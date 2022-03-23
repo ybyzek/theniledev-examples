@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}New Task{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="task_name">Task Name</label>
+    <input name="task_name" id="task_name" 
+        value="{{ request.form['task_name'] or task['task_name'] }}" required>
+    <label for="due_date">Due date</label>
+    <input name="due_date" id="due_date" 
+        value="{{ request.form['due_date'] or task['due_date'].strftime('%d-%m-%Y') }}">
+    <label for="status">Status</label>
+    <input name="status" id="status" 
+        value="{{ request.form['status'] or task['status'] }}" required>
+    <input type="submit" value="Save">
+  </form>
+
+  <form action="{{ url_for('todo.delete', id=task['id']) }}" method="post">
+    <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+  </form>
+
+{% endblock %}
