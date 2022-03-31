@@ -3,14 +3,19 @@
 ## Status
 The application is kinda basic. You can view, add, update and delete tasks in a list.
 
-In this commit, it isn't event a real SaaS! Most of the SaaS features you'd expect are missing:
-* Sign up
-* Login
-* Private task list
+It has some nifty SaaS features, implemented with Nile:
+* Users can sign up and then log in to our application
+* Only logged in users can create, update or delete tasks
+* Tasks can be public, and then anyone can view them or private and visible only to their creator
+* Only the creator of a task can update or delete a task
+
+Some SaaS features you'd expect are still missing:
+
 * Invite others to collaborate on the same task list
 * Growth metrics and badges to the top users
 * Helpful onboarding nudges
-... and a lot more 
+* RBAC or ABAC
+... and a lot more (open issues and let us know what else you'd want us to support)
 
 But don't worry, this is why Nile Platform exists - to make it easy to add all these features. 
 
@@ -22,9 +27,12 @@ So you can learn to SaaSify your own application with Nile.
 git clone https://github.com/TheNileDev/examples
 cd examples/python-flask-todo-list
 
-# Install Flask. venv is recommended but not mandatory 
+# Install Flask and few other dependencies (they are captured in requirements.txt). venv is recommended but not mandatory
 . venv/bin/activate 
 pip install Flask
+pip install PyJWT
+pip install urllib3
+
 
 export FLASK_ENV=development
 
