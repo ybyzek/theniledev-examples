@@ -33,10 +33,13 @@ pip install Flask
 pip install PyJWT
 pip install urllib3
 
-
 export FLASK_ENV=development
 
 flask init-db # only needed the first time
+
+# Replace localhost with URL that you got from the Nile team
+echo NILE=\'http://localhost:8080\' >> instance/config.py
+
 flask run
 ```
 
