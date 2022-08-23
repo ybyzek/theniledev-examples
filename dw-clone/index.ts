@@ -101,6 +101,9 @@ async function setup_workflow_developer() {
 
 async function setup_workflow_tenant() {
 
+  // TODO: investigate this is needed, otherwise error 'workspace not found'
+  await new Promise(f => setTimeout(f, 3000));
+
   await nile.users.loginUser({
     loginInfo: {
       email: NILE_TENANT_EMAIL,
