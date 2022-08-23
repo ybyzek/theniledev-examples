@@ -4,6 +4,8 @@ An example of a Data Warehouse cloud service built on Nile.
 
 ## Install Dependencies
 
+Run the following command:
+
 ```
 yarn install
 ```
@@ -23,6 +25,18 @@ warning No license field
 
 ## Execute
 
+Run the following command:
+
 ```
 ts-node index.ts
 ```
+
+To run it repeatedly with new entries, pass in a unique parameter that will be the suffix:
+
+```
+ts-node index.ts 2
+```
+
+## Validate
+
+Log into the [Nile Admin Dashboard](https://nad.thenile.dev/) (default username/password: dev-mary@dw.demo/password) to see the control plane and data plane instances. 

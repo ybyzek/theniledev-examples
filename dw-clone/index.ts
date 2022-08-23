@@ -1,36 +1,33 @@
 import Nile, { CreateEntityRequest, Entity, Organization} from "@theniledev/js";
 import { CreateEntityOperationRequest } from "@theniledev/js/dist/generated/openapi/src";
 
-// to allow running this script repeatedly
-if (process.argv.slice(2) != "") {
-	const iteration_id = process.argv.slice(2)
-} else {
-	const iteration_id = "1"
 
-}
-console.log("iteration_id is " + iteration_id)
-
+// const definitions for the demo
+const iteration_id = process.argv.slice(2) != "" ? process.argv.slice(2) : "";
 const NILE_URL = "https://prod.thenile.dev"
-const NILE_WORKSPACE = "dwh" + iteration_id
-const NILE_DEVELOPER_EMAIL = `dev-mary${iteration_id}@dwh.demo`
-const NILE_DEVELOPER_PASSWORD = "password"
-
+const NILE_WORKSPACE = `nile-demo-dw${iteration_id}`
 const nile = Nile({
   basePath: NILE_URL,
   workspace: NILE_WORKSPACE,
 });
+const NILE_DEVELOPER_EMAIL = `dev-mary${iteration_id}@dw.demo`
+const NILE_DEVELOPER_PASSWORD = "password"
+const NILE_TENANT_EMAIL=`tenant-nora${iteration_id}@customer.io`
+const NILE_TENANT_PASSWORD="password"
+const NILE_TENANT_NAME = `Tenant${iteration_id}`
+
 
 const entityDefinition: CreateEntityRequest = {
-    "name": "dwh",
+    "name": "dw",
     "schema": {
       "type": "object",
       "properties": {
-        "dwh_name": { "type": "string" },
+        "dw_name": { "type": "string" },
         "status": { "type": "string" },
         "ARN": { "type": "string" },
         "Endpoint": { "type": "string" }
       },
-      "required": ["dwh_name"]
+      "required": ["dw_name"]
     }
   };
 
@@ -81,13 +78,10 @@ async function quickstart() {
         createEntityRequest: entityDefinition
       }).then((data) => 
       {
-        console.log('API called successfully. Returned data: ' + JSON.stringify(data, null, 2));
+        console.log('\x1b[32m%s\x1b[0m', "\u2713", 'API called successfully. Returned data: ' + JSON.stringify(data, null, 2));
       }).catch((error:any) => console.error(error.message)); 
   }
   
-  const NILE_TENANT_EMAIL=`tenant-nora${iteration_id}@customer.io`
-  const NILE_TENANT_PASSWORD="password"
-    
   // check if user exists, create if not
   var myUsers = await nile.users.listUsers()
   if (myUsers.find( usr => usr.email==NILE_TENANT_EMAIL)) {
@@ -115,8 +109,6 @@ async function quickstart() {
 
   nile.authToken = nile.users.authToken
 
-
-  const NILE_TENANT_NAME = "RocketSlides" + iteration_id
   var tenant_id;
 
   // check if org exists, create if not
@@ -142,27 +134,27 @@ if (!tenant_id) {
   process.exit(1);
 }
 
-  // create dwh
+  // create dw
   await nile.entities.createInstance({
     org : tenant_id,
     type : entityDefinition.name,
     body : {
-      dwh_name : "MyFirstDWH"
+      dw_name : `DW${iteration_id}`
     }
-  }).then((dwh) => console.log ('\x1b[32m%s\x1b[0m', "\u2713", "dwh was created: " + JSON.stringify(dwh, null, 2)))
+  }).then((dw) => console.log ('\x1b[32m%s\x1b[0m', "\u2713", "Data Warehouse was created: " + JSON.stringify(dw, null, 2)))
 
-  // list dwh
+  // list dw
   await nile.entities.listInstances({
     org: tenant_id,
     type: entityDefinition.name
-  }).then((dwhs) => {
+  }).then((dws) => {
     console.log("You have the following Data Warehouses:")
-    console.log(dwhs)
+    console.log(dws)
   })
 
 // handle all past events
 console.log('Printing past events and on-going ones.')
-console.log('Create or update dwhs to see more events. Ctrl-c to exit')
+console.log('Create or update dws to see more events. Ctrl-c to exit')
 nile.events.on({type: entityDefinition.name, seq: 0},
   async(e) => console.log(JSON.stringify(e, null, 2)))
 }
