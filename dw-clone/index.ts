@@ -6,7 +6,6 @@ import { CreateEntityOperationRequest } from "@theniledev/js/dist/generated/open
 const iteration_id = process.argv.slice(2) != "" ? process.argv.slice(2) : "";
 const NILE_URL = "https://prod.thenile.dev"
 const NILE_WORKSPACE = `nile-demo-dw${iteration_id}`
-//const NILE_WORKSPACE = `nile-demo-dw`
 const nile = Nile({
   basePath: NILE_URL,
   workspace: NILE_WORKSPACE,
@@ -32,7 +31,7 @@ const entityDefinition: CreateEntityRequest = {
     }
   };
 
-async function setup_control_plane() {
+async function setup_workflow_developer() {
 
   await nile.developers.createDeveloper({
     createUserRequest : {
@@ -100,7 +99,7 @@ async function setup_control_plane() {
   }
 }
 
-async function setup_data_plane() {
+async function setup_workflow_tenant() {
 
   await nile.users.loginUser({
     loginInfo: {
@@ -162,8 +161,8 @@ async function setup_data_plane() {
 }
 
 
-// Log in as the Nile developer to setup the control plane
-setup_control_plane()
+// Log in as the Nile developer
+setup_workflow_developer()
 
-// Log in as the tenant to setup the data plane
-setup_data_plane()
+// Log in as the tenant
+setup_workflow_tenant()
