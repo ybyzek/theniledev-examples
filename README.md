@@ -5,5 +5,5 @@ Each directory contains an individual example or demo. Check the README in each 
 
 | Example | Local | Docker | Description |
 |---------|-------|--------|-------------|
-| [Minimal Quickstart](https://github.com/TheNileDev/examples/blob/main/nodejs_quickstart/README.md) | Y |  N | Guided tour of Nile APIs. Best experienced by starting here: https://docs.thenile.dev/docs/current/quick-start |
+| [Minimal Quickstart](https://github.com/TheNileDev/examples/blob/main/nodejs_quickstart/README.md) | Y |  N | A minimal example of using some of the core Nile APIs |
 | [Python + Flask Todo List Webapp](https://github.com/TheNileDev/examples/blob/main/python-flask-todo-list/README.md) | Y | Y |  Taking a basic Todo List webapp written in Python and Flask and turning it to a PLG SaaS product with Nile APIs |
