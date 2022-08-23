@@ -6,6 +6,7 @@ import { CreateEntityOperationRequest } from "@theniledev/js/dist/generated/open
 const iteration_id = process.argv.slice(2) != "" ? process.argv.slice(2) : "";
 const NILE_URL = "https://prod.thenile.dev"
 const NILE_WORKSPACE = `nile-demo-dw${iteration_id}`
+//const NILE_WORKSPACE = `nile-demo-dw`
 const nile = Nile({
   basePath: NILE_URL,
   workspace: NILE_WORKSPACE,
@@ -31,7 +32,7 @@ const entityDefinition: CreateEntityRequest = {
     }
   };
 
-async function quickstart() {
+async function setup_control_plane() {
 
   await nile.developers.createDeveloper({
     createUserRequest : {
@@ -70,8 +71,8 @@ async function quickstart() {
   }
 
   // check if entity exists, create if not
- var myEntities =  await nile.entities.listEntities()
- if (myEntities.find( ws => ws.name==entityDefinition.name)) { 
+  var myEntities =  await nile.entities.listEntities()
+  if (myEntities.find( ws => ws.name==entityDefinition.name)) { 
       console.log("Entity " + entityDefinition.name + " exists");
   } else {
       await nile.entities.createEntity({
@@ -97,9 +98,10 @@ async function quickstart() {
         console.log("User " + usr.email + " was created")
     })
   }
+}
 
-  // Log in as Shaun. The rest of the work will be done from Shaun's POV as a user of Clustify
-  
+async function setup_data_plane() {
+
   await nile.users.loginUser({
     loginInfo: {
       email: NILE_TENANT_EMAIL,
@@ -129,10 +131,10 @@ async function quickstart() {
     }).catch((error:any) => console.error(error.message));
   }
 
-if (!tenant_id) {
-  console.log("Unable to find or create organization. The rest of this example requires a tenant, so you will need to fix the problem before proceeding")
-  process.exit(1);
-}
+  if (!tenant_id) {
+    console.log("Unable to find or create organization. The rest of this example requires a tenant, so you will need to fix the problem before proceeding")
+    process.exit(1);
+  }
 
   // create dw
   await nile.entities.createInstance({
@@ -152,14 +154,16 @@ if (!tenant_id) {
     console.log(dws)
   })
 
-// handle all past events
-console.log('Printing past events and on-going ones.')
-console.log('Create or update dws to see more events. Ctrl-c to exit')
-nile.events.on({type: entityDefinition.name, seq: 0},
-  async(e) => console.log(JSON.stringify(e, null, 2)))
+  // handle all past events
+  console.log('Printing past events and on-going ones.')
+  console.log('Create or update dws to see more events. Ctrl-c to exit')
+  nile.events.on({type: entityDefinition.name, seq: 0},
+    async(e) => console.log(JSON.stringify(e, null, 2)))
 }
 
-quickstart()
-//console.log("%c \u2713 hi", 'color: green')
-//console.log('\x1b[32m%s\x1b[0m', "\u2713", "hi")
 
+// Log in as the Nile developer to setup the control plane
+setup_control_plane()
+
+// Log in as the tenant to setup the data plane
+setup_data_plane()
