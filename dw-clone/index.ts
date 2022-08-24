@@ -17,6 +17,7 @@ const NILE_TENANT_PASSWORD="password"
 const NILE_TENANT_NAME = `Tenant${iteration_id}`
 
 
+// Schema for the entity that defines the service in the data plane
 const entityDefinition: CreateEntityRequest = {
     "name": "dw",
     "schema": {
@@ -29,10 +30,12 @@ const entityDefinition: CreateEntityRequest = {
       },
       "required": ["dw_name"]
     }
-  };
+};
 
+// Workflow for the Nile developer
 async function setup_workflow_developer() {
 
+  // Signup developer
   await nile.developers.createDeveloper({
     createUserRequest : {
       email : NILE_DEVELOPER_EMAIL,
@@ -46,6 +49,7 @@ async function setup_workflow_developer() {
     }
   })
 
+  // Login developer
   await nile.developers.loginDeveloper({
     loginInfo: {
       email: NILE_DEVELOPER_EMAIL,
@@ -56,20 +60,21 @@ async function setup_workflow_developer() {
     process.exit(1);
   });
 
+  // Get the JWT token
   nile.authToken = nile.developers.authToken;
-  console.log('\x1b[32m%s\x1b[0m', "\u2713", `Successfully logged into Nile as developer ${NILE_DEVELOPER_EMAIL}!\nToken: ` + nile.authToken)
+  console.log('\x1b[32m%s\x1b[0m', "\u2713", `Logged into Nile as developer ${NILE_DEVELOPER_EMAIL}!\nToken: ` + nile.authToken)
 
-  // check if workspace exists, create if not
+  // Check if workspace exists, create if not
   var myWorkspaces = await nile.workspaces.listWorkspaces()
   if ( myWorkspaces.find( ws => ws.name==NILE_WORKSPACE) != null) {
          console.log("Workspace " + NILE_WORKSPACE + " exists");
   } else {
       await nile.workspaces.createWorkspace({
         createOrganizationRequest: { name: NILE_WORKSPACE}, 
-      }).then( (ws) => { if (ws != null)  console.log("Successfully created Workspace: " + ws.name)})
+      }).then( (ws) => { if (ws != null)  console.log('\x1b[32m%s\x1b[0m', "\u2713", "Created workspace: " + ws.name)})
   }
 
-  // check if entity exists, create if not
+  // Check if entity exists, create if not
   var myEntities =  await nile.entities.listEntities()
   if (myEntities.find( ws => ws.name==entityDefinition.name)) { 
       console.log("Entity " + entityDefinition.name + " exists");
@@ -78,11 +83,11 @@ async function setup_workflow_developer() {
         createEntityRequest: entityDefinition
       }).then((data) => 
       {
-        console.log('\x1b[32m%s\x1b[0m', "\u2713", 'API called successfully. Returned data: ' + JSON.stringify(data, null, 2));
+        console.log('\x1b[32m%s\x1b[0m', "\u2713", 'Created entity: ' + JSON.stringify(data, null, 2));
       }).catch((error:any) => console.error(error.message)); 
   }
   
-  // check if user exists, create if not
+  // Check if tenant exists, create if not
   var myUsers = await nile.users.listUsers()
   if (myUsers.find( usr => usr.email==NILE_TENANT_EMAIL)) {
       console.log("User " + NILE_TENANT_EMAIL + " exists")
@@ -94,13 +99,14 @@ async function setup_workflow_developer() {
       }
     }).then ( (usr) => {  
       if (usr != null) 
-        console.log("User " + usr.email + " was created")
+        console.log('\x1b[32m%s\x1b[0m', "\u2713", "Created User: " + usr.email)
     })
   }
 }
 
 async function setup_workflow_tenant() {
 
+  // Login tenant
   await nile.users.loginUser({
     loginInfo: {
       email: NILE_TENANT_EMAIL,
@@ -109,10 +115,11 @@ async function setup_workflow_tenant() {
   })
 
   nile.authToken = nile.users.authToken
+  console.log('\x1b[32m%s\x1b[0m', "\u2713", `Logged into Nile as tenant ${NILE_TENANT_EMAIL}!\nToken: ` + nile.authToken)
 
   var tenant_id;
 
-  // check if org exists, create if not
+  // Check if organization exists, create if not
   var myOrgs = await nile.organizations.listOrganizations()
   var maybeTenant = myOrgs.find( org => org.name == NILE_TENANT_NAME)
   if (maybeTenant) {
@@ -124,7 +131,7 @@ async function setup_workflow_tenant() {
       name : NILE_TENANT_NAME,
     }}).then ( (org) => {  
       if (org != null) {
-        console.log("Tenant " + org.name + " was created")
+        console.log('\x1b[32m%s\x1b[0m', "\u2713", "Created Tenant: " + org.name)
         tenant_id = org.id
       }
     }).catch((error:any) => console.error(error.message));
@@ -135,26 +142,26 @@ async function setup_workflow_tenant() {
     process.exit(1);
   }
 
-  // create dw
+  // Create an instance of the service in the data plane
   await nile.entities.createInstance({
     org : tenant_id,
     type : entityDefinition.name,
     body : {
       dw_name : `DW${iteration_id}`
     }
-  }).then((dw) => console.log ('\x1b[32m%s\x1b[0m', "\u2713", "Data Warehouse was created: " + JSON.stringify(dw, null, 2)))
+  }).then((dw) => console.log ('\x1b[32m%s\x1b[0m', "\u2713", "Created Data Warehouse: " + JSON.stringify(dw, null, 2)))
 
-  // list dw
+  // List instances of the service
   await nile.entities.listInstances({
     org: tenant_id,
     type: entityDefinition.name
   }).then((dws) => {
-    console.log("You have the following Data Warehouses:")
+    console.log("The following Data Warehouses exist:")
     console.log(dws)
   })
 
-  // handle all past events
-  console.log('Printing past events and on-going ones.')
+  // Handle all past events
+  console.log("\n\nPrinting past events and on-going ones.")
   console.log('Create or update dws to see more events. Ctrl-c to exit')
   nile.events.on({type: entityDefinition.name, seq: 0},
     async(e) => console.log(JSON.stringify(e, null, 2)))
