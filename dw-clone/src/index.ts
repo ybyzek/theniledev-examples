@@ -1,21 +1,15 @@
 import Nile, { CreateEntityRequest, Entity, Organization} from "@theniledev/js";
 import { CreateEntityOperationRequest } from "@theniledev/js/dist/generated/openapi/src";
 
+import {iteration_id, NILE_URL, NILE_WORKSPACE} from './constants.ts';
+import {NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD} from './constants.ts';
+import {NILE_TENANT_EMAIL, NILE_TENANT_PASSWORD, NILE_TENANT_NAME} from './constants.ts';
 
-// const definitions for the demo
-const iteration_id = process.argv.slice(2) != "" ? process.argv.slice(2) : "";
-const NILE_URL = process.env.NILE_URL || "https://prod.thenile.dev";
-const NILE_WORKSPACE = `demo-test-dw${iteration_id}`
 const nile = Nile({
   basePath: NILE_URL,
   workspace: NILE_WORKSPACE,
 });
-const NILE_DEVELOPER_EMAIL = process.env.NILE_DEVELOPER_EMAIL || `dev-mary${iteration_id}@dw.demo`
-console.log(`Logging into Nile at ${NILE_URL}, workspace ${NILE_WORKSPACE}, as developer ${NILE_DEVELOPER_EMAIL}`)
-const NILE_DEVELOPER_PASSWORD = process.env.NILE_DEVELOPER_PASSWORD || "password"
-const NILE_TENANT_EMAIL=`tenant-nora${iteration_id}@customer.io`
-const NILE_TENANT_PASSWORD="password"
-const NILE_TENANT_NAME = `Tenant${iteration_id}`
+
 
 // Schema for the entity that defines the service in the data plane
 const entityDefinition: CreateEntityRequest = {
@@ -34,6 +28,8 @@ const entityDefinition: CreateEntityRequest = {
 
 // Workflow for the Nile developer
 async function setup_workflow_developer() {
+
+  console.log(`\nLogging into Nile at ${NILE_URL}, workspace ${NILE_WORKSPACE}, as developer ${NILE_DEVELOPER_EMAIL}`)
 
   // Signup developer
   await nile.developers.createDeveloper({
@@ -105,6 +101,8 @@ async function setup_workflow_developer() {
 }
 
 async function setup_workflow_tenant() {
+
+  console.log(`\nLogging into Nile at ${NILE_URL}, workspace ${NILE_WORKSPACE}, as tenant ${NILE_TENANT_EMAIL}`)
 
   // Login tenant
   await nile.users.loginUser({
