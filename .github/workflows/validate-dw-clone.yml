@@ -17,9 +17,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Run quickstart to Nile
-        run: |
-          cd dw-clone
-          yarn install
-          yarn add node-fetch
-          yarn setup
+      - uses: borales/actions-yarn@v3.0.0
+        working-directory: dw-clone
+        with:
+          cmd: install
+
+      - uses: borales/actions-yarn@v3.0.0
+        working-directory: dw-clone
+        with:
+          cmd: setup
