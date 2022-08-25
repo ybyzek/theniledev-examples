@@ -29,10 +29,6 @@ jobs:
         working-directory: dw-clone
         run: yarn install --no-lockfile
 
-      - name: yarn add node-fetch
-        working-directory: dw-clone
-        run: yarn add node-fetch --no-lockfile
-
       - name: yarn setup
         working-directory: dw-clone
         run: |
