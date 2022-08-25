@@ -39,4 +39,10 @@ yarn setup 2
 
 ## Validate
 
+Run the following command:
+
+```
+yarn test-setup
+```
+
 Log into the [Nile Admin Dashboard](https://nad.thenile.dev/) (default username/password: dev-mary@dw.demo/password) to see the control plane and data plane instances. 
