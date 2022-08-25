@@ -12,6 +12,9 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+
     steps:
 
       - name: Checkout repository
@@ -25,16 +28,13 @@ jobs:
           #yarn setup
 
       - name: yarn install
-        uses: borales/actions-yarn@v3.0.0
-        with:
-          cmd: --cwd ./dw-clone install
+        working-directory: dw-clone
+        run: yarn install --no-lockfile
 
       - name: yarn add node-fetch
-        uses: borales/actions-yarn@v3.0.0
-        with:
-          cmd: --cwd ./dw-clone add node-fetch
+        working-directory: dw-clone
+        run: yarn add node-fetch --no-lockfile
 
       - name: yarn setup
-        uses: borales/actions-yarn@v3.0.0
-        with:
-          cmd: --cwd ./dw-clone setup
+        working-directory: dw-clone
+        run: yarn setup
