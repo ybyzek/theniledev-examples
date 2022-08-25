@@ -42,4 +42,6 @@ jobs:
 
       - name: yarn setup
         working-directory: dw-clone
-        run: timeout 15s yarn setup
+        run: |
+          timeout 15s yarn setup \
+          || code=$?; if [[ $code -ne 124 && $code -ne 0 ]]; then exit $code; fi
