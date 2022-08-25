@@ -6,7 +6,7 @@ import { CreateEntityOperationRequest } from "@theniledev/js/dist/generated/open
 const iteration_id = process.argv.slice(2) != "" ? process.argv.slice(2) : "";
 const NILE_URL = process.env.NILE_URL || "https://prod.thenile.dev";
 console.log(`Logging into Nile at ${NILE_URL}`)
-const NILE_WORKSPACE = `nile-demo-dw${iteration_id}`
+const NILE_WORKSPACE = `demo-test-dw${iteration_id}`
 const nile = Nile({
   basePath: NILE_URL,
   workspace: NILE_WORKSPACE,

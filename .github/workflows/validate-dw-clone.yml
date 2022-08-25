@@ -1,0 +1,22 @@
+name: dw-clone
+
+on: [push]
+
+env:
+  NILE_DEVELOPER_EMAIL: ${{ secrets.NILE_DEVELOPER_EMAIL }}
+  NILE_DEVELOPER_PASSWORD: ${{ secrets.NILE_DEVELOPER_PASSWORD }}
+
+jobs:
+
+  quickstart:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Run quickstart to Nile
+        run: |
+          yarn quickstart
