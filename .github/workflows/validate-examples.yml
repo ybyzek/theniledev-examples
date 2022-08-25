@@ -1,4 +1,4 @@
-name: dw-clone
+name: examples
 
 on: [push]
 
@@ -8,7 +8,7 @@ env:
 
 jobs:
 
-  quickstart:
+  dw-clone:
 
     runs-on: ubuntu-latest
 
@@ -42,4 +42,4 @@ jobs:
 
       - name: yarn setup
         working-directory: dw-clone
-        run: yarn setup
+        run: timeout 15s yarn setup
