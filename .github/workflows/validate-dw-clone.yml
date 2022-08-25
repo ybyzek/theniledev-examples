@@ -24,22 +24,22 @@ jobs:
           #yarn add node-fetch
           #yarn setup
 
-      - name: Set node version 18
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
+      #- name: yarn install
+        #uses: borales/actions-yarn@v3.0.0
+        #with:
+          #cmd: --cwd ./dw-clone install
 
-      - name: yarn install
-        uses: borales/actions-yarn@v3.0.0
-        with:
-          cmd: --cwd ./dw-clone install
+      #- name: yarn add node-fetch
+        #uses: borales/actions-yarn@v3.0.0
+        #with:
+          #cmd: --cwd ./dw-clone add node-fetch
 
-      - name: yarn add node-fetch
-        uses: borales/actions-yarn@v3.0.0
-        with:
-          cmd: --cwd ./dw-clone add node-fetch
+      #- name: yarn setup
+        #uses: borales/actions-yarn@v3.0.0
+        #with:
+          #cmd: --cwd ./dw-clone setup
 
-      - name: yarn setup
-        uses: borales/actions-yarn@v3.0.0
-        with:
-          cmd: --cwd ./dw-clone setup
+      - name: run yarn commands
+        uses: comchangs/action-yarn@master
+        args: "cd dw-clone; yarn install; yarn setup"
+
