@@ -17,9 +17,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      #- name: Run yarn setup
+        #run: |
+          #cd dw-clone
+          #yarn install
+          #yarn install node-fetch
+          #yarn setup
+
       - uses: borales/actions-yarn@v3.0.0
         with:
           cmd: --cwd ./dw-clone install
+
+      - uses: borales/actions-yarn@v3.0.0
+        with:
+          cmd: --cwd ./dw-clone install node-fetch
 
       - uses: borales/actions-yarn@v3.0.0
         with:
