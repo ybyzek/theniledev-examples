@@ -20,13 +20,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      #- name: Run yarn setup
-        #run: |
-          #cd dw-clone
-          #yarn install
-          #yarn add node-fetch
-          #yarn setup
-
       - name: Set node version 18
         uses: actions/setup-node@v3
         with:
@@ -45,3 +38,7 @@ jobs:
         run: |
           timeout 15s yarn setup \
           || code=$?; if [[ $code -ne 124 && $code -ne 0 ]]; then exit $code; fi
+
+      - name: yarn test-setup
+        working-directory: dw-clone
+        run: yarn test-setup

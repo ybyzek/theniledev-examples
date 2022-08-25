@@ -5,13 +5,13 @@ import { CreateEntityOperationRequest } from "@theniledev/js/dist/generated/open
 // const definitions for the demo
 const iteration_id = process.argv.slice(2) != "" ? process.argv.slice(2) : "";
 const NILE_URL = process.env.NILE_URL || "https://prod.thenile.dev";
-console.log(`Logging into Nile at ${NILE_URL}`)
 const NILE_WORKSPACE = `demo-test-dw${iteration_id}`
 const nile = Nile({
   basePath: NILE_URL,
   workspace: NILE_WORKSPACE,
 });
 const NILE_DEVELOPER_EMAIL = process.env.NILE_DEVELOPER_EMAIL || `dev-mary${iteration_id}@dw.demo`
+console.log(`Logging into Nile at ${NILE_URL}, workspace ${NILE_WORKSPACE}, as developer ${NILE_DEVELOPER_EMAIL}`)
 const NILE_DEVELOPER_PASSWORD = process.env.NILE_DEVELOPER_PASSWORD || "password"
 const NILE_TENANT_EMAIL=`tenant-nora${iteration_id}@customer.io`
 const NILE_TENANT_PASSWORD="password"

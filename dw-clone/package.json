@@ -12,6 +12,7 @@
     "typescript": "^4.7.3"
   },
   "scripts": {
-    "setup": "ts-node index.ts"
+    "setup": "ts-node index.ts",
+    "test-setup": "ts-node find-entity.ts"
   }
 }
