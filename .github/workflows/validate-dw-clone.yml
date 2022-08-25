@@ -24,6 +24,11 @@ jobs:
           #yarn add node-fetch
           #yarn setup
 
+      - name: Set node version 18
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
       - name: yarn install
         uses: borales/actions-yarn@v3.0.0
         with:
