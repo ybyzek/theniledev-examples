@@ -28,9 +28,9 @@ jobs:
           #yarn setup
 
       - name: Set node version 18
-         uses: actions/setup-node@v3
-         with:
-           node-version: 18
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
 
       - name: yarn install
         working-directory: dw-clone
