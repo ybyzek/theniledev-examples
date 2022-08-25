@@ -3,7 +3,6 @@ name: dw-clone
 on: [push]
 
 env:
-  DEST_WORKSPACE: ${{ github.workspace }}
   NILE_DEVELOPER_EMAIL: ${{ secrets.NILE_DEVELOPER_EMAIL }}
   NILE_DEVELOPER_PASSWORD: ${{ secrets.NILE_DEVELOPER_PASSWORD }}
 
@@ -20,8 +19,8 @@ jobs:
 
       - uses: borales/actions-yarn@v3.0.0
         with:
-          cmd: -cwd ${DEST_WORKSPACE}/dw-clone install
+          cmd: --cwd ./dw-clone install
 
       - uses: borales/actions-yarn@v3.0.0
         with:
-          cmd: -cwd ${DEST_WORKSPACE}/dw-clone setup
+          cmd: --cwd ./dw-clone setup
