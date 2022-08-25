@@ -28,13 +28,13 @@ warning No license field
 Run the following command:
 
 ```
-ts-node index.ts
+yarn setup
 ```
 
 To run it repeatedly with new entries, pass in a unique parameter that will be the suffix:
 
 ```
-ts-node index.ts 2
+yarn setup 2
 ```
 
 ## Validate
