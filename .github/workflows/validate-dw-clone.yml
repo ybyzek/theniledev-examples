@@ -19,4 +19,6 @@ jobs:
 
       - name: Run quickstart to Nile
         run: |
-          yarn quickstart
+          cd dw-clone
+          yarn install
+          yarn setup
