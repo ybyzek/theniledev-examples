@@ -20,6 +20,6 @@ jobs:
       - name: Run quickstart to Nile
         run: |
           cd dw-clone
-          npm i node-fetch
           yarn install
+          yarn install node-fetch
           yarn setup
