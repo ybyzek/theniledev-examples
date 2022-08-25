@@ -47,10 +47,10 @@ async function run() {
     org: tenant_id,
     type: "dw"
   })
-  if ( instances.find( i => i.properties.dw_name == `xxxDW${iteration_id}`) != null) {
+  if ( instances.find( i => i.properties.dw_name == `DW${iteration_id}`) != null) {
     console.log (`Found Data Warehouse entry with name DW${iteration_id}`)
   } else {
-    console.error (`Error: could not find Data Warehouse entry with name DW${iteration_id}`)
+    console.error (`Error: could not find Data Warehouse entity instance with dw_name DW${iteration_id}`)
     return process.exit(1)
   }
 
