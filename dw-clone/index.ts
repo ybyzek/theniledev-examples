@@ -4,18 +4,18 @@ import { CreateEntityOperationRequest } from "@theniledev/js/dist/generated/open
 
 // const definitions for the demo
 const iteration_id = process.argv.slice(2) != "" ? process.argv.slice(2) : "";
-const NILE_URL = "https://prod.thenile.dev"
+const NILE_URL = process.env.NILE_URL || "https://prod.thenile.dev";
+console.log(`Logging into Nile at ${NILE_URL}`)
 const NILE_WORKSPACE = `nile-demo-dw${iteration_id}`
 const nile = Nile({
   basePath: NILE_URL,
   workspace: NILE_WORKSPACE,
 });
-const NILE_DEVELOPER_EMAIL = `dev-mary${iteration_id}@dw.demo`
-const NILE_DEVELOPER_PASSWORD = "password"
+const NILE_DEVELOPER_EMAIL = process.env.NILE_DEVELOPER_EMAIL || `dev-mary${iteration_id}@dw.demo`
+const NILE_DEVELOPER_PASSWORD = process.env.NILE_DEVELOPER_PASSWORD || "password"
 const NILE_TENANT_EMAIL=`tenant-nora${iteration_id}@customer.io`
 const NILE_TENANT_PASSWORD="password"
 const NILE_TENANT_NAME = `Tenant${iteration_id}`
-
 
 // Schema for the entity that defines the service in the data plane
 const entityDefinition: CreateEntityRequest = {
