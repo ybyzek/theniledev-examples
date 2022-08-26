@@ -26,7 +26,15 @@ warning No license field
 
 ## Execute
 
-Run the following command:
+The quickstart workflow creates your control plane and data plane in Nile:
+
+- Sign up a new developer
+- Create a workspace
+- Create an entity
+- Create an organization
+- Create an instance of an entity
+
+To execute the above workflow, run the following command:
 
 ```
 yarn setup
@@ -40,10 +48,10 @@ yarn setup 2
 
 ## Validate
 
-Run the following command:
+To validate that the quickstart worked when you ran `yarn setup`, run the following command to find the new instance of the entity:
 
 ```
 yarn test-setup
 ```
 
-Log into the [Nile Admin Dashboard](https://nad.thenile.dev/) (default username/password: dev-mary@dw.demo/password) to see the control plane and data plane instances. 
+Then log into the [Nile Admin Dashboard](https://nad.thenile.dev/) (default username/password: dev-mary@dw.demo/password) to see the control plane and data plane instances. 
