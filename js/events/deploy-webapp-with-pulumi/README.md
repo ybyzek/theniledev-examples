@@ -114,12 +114,14 @@ Execute the binary with:
 --password YOUR_PASSWORD
 ```
 
-This will synchronize your Pulumi stack and instantiate the SkyNet instance
-already defined in your control plane. Check your Pulumi project dashboard to
-confirm.
+This will immediately find the newly instantiated SkyNet instance in your Nile
+control plane and create a Pulumi stack that represents it, defined by the
+[`pulumis3` program](./src/commands/reconcile/lib/pulumi/pulumiS3.ts). This
+includes a new S3 bucket containing a static website and a bucket policy that
+allows public access.
 
-The command will log out your instance properties, including the `websiteUrl` 
-of the object created by the [`pulumis3` program](./src/commands/reconcile/lib/pulumi/pulumiS3.ts):
+The command will also log out the instance properties, including the 
+`websiteUrl` of the object created by the [`pulumis3` program](./src/commands/reconcile/lib/pulumi/pulumiS3.ts):
 
 ```bash
 Outputs:
