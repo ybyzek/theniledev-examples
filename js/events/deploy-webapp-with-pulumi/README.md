@@ -117,7 +117,7 @@ already defined in your control plane. Check your Pulumi project dashboard to
 confirm.
 
 The command will log out your instance properties, including the `websiteUrl` 
-of the object created by the [`pulumis3` program](./src/pulumi/pulumiS3.ts):
+of the object created by the [`pulumis3` program](./src/commands/reconcile/lib/pulumi/pulumiS3.ts):
 
 ```bash
 Outputs:
