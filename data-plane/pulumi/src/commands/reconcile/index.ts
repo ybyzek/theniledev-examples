@@ -46,7 +46,7 @@ export default class Reconcile extends Command {
 
     // pulumi setup
     this.deployment = await PulumiAwsDeployment.create(
-      'nile-examples',
+      'pulumi-clustify',
       pulumiS3
     );
     const stacks = await this.deployment.loadPulumiStacks();
