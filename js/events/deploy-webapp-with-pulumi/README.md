@@ -62,16 +62,16 @@ This example assumes you have:
 Set up a new Pulumi project:
 
 ```bash
-mkdir pulumi && cd pulumi
+mkdir pulumi-clustify && cd pulumi-clustify
 pulumi new aws-typescript
 ```
 
-and set the project name to "nile-examples":
+and accept the defaults:
 
 ```
-project name: (pulumi) nile-examples
+project name: (pulumi-clustify)
 project description: (A minimal AWS TypeScript Pulumi program) 
-Created project 'nile-examples'
+Created project 'pulumi-clustify'
 
 Please enter your desired stack name.
 To create a stack in an organization, use the format <org-name>/<stack-name> (e.g. `acmecorp/dev`).
@@ -91,9 +91,10 @@ presence verifies that you're ready to proceed.
 Back up in the `deploy-webapp-with-pulumi` directory, run `yarn install && yarn build` 
 to create the executable command binary.
 
-To run the binary, you'll need to pass arguments for your Nile workspace,
-organization, and entity type, plus your developer login. The workspace
-and entity type are identified by name, but the organization requires an id.
+To run the `reconcile` binary, you'll need to pass arguments for your Nile 
+workspace, organization, and entity type, plus your developer login. The 
+workspace and entity type are identified by name, but the organization requires
+an id.
 
 > The organization id is not visible in the NAD yet, but can be obtained from
 > the URL when you select an org. In this case:
