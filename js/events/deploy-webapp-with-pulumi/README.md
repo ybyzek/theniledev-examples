@@ -7,7 +7,8 @@ Nile doesn't prescribe any particular deployment solution, but here we'll be
 using [Pulumi](https://app.pulumi.com/) to deploy objects into AWS. 
 
 > If you're using another tool like Kubernetes or Terraform, you could replace
-> the `PulumiAwsDeployment` class with your own deployment implementation.
+> the [`PulumiAwsDeployment`](./src/commands/reconcile/lib/pulumi/PulumiAwsDeployment.ts) 
+> class in this example with your own deployment implementation.
 
 ## Prerequisites ##
 
@@ -141,7 +142,7 @@ as well as all of your instance details.
 
 ## Add/Remove Instances ##
 
-In your [Nile dashboard](https://nad.thenile.dev/dev/organizations), add one or
+In the [Nile Admin Dashboard](https://nad.thenile.dev/), add one or
 more SkyNet instances to your organization. This will trigger events that the
 command receives, and will synchronize accordingly. Deleting an instance in your
 control plane will result in destruction of the corresponding Pulumi stack.
