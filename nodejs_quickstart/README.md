@@ -31,8 +31,8 @@ The quickstart workflow creates your control plane and data plane in Nile:
 - Sign up a new developer
 - Create a workspace
 - Create an entity
-- Create an organization
-- Create an instance of an entity
+- Create an organization and tenant
+- Create an instance of an entity in the organization
 
 To execute the above workflow, run the following command:
 
