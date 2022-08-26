@@ -1,4 +1,4 @@
-# Nile Events Example #
+# Nile Data Plane Example #
 
 This example demonstrates how to synchronize (i.e., `reconcile`) your data
 plane and control plane in real time with Nile events.
@@ -88,7 +88,7 @@ presence verifies that you're ready to proceed.
 
 ## Create and Execute a Command ##
 
-Back up in the `deploy-webapp-with-pulumi` directory, run `yarn install && yarn build` 
+Back up in the `data-plane/pulumi` directory, run `yarn install && yarn build` 
 to create the executable command binary.
 
 To run the `reconcile` binary, you'll need to pass arguments for your Nile 

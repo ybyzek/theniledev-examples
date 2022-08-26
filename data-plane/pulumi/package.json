@@ -1,5 +1,5 @@
 {
-  "name": "@theniledev/events-deploy-webapp-with-pulumi",
+  "name": "@theniledev/data-plane-with-pulumi",
   "description": "reconcile nile instances with pulumi deployment",
   "version": "0.1.0",
   "author": "nile",
