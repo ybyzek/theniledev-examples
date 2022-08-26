@@ -1,10 +1,13 @@
 # Nile Events Example #
 
-This example demonstrates how synchronize your data plane and control plane in
-real time with Nile events.
+This example demonstrates how to synchronize (i.e., `reconcile`) your data
+plane and control plane in real time with Nile events.
 
 Nile doesn't prescribe any particular deployment solution, but here we'll be
-using [Pulumi](https://app.pulumi.com/) to deploy objects into AWS.
+using [Pulumi](https://app.pulumi.com/) to deploy objects into AWS. 
+
+> If you're using another tool like Kubernetes or Terraform, you could replace
+> the `PulumiAwsDeployment` class with your own deployment implementation.
 
 ## Prerequisites ##
 
@@ -13,13 +16,16 @@ This example assumes you have:
 * [An AWS account](https://aws.amazon.com/free/)
 * [A Pulumi account](https://app.pulumi.com/signup) that's
   [connected to your AWS account](https://www.pulumi.com/docs/get-started/aws/begin/)
-* [The Pulumi CLI installed]()
-* A Nile developer account
+* [The Pulumi CLI installed](https://www.pulumi.com/docs/reference/cli/)
+* A Nile developer account using an email address and password
 
 ## Configure Your Control Plane ##
 
+> If you're not familiar with the terminology used below, be sure to read the
+> [Nile Quickstart](https://www.thenile.dev/docs/current/quick-start-ui).
+
 1. [Login to the Nile Admin Dashboard](https://nad.thenile.dev/) If you don't
-   already have one, create a workspace named "cyberdyne".
+   already have one, create a workspace named "clustify".
 2. Create an entity type named "SkyNet". A simple schema is sufficient for
    this example:
 
@@ -38,7 +44,8 @@ This example assumes you have:
 ```
 
 3. Create an organization in your workspace named "sac-norad".
-4. Create an SkyNet instance in your organization, with a simple greeting:
+4. Create a "SkyNet" instance in your organization, with a value that matches 
+   the schema defined earlier:
 
 ```json
 {
@@ -51,18 +58,17 @@ This example assumes you have:
 > These instructions summarize how to [get started with Pulumi](https://www.pulumi.com/docs/get-started/aws/begin/)
 > on AWS. See their docs for a more complete setup.
 
-Install the Pulumi CLI and set up a new Pulumi project:
+Set up a new Pulumi project:
 
 ```bash
-[~/] $ brew install pulumi/tap/pulumi
-[~/] $ mkdir nile-examples && cd nile-examples
-[~/] $ pulumi new aws-typescript
+mkdir pulumi && cd pulumi
+pulumi new aws-typescript
 ```
 
-and accept the defaults:
+and set the project name to "nile-examples":
 
 ```
-project name: (nile-examples) 
+project name: (pulumi) nile-examples
 project description: (A minimal AWS TypeScript Pulumi program) 
 Created project 'nile-examples'
 
@@ -76,13 +82,13 @@ Saved config
 ```
 
 Run `pulumi up` to ensure that you've configured Pulumi correctly. This will
-create a stack named `dev`. We won't be using this stack, but its presence
-verifies that you're ready to proceed.
+create a new Pulumi stack named `dev`. We won't be using this stack, but its
+presence verifies that you're ready to proceed.
 
 ## Create and Execute a Command ##
 
-In the `deploy-webapp-with-pulumi` directory, run `yarn install && yarn build` to
-create the executable command binary.
+Back up in the `deploy-webapp-with-pulumi` directory, run `yarn install && yarn build` 
+to create the executable command binary.
 
 To run the binary, you'll need to pass arguments for your Nile workspace,
 organization, and entity type, plus your developer login. The workspace
@@ -91,7 +97,7 @@ and entity type are identified by name, but the organization requires an id.
 > The organization id is not visible in the NAD yet, but can be obtained from
 > the URL when you select an org. In this case:
 >
-> `https://nad.thenile.dev/cyberdyne/organization/org_02qfJTCBve6bw0XlxC92CG`
+> `https://nad.thenile.dev/clustify/organization/org_02qfJTCBve6bw0XlxC92CG`
 >
 > the organization id is `org_02qfJTCBve6bw0XlxC92CG`.
 
@@ -99,7 +105,7 @@ Execute the binary with:
 
 ```bash
 ./bin/dev reconcile --basePath https://prod.thenile.dev \
---workspace cyberdyne \
+--workspace clustify \
 --entity SkyNet \
 --organization YOUR_ORG_ID \
 --email YOUR_EMAIL \

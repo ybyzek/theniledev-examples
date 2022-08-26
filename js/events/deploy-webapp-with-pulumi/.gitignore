@@ -38,3 +38,9 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# include source lib
+!lib/
+
+# pulumi project
+/pulumi
