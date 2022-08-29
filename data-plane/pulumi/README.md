@@ -86,32 +86,20 @@ Run `pulumi up` to ensure that you've configured Pulumi correctly. This will
 create a new Pulumi stack named `dev`. We won't be using this stack, but its
 presence verifies that you're ready to proceed.
 
-## Create and Execute a Command ##
+## Create and run the reconciler ##
 
-Back up in the `data-plane/pulumi` directory, run `yarn install && yarn build` 
-to create the executable command binary.
+Back up in the `data-plane/pulumi` directory, run `yarn install && yarn build` to create the executable command binary.
 
-To run the `reconcile` binary, you'll need to pass arguments for your Nile 
-workspace, organization, and entity type, plus your developer login. The 
-workspace and entity type are identified by name, but the organization requires
-an id.
+Copy the `.env.defaults` file to `.env`, and set the values of this new file to match the values you used in the setup of your control plane.
 
-> The organization id is not visible in the NAD yet, but can be obtained from
-> the URL when you select an org. In this case:
->
-> `https://nad.thenile.dev/clustify/organization/org_02qfJTCBve6bw0XlxC92CG`
->
-> the organization id is `org_02qfJTCBve6bw0XlxC92CG`.
+One of the values required is the organization ID which is not visible in the NAD yet, but can be obtained from the URL when you select an org.
+For example, in the URL `https://nad.thenile.dev/clustify/organization/org_02qfJTCBve6bw0XlxC92CG`, the organization id is `org_02qfJTCBve6bw0XlxC92CG`.
 
-Execute the binary with:
+Run the reconciler as follows:
 
-```bash
-./bin/dev reconcile --basePath https://prod.thenile.dev \
---workspace clustify \
---entity SkyNet \
---organization YOUR_ORG_ID \
---email YOUR_EMAIL \
---password YOUR_PASSWORD
+```
+yarn install
+yarn run start
 ```
 
 This will immediately find the newly instantiated SkyNet instance in your Nile
