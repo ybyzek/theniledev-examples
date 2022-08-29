@@ -1,11 +1,11 @@
-import { Reconciler } from './src/command/reconciler';
+import Reconcile from "./commands/reconcile/index"
 
 import * as dotenv from "dotenv";
 
 async function run() {
 
-  dotenv.config()
-  //console.log ("(TO REMOVE) test env: ", process.env)
+  await dotenv.config()
+  console.log ("(TO REMOVE) test env: ", process.env)
 
   const basePath = process.env.NILE_URL
   const workspace = process.env.NILE_WORKSPACE
@@ -14,7 +14,9 @@ async function run() {
   const organization = process.env.NILE_ORGANIZATION_ID
   const entity = process.env.NILE_ENTITY_NAME
 
-  await Reconciler.run([
+  console.log ("basePath: ", basePath)
+
+  await Reconcile.run([
     '--basePath', basePath,
     '--workspace', workspace,
     '--email', email,
