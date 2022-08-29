@@ -94,7 +94,7 @@ Copy the `.env.defaults` file to `.env`, and set the values of this new file to 
 One of the values required is the organization ID which is not visible in the NAD yet, but can be obtained from the URL when you select an org.
 For example, in the URL `https://nad.thenile.dev/clustify/organization/org_02qfJTCBve6bw0XlxC92CG`, the organization id is `org_02qfJTCBve6bw0XlxC92CG`.
 
-Run the reconciler as follows:
+Test the reconciler as follows:
 
 ```
 yarn install
