@@ -1,14 +1,11 @@
 import { Reconciler } from './src/command/reconciler';
 
-import "dotenv/config"
+import * as dotenv from "dotenv";
 
 async function run() {
 
-  console.log ("test env (TO REMOVE): ")
-
-  // test
-  console.log(process.env)
-  return
+  dotenv.config()
+  //console.log ("(TO REMOVE) test env: ", process.env)
 
   const basePath = process.env.NILE_URL
   const workspace = process.env.NILE_WORKSPACE
