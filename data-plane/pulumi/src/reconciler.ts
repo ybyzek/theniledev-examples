@@ -11,6 +11,11 @@ const password = process.env.NILE_DEVELOPER_PASSWORD || '';
 const organization = process.env.NILE_ORGANIZATION_ID || '';
 const entity = process.env.NILE_ENTITY_NAME || '';
 
+if (basePath == "" || workspace == "" || email == "" || password == "" || organization == "" || entity == "") {
+  console.error("Error: Not all required parameters were defined in .env file.  See .env.defaults for more info")
+  process.exit(1);
+}
+
 async function run() {
 
   await Reconcile.run([
