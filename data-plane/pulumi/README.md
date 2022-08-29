@@ -91,7 +91,6 @@ presence verifies that you're ready to proceed.
 Back up in the `data-plane/pulumi` directory, run `yarn install && yarn build` to create the executable command binary.
 
 Copy the `.env.defaults` file to `.env`, and set the values of this new file to match the values you used in the setup of your control plane.
-
 One of the values required is the organization ID which is not visible in the NAD yet, but can be obtained from the URL when you select an org.
 For example, in the URL `https://nad.thenile.dev/clustify/organization/org_02qfJTCBve6bw0XlxC92CG`, the organization id is `org_02qfJTCBve6bw0XlxC92CG`.
 
@@ -102,7 +101,8 @@ yarn install
 yarn run start
 ```
 
-This will immediately find the newly instantiated SkyNet instance in your Nile
+It automatically imports the `.env` file you created earlier and provide the input parameters for the reconciler.
+The reconciler will immediately find the newly instantiated SkyNet instance in your Nile
 control plane and create a Pulumi stack that represents it, defined by the
 [`pulumis3` program](./src/commands/reconcile/lib/pulumi/pulumiS3.ts). This
 includes a new S3 bucket containing a static website and a bucket policy that
