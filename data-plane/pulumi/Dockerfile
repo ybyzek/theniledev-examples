@@ -24,6 +24,4 @@ WORKDIR /usr/src/reconciler
 RUN ["yarn", "install"]
 RUN ["yarn", "build"]
 
-RUN node -v
-
 ENTRYPOINT ["yarn", "start"]
