@@ -72,7 +72,7 @@ This example assumes you have:
 > These instructions summarize how to [get started with Pulumi](https://www.pulumi.com/docs/get-started/aws/begin/)
 > on AWS. See their docs for a more complete setup.
 
-Set up a new Pulumi project:
+Set up a new Pulumi project called `pulumi-clustify`:
 
 ```bash
 mkdir pulumi-clustify && cd pulumi-clustify
