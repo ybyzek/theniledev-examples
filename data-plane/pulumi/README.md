@@ -1,5 +1,18 @@
 # Nile Data Plane Example #
 
+## Table of Contents
+
+* [Overview](#overview)
+* [Prerequisites](#prerequisites)
+* [Configure your Control Plane](#configure-your-control-plane)
+* [Configure your Data Plane](#configure-your-data-plane)
+* [Run the reconciler](#run-the-reconciler)
+* [Explanation](#Explanation)
+* [Add or remove instances](#add-or-remove-instances)
+
+
+## Overview
+
 This example demonstrates how to synchronize (i.e., `reconcile`) your data
 plane and control plane in real time with Nile events.
 
@@ -86,7 +99,7 @@ Run `pulumi up` to ensure that you've configured Pulumi correctly. This will
 create a new Pulumi stack named `dev`. We won't be using this stack, but its
 presence verifies that you're ready to proceed.
 
-## Create and run the reconciler ##
+## Run the reconciler ##
 
 There are several ways to run the reconciler, as described in the following sections.
 
@@ -183,7 +196,7 @@ Duration: 5s
 Pull up that `websiteUrl` in-browser and you'll find your provided `greeting`
 as well as all of your instance details.
 
-## Add/Remove Instances ##
+## Add or Remove Instances ##
 
 In the [Nile Admin Dashboard](https://nad.thenile.dev/), add one or
 more SkyNet instances to your organization. This will trigger events that the
