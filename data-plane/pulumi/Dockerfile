@@ -1,0 +1,25 @@
+FROM pulumi/pulumi-nodejs:3.38.0-debian
+
+# Get Node v18.0.0+ for Fetch
+ENV NVM_DIR /root/.nvm
+ENV NODE_VERSION 18.7.0
+ENV NVM_INSTALL_PATH $NVM_DIR/versions/node/v$NODE_VERSION
+RUN apt install -y curl
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+SHELL [ "/bin/bash", "-l", "-c" ]
+RUN source $NVM_DIR/nvm.sh \
+   && nvm install $NODE_VERSION \
+   && nvm alias default $NODE_VERSION \
+   && nvm use default
+ENV NODE_PATH $NVM_INSTALL_PATH/lib/node_modules
+ENV PATH $NVM_INSTALL_PATH/bin:$PATH
+
+COPY . /usr/src/reconciler
+WORKDIR /usr/src/reconciler
+
+RUN ["yarn", "install"]
+RUN ["yarn", "build"]
+
+RUN node -v
+
+ENTRYPOINT ["yarn", "start"]

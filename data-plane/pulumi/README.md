@@ -88,28 +88,73 @@ presence verifies that you're ready to proceed.
 
 ## Create and run the reconciler ##
 
-Back up in the `data-plane/pulumi` directory, run `yarn install && yarn build` to create the executable command binary.
+There are several ways to run the reconciler, as described in the following sections.
 
-Copy the `.env.defaults` file to `.env`, and set the values of this new file to match the values you used in the setup of your control plane.
-
+For any of these options, you first have to copy the `.env.defaults` file to `.env`, and set the values of this new file to match the values you used in the setup of your control plane.
 One of the values required is the organization ID which is not visible in the NAD yet, but can be obtained from the URL when you select an org.
 For example, in the URL `https://nad.thenile.dev/clustify/organization/org_02qfJTCBve6bw0XlxC92CG`, the organization id is `org_02qfJTCBve6bw0XlxC92CG`.
 
-Test the reconciler as follows:
+### Using `yarn`
 
+1. Back up in the `data-plane/pulumi` directory, create the executable command binary with the following command
+
+```bash
+yarn install && yarn build
 ```
-yarn install
+
+2. Run the following command
+
+```bash
 yarn run start
 ```
 
-It automatically imports the `.env` file you created earlier and provides them as input parameters to the reconciler.
+### Executable binary
+
+1. Back up in the `data-plane/pulumi` directory, create the executable command binary with the following command
+
+```bash
+yarn install && yarn build
+```
+
+2. Run the following command
+
+```bash
+ ./bin/dev reconcile --basePath $NILE_URL \
+ --workspace $NILE_WORKSPACE_NAME \
+ --entity $NILE_ENTITY_NAME \
+ --organization $NILE_ORGANIZATION_ID \
+ --email $NILE_DEVELOPER_EMAIL \
+ --password $NILE_DEVELOPER_PASSWORD
+ ```
+
+### Docker
+
+1. Back up in the `data-plane/pulumi` directory, build the Docker image (see [Dockerfile](Dockerfile) for image details):
+
+```bash
+docker build . -t reconciler
+```
+
+2. Run the Docker image, taking note of the 3 input parameters required to connect to Pulumi and S3:
+
+```bash
+docker run --init \
+  --env-file .env \
+  -e AWS_ACCESS_KEY_ID=$(aws configure get aws_access_key_id) \
+  -e AWS_SECRET_ACCESS_KEY=$(aws configure get aws_secret_access_key) \
+  -e PULUMI_ACCESS_TOKEN=$PULUMI_ACCESS_TOKEN \
+  reconciler
+```
+
+## Explanation
+
 The reconciler will immediately find the newly instantiated SkyNet instance in your Nile
 control plane and create a Pulumi stack that represents it, defined by the
 [`pulumis3` program](./src/commands/reconcile/lib/pulumi/pulumiS3.ts). This
 includes a new S3 bucket containing a static website and a bucket policy that
 allows public access.
 
-The command will also log out the instance properties, including the 
+The reconciler will also log out the instance properties, including the 
 `websiteUrl` of the object created by the [`pulumis3` program](./src/commands/reconcile/lib/pulumi/pulumiS3.ts):
 
 ```bash
