@@ -90,7 +90,13 @@ presence verifies that you're ready to proceed.
 
 There are several ways to run the reconciler, as described in the following sections.
 
-For any of these options, you first have to copy the `.env.defaults` file to `.env`, and set the values of this new file to match the values you used in the setup of your control plane.
+For any of these options, back up in the `data-plane/pulumi` directory, you first have to copy the `.env.defaults` file to `.env`:
+
+```bash
+cp .env.defaults .env
+```
+
+And then set the values in this new file to match the values you used in the setup of your control plane.
 One of the values required is the organization ID which is not visible in the NAD yet, but can be obtained from the URL when you select an org.
 For example, in the URL `https://nad.thenile.dev/clustify/organization/org_02qfJTCBve6bw0XlxC92CG`, the organization id is `org_02qfJTCBve6bw0XlxC92CG`.
 
@@ -102,7 +108,7 @@ For example, in the URL `https://nad.thenile.dev/clustify/organization/org_02qfJ
 yarn install && yarn build
 ```
 
-2. Run the following command
+2. Run the reconciler:
 
 ```bash
 yarn run start
@@ -116,7 +122,7 @@ yarn run start
 yarn install && yarn build
 ```
 
-2. Run the following command
+2. Run the following reconciler executable:
 
 ```bash
  ./bin/dev reconcile --basePath $NILE_URL \
