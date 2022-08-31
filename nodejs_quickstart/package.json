@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@theniledev/js": "^0.13.1",
+    "@theniledev/js": "^0.17.0",
     "@types/node": "^18.0.0",
     "node-docker-api": "^1.1.22",
     "yarn": "^1.22.19"
