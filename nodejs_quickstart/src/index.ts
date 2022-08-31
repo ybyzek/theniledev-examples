@@ -66,7 +66,7 @@ async function setup_workflow_developer() {
          console.log("Workspace " + NILE_WORKSPACE + " exists");
   } else {
       await nile.workspaces.createWorkspace({
-        createOrganizationRequest: { name: NILE_WORKSPACE}, 
+        createWorkspaceRequest: { name: NILE_WORKSPACE },
       }).then( (ws) => { if (ws != null)  console.log('\x1b[32m%s\x1b[0m', "\u2713", "Created workspace: " + ws.name)})
   }
 
