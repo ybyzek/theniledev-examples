@@ -6,7 +6,7 @@ dotenv.config({ override: true })
 
 let envParams = [
   "NILE_URL",
-  "NILE_WORKSPACE_NAME",
+  "NILE_WORKSPACE",
   "NILE_DEVELOPER_EMAIL",
   "NILE_DEVELOPER_PASSWORD",
   "NILE_ORGANIZATION_ID",
@@ -20,7 +20,7 @@ envParams.forEach( (key: string) => {
 });
 
 const basePath = process.env.NILE_URL!;
-const workspace = process.env.NILE_WORKSPACE_NAME!;
+const workspace = process.env.NILE_WORKSPACE!;
 const email = process.env.NILE_DEVELOPER_EMAIL!;
 const password = process.env.NILE_DEVELOPER_PASSWORD!;
 const organization = process.env.NILE_ORGANIZATION_ID!;

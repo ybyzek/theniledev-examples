@@ -35,8 +35,27 @@ This example assumes you have:
 
 ## Configure the Control Plane ##
 
+For future steps, it will be helpful to have a local Nile configuration file.
+Copy the `.env.defaults` file to `.env`:
+
+```bash
+cp .env.defaults .env
+```
+
+And then set the values in this `.env` file to match the values you want to use in your control plane.
+
+There are a few ways to configure the control plane:
+
+- [Nile Admin Dashboard](#nile-admin-dashboard): use the UI to configure the control plane
+- Programmatically(#programmatically): Use the provided [cp-configure.ts](src/cp-configure.ts) script which leverages the SDK.
+
+### Nile Admin Dashboard
+
 > If you're not familiar with the terminology used below, be sure to read the
 > [Nile Quickstart](https://www.thenile.dev/docs/current/quick-start-ui).
+
+For the values below, make sure they match what you set in the `.env` file.
+In the `.env` file, set `NILE_ORGANIZATION_NAME` and comment out `NILE_ORGANIZATION_ID` (you won't know this yet).
 
 1. Login to the [Nile Admin Dashboard](https://nad.thenile.dev/).
 2. If there isn't one already, create a workspace named "clustify".
@@ -59,7 +78,7 @@ This example assumes you have:
 }
 ```
 
-4. Create an organization in the workspace named "sac-norad".
+4. Create an organization in the workspace named "sac-norad". Note that `NILE_ORGANIZATION_ID` is not visible in the dashboard yet, but can be obtained from the URL when you select the new organization that you just created. For example, in the URL `https://nad.thenile.dev/clustify/organization/org_02qfJTCBve6bw0XlxC92CG`, the organization id is `org_02qfJTCBve6bw0XlxC92CG`.
 5. Create a "SkyNet" instance in the organization, with a value that matches 
    the schema defined earlier:
 
@@ -68,6 +87,30 @@ This example assumes you have:
   "greeting": "Come with me if you want to live."
 }
 ```
+
+### Programmatically
+
+1. Copy the `.env.defaults` file to `.env`:
+
+```bash
+cp .env.defaults .env
+```
+
+And then set the values in this `.env` file to match the values used in the setup of the control plane.
+Be sure to set `NILE_ORGANIZATION_NAME` and comment out `NILE_ORGANIZATION_ID` (you won't know this yet).
+
+2. Install and build the project
+
+```bash
+yarn install && yarn build
+```
+
+3. Configure the control plane. This command will read from the `.env` file you set earlier.
+
+```bash
+yarn cp-configure
+```
+
 
 ## Configure the Data Plane ##
 
@@ -107,17 +150,23 @@ pulumi up
 
 ## Run the reconciler ##
 
-There are several ways to run the reconciler, as described in the following sections.
-
-For any of these options, back up in the `data-plane/pulumi` directory, first copy the `.env.defaults` file to `.env`:
+Back up in the `data-plane/pulumi` directory, first copy the `.env.defaults` file to `.env`:
 
 ```bash
 cp .env.defaults .env
 ```
 
 And then set the values in this `.env` file to match the values used in the setup of the control plane.
-One of the values required is `NILE_ORGANIZATION_ID` which is not visible in the NAD yet, but can be obtained in NAD from the URL when you select an org.
+Be sure to set `NILE_ORGANIZATION_ID` and comment out `NILE_ORGANIZATION_NAME`.
+Note that `NILE_ORGANIZATION_ID` is not visible in the [Nile Admin Dashboard](https://nad.thenile.dev/) yet, but can be obtained in the Nile Admin Dashboard from the URL when you select an org.
 For example, in the URL `https://nad.thenile.dev/clustify/organization/org_02qfJTCBve6bw0XlxC92CG`, the organization id is `org_02qfJTCBve6bw0XlxC92CG`.
+
+Next, there are several ways to run the reconciler, as described in the following sections:
+
+- [Using yarn](#using-yarn)
+- [Executable binary](#executable-binary)
+- [Docker](#docker) 
+
 
 ### Using `yarn`
 
@@ -127,10 +176,10 @@ For example, in the URL `https://nad.thenile.dev/clustify/organization/org_02qfJ
 yarn install && yarn build
 ```
 
-2. Run the reconciler:
+2. Run the reconciler. This command will read from the `.env` file you set earlier.
 
 ```bash
-yarn start
+yarn reconcile
 ```
 
 ### Executable binary
@@ -151,7 +200,7 @@ source .env
 
 ```bash
  ./bin/dev reconcile --basePath $NILE_URL \
- --workspace $NILE_WORKSPACE_NAME \
+ --workspace $NILE_WORKSPACE \
  --entity $NILE_ENTITY_NAME \
  --organization $NILE_ORGANIZATION_ID \
  --email $NILE_DEVELOPER_EMAIL \
