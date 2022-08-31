@@ -16,6 +16,7 @@
     "@pulumi/pulumi": "^3.36.0",
     "@theniledev/js": "^0.17.0",
     "@types/node-fetch": "^2.6.2",
+    "dotenv": "^16.0.1",
     "node-fetch": "^3.2.10"
   },
   "devDependencies": {
@@ -62,6 +63,7 @@
     "postpack": "shx rm -f oclif.manifest.json",
     "posttest": "yarn lint",
     "prepack": "yarn build && oclif manifest && oclif readme",
+    "start": "yarn build && ts-node src/reconciler.ts",
     "test": "mocha --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif readme && git add README.md"
   },
