@@ -150,7 +150,7 @@ more SkyNet instances to your organization. This will trigger events that the
 command receives, and will synchronize accordingly. Deleting an instance in your
 control plane will result in destruction of the corresponding Pulumi stack.
 
-With the current implementation of the [reconciler](src/commands/reconcile/index.ts),
+With the current implementation of the [reconciler example](src/commands/reconcile/index.ts),
 if the reconciler stops running for a period of time and then restarts,
 the events that occurred during the down time are handled as follows:
 
