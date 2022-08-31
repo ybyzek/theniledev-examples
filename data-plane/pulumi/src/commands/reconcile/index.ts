@@ -6,16 +6,6 @@ import { ReconciliationPlan } from '../../model/ReconciliationPlan';
 import { pulumiS3, PulumiAwsDeployment } from './lib/pulumi';
 import { flagDefaults } from './flagDefaults';
 
-// configuration for interacting with nile
-type NileConfig = {
-  workspace: string; // workspace of the application
-  basePath: string; // nile URL (https://prod.thenile.dev)
-};
-type DeveloperCreds = {
-  email: string; // developer email
-  password: string; // developer password
-};
-
 export default class Reconcile extends Command {
   static enableJsonFlag = true;
   static description = 'reconcile nile/pulumi deploys';
@@ -35,10 +25,16 @@ export default class Reconcile extends Command {
       workspace,
       email,
       password,
+      authToken,
     } = flags;
 
     // nile setup
-    await this.connectNile({ basePath, workspace, email, password });
+    this.nile = await Nile({
+      basePath,
+      workspace,
+    }).connect(authToken ?? { email, password });
+
+    // load instances
     const instances = await this.loadNileInstances(
       String(organization),
       String(entity)
@@ -73,34 +69,6 @@ export default class Reconcile extends Command {
       String(flags.entity),
       this.findLastSeq(Object.values(instances))
     );
-  }
-
-  /**
-   * sets up Nile instance, and set auth token to the logged in developer
-   * @param config Configuration for instantiating Nile and logging in
-   */
-  async connectNile({
-    basePath,
-    workspace,
-    email,
-    password,
-  }: NileConfig & DeveloperCreds) {
-    this.nile = Nile({
-      basePath,
-      workspace,
-    });
-    const token = await this.nile.developers
-      .loginDeveloper({
-        loginInfo: {
-          email,
-          password,
-        },
-      })
-      .catch((error: unknown) => {
-        // eslint-disable-next-line no-console
-        console.error('Nile authentication failed', error);
-      });
-    this.nile.authToken = token?.token;
   }
 
   /**

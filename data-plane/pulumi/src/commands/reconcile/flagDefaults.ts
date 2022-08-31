@@ -17,6 +17,9 @@ export const flagDefaults = {
     description: 'developer password',
     default: 'very_secret',
   }),
+  authToken: Flags.string({
+    description: 'developer access token. If used, this overrides the email/password flags.'
+  }),
   organization: Flags.string({
     description: 'an organization in your Nile workspace',
   }),

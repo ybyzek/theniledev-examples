@@ -787,10 +787,10 @@
   resolved "https://registry.yarnpkg.com/@pulumi/query/-/query-0.3.0.tgz#f496608e86a18c3dd31b6c533408e2441c29071d"
   integrity sha512-xfo+yLRM2zVjVEA4p23IjQWzyWl1ZhWOGobsBqRpIarzLvwNH/RAGaoehdxlhx4X92302DrpdIFgTICMN4P38w==
 
-"@theniledev/js@^0.16.0":
-  version "0.16.3"
-  resolved "https://registry.yarnpkg.com/@theniledev/js/-/js-0.16.3.tgz#88273743acae25aa4a718473d9241b74aa55f45b"
-  integrity sha512-MYF+FznAVLjMIC+WGurtxRn/AvvG8M1lwqpw40CDzxdC82o5QHUsFfEG1wrQKKqHJ+cFGkjEC+Nx7i6c09sa+g==
+"@theniledev/js@^0.17.0":
+  version "0.17.0"
+  resolved "https://registry.yarnpkg.com/@theniledev/js/-/js-0.17.0.tgz#ca8abefe60745a4732b403589dd201ad9e0670f9"
+  integrity sha512-gwYrHn5BvmZ7fD7qxOFdB2au1lsw4TYljwJDDkmPLs3gNxRUeEHhmVvEaBVdRGUcd4YTAPuoCniHMKwpZEOErA==
   dependencies:
     "@openapitools/openapi-generator-cli" "^2.5.1"
     es6-promise "^4.2.8"
