@@ -149,3 +149,11 @@ In the [Nile Admin Dashboard](https://nad.thenile.dev/), add one or
 more SkyNet instances to your organization. This will trigger events that the
 command receives, and will synchronize accordingly. Deleting an instance in your
 control plane will result in destruction of the corresponding Pulumi stack.
+
+With the current implementation of the [reconciler](src/commands/reconcile/index.ts),
+if the reconciler stops running for a period of time and then restarts,
+the events that occurred during the down time are handled as follows:
+
+- _New_ entity instances that were created will be reconciled in the data plane
+- _Old_ entity instances that were deleted will be reconciled in the data plane
+- _Existing_ entity instances that were updated will not be reconciled in the data plane. It is left to the developer to apply their own logic to detect a significant change (e.g. use `instanceEvents()` to compare before and after properties) and to determine what action to take in the data plane, if any. 
