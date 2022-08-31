@@ -29,17 +29,12 @@ export default class Reconcile extends Command {
     } = flags;
 
     // nile setup
-    this.nile = await NileApi.connect(
-      {
-        basePath,
-        workspace,
-      },
-      {
-        email,
-        password,
-        authToken,
-      }
-    );
+    this.nile = await Nile({
+      basePath,
+      workspace,
+    }).connect(authToken ?? { email, password });
+
+    // load instances
     const instances = await this.loadNileInstances(
       String(organization),
       String(entity)
