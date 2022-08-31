@@ -130,7 +130,7 @@ yarn install && yarn build
 2. Run the reconciler:
 
 ```bash
-yarn run start
+yarn start
 ```
 
 ### Executable binary
