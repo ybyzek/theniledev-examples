@@ -181,7 +181,7 @@ yarn reconcile
 yarn install && yarn build
 ```
 
-2. Source the `.env` parameters into your shell.  This step isn't necessary since you're passing in the Nile configuration values at the command line, but assuming you already went through the effort of configuring the `.env` file, may as well use it.
+2. Source the `.env` parameters into your shell.  This step isn't entirely necessary since in the next step you can pass in the Nile configuration parameter values at the command line, but assuming you already went through the effort of configuring the `.env` file, may as well use it.
 
 ```bash
 source .env
@@ -208,7 +208,7 @@ docker run --init --rm \
   -e AWS_ACCESS_KEY_ID=$(aws configure get aws_access_key_id) \
   -e AWS_SECRET_ACCESS_KEY=$(aws configure get aws_secret_access_key) \
   -e PULUMI_ACCESS_TOKEN=$PULUMI_ACCESS_TOKEN \
-  theniledev/reconciler:v0.1
+  theniledev/reconciler:v0.2
 ```
 
 ## Explanation
