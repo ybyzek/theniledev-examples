@@ -4,6 +4,7 @@
 
 * [Overview](#overview)
 * [Prerequisites](#prerequisites)
+* [Setup](#setup)
 * [Configure the Control Plane](#configure-the-control-plane)
 * [Configure the Data Plane](#configure-the-data-plane)
 * [Run the reconciler](#run-the-reconciler)
@@ -33,9 +34,10 @@ This example assumes you have:
 * [The Pulumi CLI installed](https://www.pulumi.com/docs/reference/cli/)
 * A Nile developer account using an email address and password
 
-## Configure the Control Plane ##
+## Setup
 
-For future steps, it will be helpful to have a local Nile configuration file.
+For future steps, it will be helpful to have a local file with your Nile configuration.
+For that purpose, in this example, you will create a `.env` file with environment variables.
 Copy the `.env.defaults` file to `.env`:
 
 ```bash
@@ -43,6 +45,8 @@ cp .env.defaults .env
 ```
 
 And then set the values in this `.env` file to match the values you want to use in your control plane.
+
+## Configure the Control Plane ##
 
 There are a few ways to configure the control plane:
 
@@ -90,14 +94,7 @@ In the `.env` file, set `NILE_ORGANIZATION_NAME` and comment out `NILE_ORGANIZAT
 
 ### Programmatically
 
-1. Copy the `.env.defaults` file to `.env`:
-
-```bash
-cp .env.defaults .env
-```
-
-And then set the values in this `.env` file to match the values used in the setup of the control plane.
-Be sure to set `NILE_ORGANIZATION_NAME` and comment out `NILE_ORGANIZATION_ID` (you won't know this yet).
+1. In your `.env` file, be sure to set `NILE_ORGANIZATION_NAME` and comment out `NILE_ORGANIZATION_ID` (you won't know this yet).
 
 2. Install and build the project
 
@@ -105,7 +102,7 @@ Be sure to set `NILE_ORGANIZATION_NAME` and comment out `NILE_ORGANIZATION_ID` (
 yarn install && yarn build
 ```
 
-3. Configure the control plane. This command will read from the `.env` file you set earlier.
+3. Configure the control plane. This command will read from the `.env` file you defined earlier.
 
 ```bash
 yarn cp-configure
@@ -150,13 +147,7 @@ pulumi up
 
 ## Run the reconciler ##
 
-Back up in the `data-plane/pulumi` directory, first copy the `.env.defaults` file to `.env`:
-
-```bash
-cp .env.defaults .env
-```
-
-And then set the values in this `.env` file to match the values used in the setup of the control plane.
+Ensure that the values in your `.env` file match the values used in the setup of the control plane.
 Be sure to set `NILE_ORGANIZATION_ID` and comment out `NILE_ORGANIZATION_NAME`.
 Note that `NILE_ORGANIZATION_ID` is not visible in the [Nile Admin Dashboard](https://nad.thenile.dev/) yet, but can be obtained in the Nile Admin Dashboard from the URL when you select an org.
 For example, in the URL `https://nad.thenile.dev/clustify/organization/org_02qfJTCBve6bw0XlxC92CG`, the organization id is `org_02qfJTCBve6bw0XlxC92CG`.
@@ -176,7 +167,7 @@ Next, there are several ways to run the reconciler, as described in the followin
 yarn install && yarn build
 ```
 
-2. Run the reconciler. This command will read from the `.env` file you set earlier.
+2. Run the reconciler. This command will read from the `.env` file you defined earlier.
 
 ```bash
 yarn reconcile
