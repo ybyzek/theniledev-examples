@@ -90,7 +90,7 @@ async function setup_control_plane() {
       }).then( (ws) => { if (ws != null)  console.log('\x1b[32m%s\x1b[0m', "\u2713", "Created workspace: " + ws.name)})
         .catch((error:any) => {
           if (error.message == "workspace already exists") {
-            console.error(`Workspace ${NILE_WORKSPACE} already exists`)
+            console.error(`Workspace ${NILE_WORKSPACE} already exists (workspace names are globally unique)`)
             process.exit(1);
           } else {
             console.error(error)
