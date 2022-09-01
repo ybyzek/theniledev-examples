@@ -59,7 +59,6 @@ There are a few ways to configure the control plane:
 > [Nile Quickstart](https://www.thenile.dev/docs/current/quick-start-ui).
 
 For the values below, make sure they match what you set in the `.env` file.
-In the `.env` file, set `NILE_ORGANIZATION_NAME` and comment out `NILE_ORGANIZATION_ID` (you won't know this yet).
 
 1. Login to the [Nile Admin Dashboard](https://nad.thenile.dev/).
 2. If there isn't one already, create a workspace named "clustify".
@@ -82,7 +81,7 @@ In the `.env` file, set `NILE_ORGANIZATION_NAME` and comment out `NILE_ORGANIZAT
 }
 ```
 
-4. Create an organization in the workspace named "sac-norad". Note that `NILE_ORGANIZATION_ID` is not visible in the dashboard yet, but can be obtained from the URL when you select the new organization that you just created. For example, in the URL `https://nad.thenile.dev/clustify/organization/org_02qfJTCBve6bw0XlxC92CG`, the organization id is `org_02qfJTCBve6bw0XlxC92CG`.
+4. Create an organization in the workspace named "sac-norad".
 5. Create a "SkyNet" instance in the organization, with a value that matches 
    the schema defined earlier:
 
@@ -94,15 +93,13 @@ In the `.env` file, set `NILE_ORGANIZATION_NAME` and comment out `NILE_ORGANIZAT
 
 ### Programmatically
 
-1. In your `.env` file, set `NILE_ORGANIZATION_NAME` and comment out `NILE_ORGANIZATION_ID` (you won't know this yet).
-
-2. Install and build the project
+1. Install and build the project
 
 ```bash
 yarn install && yarn build
 ```
 
-3. Configure the control plane. This command will read from the `.env` file you defined earlier.
+2. Configure the control plane. This command will read from the `.env` file you defined earlier.
 
 ```bash
 yarn cp-configure
