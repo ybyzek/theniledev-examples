@@ -42,6 +42,8 @@ export default class Reconcile extends Command {
     if (!orgID) {
       console.error ("Cannot determine the ID of the organization from the provided name :" + organizationName)
       process.exit(1);
+    } else {
+      console.log("Organization with name " + organizationName + " exists with id " + orgID)
     }
 
     // load instances
@@ -176,10 +178,8 @@ export default class Reconcile extends Command {
     var myOrgs = await this.nile.organizations.listOrganizations()
     var maybeOrg = myOrgs.find( org => org.name == orgName)
     if (maybeOrg) {
-      console.log("Organization with name " + orgName + " exists with id " + maybeOrg.id)
       return maybeOrg.id
     } else {
-      console.log("Organization with name " + orgName + " does not exist")
       return null
     }
   }
