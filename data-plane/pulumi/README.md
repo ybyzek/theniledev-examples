@@ -4,6 +4,7 @@
 
 * [Overview](#overview)
 * [Prerequisites](#prerequisites)
+* [Setup](#setup)
 * [Configure the Control Plane](#configure-the-control-plane)
 * [Configure the Data Plane](#configure-the-data-plane)
 * [Run the reconciler](#run-the-reconciler)
@@ -33,10 +34,31 @@ This example assumes you have:
 * [The Pulumi CLI installed](https://www.pulumi.com/docs/reference/cli/)
 * A Nile developer account using an email address and password
 
+## Setup
+
+For future steps, it will be helpful to have a local file with your Nile configuration.
+For that purpose, in this example, you will create a `.env` file with environment variables.
+Copy the `.env.defaults` file to `.env`:
+
+```bash
+cp .env.defaults .env
+```
+
+Set the values in this `.env` file to match the values you want in your control plane.
+
 ## Configure the Control Plane ##
 
-> If you're not familiar with the terminology used below, be sure to read the
+There are a few ways to configure the control plane:
+
+- [Nile Admin Dashboard](#nile-admin-dashboard): use the UI to manually configure the control plane
+- [Programmatically](#programmatically): use the provided script which leverages the SDK
+
+### Nile Admin Dashboard
+
+> If you're not familiar with the terminology used below, read the
 > [Nile Quickstart](https://www.thenile.dev/docs/current/quick-start-ui).
+
+For the values below, make sure they match what you set in the `.env` file.
 
 1. Login to the [Nile Admin Dashboard](https://nad.thenile.dev/).
 2. If there isn't one already, create a workspace named "clustify".
@@ -69,10 +91,24 @@ This example assumes you have:
 }
 ```
 
+### Programmatically
+
+1. Install and build the project
+
+```bash
+yarn install && yarn build
+```
+
+2. Configure the control plane. This command will read from the `.env` file you defined earlier. The script is idempotent and instances will be created only once.
+
+```bash
+yarn prereconcile
+```
+
 ## Configure the Data Plane ##
 
-> These instructions summarize how to [get started with Pulumi](https://www.pulumi.com/docs/get-started/aws/begin/)
-> on AWS. See their docs for a more complete setup.
+These instructions summarize how to get started with Pulumi on AWS.
+See the [Pulumi documentation](https://www.pulumi.com/docs/get-started/aws/begin/) for a more complete setup.
 
 1. Set up a new Pulumi project called `pulumi-clustify`:
 
@@ -107,17 +143,13 @@ pulumi up
 
 ## Run the reconciler ##
 
-There are several ways to run the reconciler, as described in the following sections.
+Ensure that the values in your `.env` file match the values used in the setup of the control plane.
 
-For any of these options, back up in the `data-plane/pulumi` directory, first copy the `.env.defaults` file to `.env`:
+Next, there are several ways to run the reconciler, each described in the following sections:
 
-```bash
-cp .env.defaults .env
-```
-
-And then set the values in this `.env` file to match the values used in the setup of the control plane.
-One of the values required is `NILE_ORGANIZATION_ID` which is not visible in the NAD yet, but can be obtained in NAD from the URL when you select an org.
-For example, in the URL `https://nad.thenile.dev/clustify/organization/org_02qfJTCBve6bw0XlxC92CG`, the organization id is `org_02qfJTCBve6bw0XlxC92CG`.
+- [Using yarn](#using-yarn)
+- [Executable binary](#executable-binary)
+- [Docker](#docker) 
 
 ### Using `yarn`
 
@@ -127,10 +159,10 @@ For example, in the URL `https://nad.thenile.dev/clustify/organization/org_02qfJ
 yarn install && yarn build
 ```
 
-2. Run the reconciler:
+2. Run the reconciler. This command will read from the `.env` file you defined earlier.
 
 ```bash
-yarn start
+yarn reconcile
 ```
 
 ### Executable binary
@@ -141,7 +173,7 @@ yarn start
 yarn install && yarn build
 ```
 
-2. Source the `.env` parameters into your shell.
+2. Source the `.env` parameters into your shell.  This step isn't entirely necessary since in the next step you can pass in the Nile configuration parameter values at the command line, but assuming you already went through the effort of configuring the `.env` file, may as well use it.
 
 ```bash
 source .env
@@ -151,16 +183,16 @@ source .env
 
 ```bash
  ./bin/dev reconcile --basePath $NILE_URL \
- --workspace $NILE_WORKSPACE_NAME \
+ --workspace $NILE_WORKSPACE \
  --entity $NILE_ENTITY_NAME \
- --organization $NILE_ORGANIZATION_ID \
+ --organizationName $NILE_ORGANIZATION_NAME \
  --email $NILE_DEVELOPER_EMAIL \
  --password $NILE_DEVELOPER_PASSWORD
  ```
 
 ### Docker
 
-1. Back up in the `data-plane/pulumi` directory, run the reconciler Docker image, taking note to validate the 3 input parameters required to connect to S3 and Pulumi:
+1. Back up in the `data-plane/pulumi` directory, run the reconciler Docker image. Ensure that you have valid values for the three input parameters required to connect to S3 (`AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`) and Pulumi (`PULUMI_ACCESS_TOKEN`):
 
 ```bash
 docker run --init --rm \
@@ -168,15 +200,15 @@ docker run --init --rm \
   -e AWS_ACCESS_KEY_ID=$(aws configure get aws_access_key_id) \
   -e AWS_SECRET_ACCESS_KEY=$(aws configure get aws_secret_access_key) \
   -e PULUMI_ACCESS_TOKEN=$PULUMI_ACCESS_TOKEN \
-  theniledev/reconciler:v0.1
+  theniledev/reconciler:v0.2
 ```
 
 ## Explanation
 
 The reconciler will immediately find the newly instantiated SkyNet instance in the Nile
 control plane and create a Pulumi stack that represents it, defined by the
-[`pulumis3` program](./src/commands/reconcile/lib/pulumi/pulumiS3.ts). This
-includes a new S3 bucket containing a static website and a bucket policy that
+[`pulumiS3.ts`](./src/commands/reconcile/lib/pulumi/pulumiS3.ts). Pulumi also
+created a new S3 bucket containing a static website and a bucket policy that
 allows public access.
 
 The reconciler will also log out the instance properties, including the 
@@ -199,14 +231,14 @@ Resources:
 Duration: 5s
 ```
 
-Pull up that `websiteUrl` in-browser and verify you see the provided `greeting`
+Pull up that `websiteUrl` in-browser and verify you see the provided "greeting"
 as well as all of the instance details.
 
 ## Add or Remove Instances ##
 
-In the [Nile Admin Dashboard](https://nad.thenile.dev/), add one or
-more SkyNet instances to the organization. This will trigger events that the
-command receives, and will synchronize accordingly. Deleting an instance in the
+While the reconciler is running, in the [Nile Admin Dashboard](https://nad.thenile.dev/), add one or
+more new SkyNet instances to the organization. This will trigger events that the
+reconciler receives and the data plane will synchronize accordingly. Deleting an instance in the
 control plane will result in destruction of the corresponding Pulumi stack.
 
 With the current implementation of the [reconciler example](src/commands/reconcile/index.ts), if the reconciler stops running for a period of time and then restarts, the events that occurred during the down time are handled as follows:
