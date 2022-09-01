@@ -131,15 +131,25 @@ async function setup_control_plane() {
     }).catch((error:any) => console.error(error.message));
   }
 
-  // Create an instance of the service in the data plane
-  const identifier = Math.floor(Math.random() * 100000)
-  await nile.entities.createInstance({
-    org : tenant_id,
-    type : entityDefinition.name,
-    body : {
-      greeting : `Come with me if you want to live: ${identifier}`
-    }
-  }).then((entity_instance) => console.log ('\x1b[32m%s\x1b[0m', "\u2713", "Created entity instances: " + JSON.stringify(entity_instance, null, 2)))
+  // Check if entity instance already exists, create if not
+  var myInstances = await nile.entities.listInstances({
+        org: tenant_id,
+        type: NILE_ENTITY_NAME,
+      })
+  var maybeInstance = myInstances.find( instance => instance.type == NILE_ENTITY_NAME)
+  if (maybeInstance) {
+    console.log("Entity instance " + NILE_ENTITY_NAME + " exists with id " + maybeInstance.id)
+  } else {
+    console.log(myInstances);
+    const identifier = Math.floor(Math.random() * 100000)
+    await nile.entities.createInstance({
+      org : tenant_id,
+      type : entityDefinition.name,
+      body : {
+        greeting : `Come with me if you want to live: ${identifier}`
+      }
+    }).then((entity_instance) => console.log ('\x1b[32m%s\x1b[0m', "\u2713", "Created entity instances: " + JSON.stringify(entity_instance, null, 2)))
+  }
 
   // List instances of the service
   await nile.entities.listInstances({

@@ -44,13 +44,13 @@ Copy the `.env.defaults` file to `.env`:
 cp .env.defaults .env
 ```
 
-And then set the values in this `.env` file to match the values you want to use in your control plane.
+Set the values in this `.env` file to match the values you want in your control plane.
 
 ## Configure the Control Plane ##
 
 There are a few ways to configure the control plane:
 
-- [Nile Admin Dashboard](#nile-admin-dashboard): use the UI to configure the control plane
+- [Nile Admin Dashboard](#nile-admin-dashboard): use the UI to manually configure the control plane
 - [Programmatically](#programmatically): use the provided script which leverages the SDK
 
 ### Nile Admin Dashboard
