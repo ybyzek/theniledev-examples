@@ -46,6 +46,8 @@ const entityDefinition: CreateEntityRequest = {
     }
 };
 
+var colors = require('colors');
+
 // Setup the Control Plane
 async function setup_control_plane() {
 
@@ -78,7 +80,7 @@ async function setup_control_plane() {
 
   // Get the JWT token
   nile.authToken = nile.developers.authToken;
-  console.log('\x1b[32m%s\x1b[0m', "\u2713", `Logged into Nile as developer ${NILE_DEVELOPER_EMAIL}!\nToken: ` + nile.authToken)
+  console.log(colors.green("\u2713"), `Logged into Nile as developer ${NILE_DEVELOPER_EMAIL}!\nToken: ` + nile.authToken)
 
   // Check if workspace exists, create if not
   var myWorkspaces = await nile.workspaces.listWorkspaces()
@@ -87,7 +89,7 @@ async function setup_control_plane() {
   } else {
       await nile.workspaces.createWorkspace({
         createWorkspaceRequest: { name: NILE_WORKSPACE },
-      }).then( (ws) => { if (ws != null)  console.log('\x1b[32m%s\x1b[0m', "\u2713", "Created workspace: " + ws.name)})
+      }).then( (ws) => { if (ws != null)  console.log(colors.green("\u2713"), "Created workspace: " + ws.name)})
         .catch((error:any) => {
           if (error.message == "workspace already exists") {
             console.error(`Error: workspace ${NILE_WORKSPACE} already exists (workspace names are globally unique)`)
@@ -107,7 +109,7 @@ async function setup_control_plane() {
         createEntityRequest: entityDefinition
       }).then((data) => 
       {
-        console.log('\x1b[32m%s\x1b[0m', "\u2713", 'Created entity: ' + JSON.stringify(data, null, 2));
+        console.log(colors.green("\u2713"), 'Created entity: ' + JSON.stringify(data, null, 2));
       }).catch((error:any) => console.error(error.message)); 
   }
 
@@ -125,7 +127,7 @@ async function setup_control_plane() {
       name : NILE_ORGANIZATION_NAME,
     }}).then ( (org) => {
       if (org != null) {
-        console.log('\x1b[32m%s\x1b[0m', "\u2713", "Created Tenant: " + org.name)
+        console.log(colors.green("\u2713"), "Created Tenant: " + org.name)
         tenant_id = org.id
       }
     }).catch((error:any) => console.error(error.message));
@@ -148,7 +150,7 @@ async function setup_control_plane() {
       body : {
         greeting : `Come with me if you want to live: ${identifier}`
       }
-    }).then((entity_instance) => console.log ('\x1b[32m%s\x1b[0m', "\u2713", "Created entity instances: " + JSON.stringify(entity_instance, null, 2)))
+    }).then((entity_instance) => console.log (colors.green("\u2713"), "Created entity instances: " + JSON.stringify(entity_instance, null, 2)))
   }
 
   // List instances of the service

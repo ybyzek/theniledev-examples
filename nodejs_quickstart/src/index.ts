@@ -26,6 +26,8 @@ const entityDefinition: CreateEntityRequest = {
     }
 };
 
+var colors = require('colors');
+
 // Workflow for the Nile developer
 async function setup_workflow_developer() {
 
@@ -58,7 +60,7 @@ async function setup_workflow_developer() {
 
   // Get the JWT token
   nile.authToken = nile.developers.authToken;
-  console.log('\x1b[32m%s\x1b[0m', "\u2713", `Logged into Nile as developer ${NILE_DEVELOPER_EMAIL}!\nToken: ` + nile.authToken)
+  console.log(colors.green("\u2713"), `Logged into Nile as developer ${NILE_DEVELOPER_EMAIL}!\nToken: ` + nile.authToken)
 
   // Check if workspace exists, create if not
   var myWorkspaces = await nile.workspaces.listWorkspaces()
@@ -67,7 +69,7 @@ async function setup_workflow_developer() {
   } else {
       await nile.workspaces.createWorkspace({
         createWorkspaceRequest: { name: NILE_WORKSPACE },
-      }).then( (ws) => { if (ws != null)  console.log('\x1b[32m%s\x1b[0m', "\u2713", "Created workspace: " + ws.name)})
+      }).then( (ws) => { if (ws != null)  console.log(colors.green("\u2713"), "Created workspace: " + ws.name)})
   }
 
   // Check if entity exists, create if not
@@ -79,7 +81,7 @@ async function setup_workflow_developer() {
         createEntityRequest: entityDefinition
       }).then((data) => 
       {
-        console.log('\x1b[32m%s\x1b[0m', "\u2713", 'Created entity: ' + JSON.stringify(data, null, 2));
+        console.log(colors.green("\u2713"), 'Created entity: ' + JSON.stringify(data, null, 2));
       }).catch((error:any) => console.error(error.message)); 
   }
   
@@ -95,7 +97,7 @@ async function setup_workflow_developer() {
       }
     }).then ( (usr) => {  
       if (usr != null) 
-        console.log('\x1b[32m%s\x1b[0m', "\u2713", "Created User: " + usr.email)
+        console.log(colors.green("\u2713"), "Created User: " + usr.email)
     })
   }
 }
@@ -113,7 +115,7 @@ async function setup_workflow_tenant() {
   })
 
   nile.authToken = nile.users.authToken
-  console.log('\x1b[32m%s\x1b[0m', "\u2713", `Logged into Nile as tenant ${NILE_TENANT_EMAIL}!\nToken: ` + nile.authToken)
+  console.log(colors.green("\u2713"), `Logged into Nile as tenant ${NILE_TENANT_EMAIL}!\nToken: ` + nile.authToken)
 
   var tenant_id;
 
@@ -129,7 +131,7 @@ async function setup_workflow_tenant() {
       name : NILE_TENANT_NAME,
     }}).then ( (org) => {  
       if (org != null) {
-        console.log('\x1b[32m%s\x1b[0m', "\u2713", "Created Tenant: " + org.name)
+        console.log(colors.green("\u2713"), "Created Tenant: " + org.name)
         tenant_id = org.id
       }
     }).catch((error:any) => console.error(error.message));
@@ -147,7 +149,7 @@ async function setup_workflow_tenant() {
     body : {
       dw_name : `DW${iteration_id}`
     }
-  }).then((dw) => console.log ('\x1b[32m%s\x1b[0m', "\u2713", "Created Data Warehouse: " + JSON.stringify(dw, null, 2)))
+  }).then((dw) => console.log (colors.green("\u2713"), "Created Data Warehouse: " + JSON.stringify(dw, null, 2)))
 
   // List instances of the service
   await nile.entities.listInstances({
