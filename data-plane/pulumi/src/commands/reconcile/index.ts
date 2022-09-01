@@ -19,7 +19,6 @@ export default class Reconcile extends Command {
     const { flags } = await this.parse(Reconcile);
     const {
       status,
-      organization,
       organizationName,
       entity,
       basePath,
@@ -35,16 +34,13 @@ export default class Reconcile extends Command {
       workspace,
     }).connect(authToken ?? { email, password });
 
-    // Get orgID either as:
-    // -- input parameter of ID (organization)
-    // -- lookup from input parameter of name (organizationName)
-    if (!organization && !organizationName) {
-      console.error ("Must pass in either organization or organizationName");
+    if (!organizationName) {
+      console.error ("Must pass in organizationName");
       process.exit(1);
     }
-    let orgID = organization || await this.getOrgIDFromOrgName(organizationName!);
+    let orgID = await this.getOrgIDFromOrgName(organizationName!);
     if (!orgID) {
-      console.error ("Cannot determine the ID of the organization.  Check input parameters.")
+      console.error ("Cannot determine the ID of the organization from the provided name :" + organizationName)
       process.exit(1);
     }
 
