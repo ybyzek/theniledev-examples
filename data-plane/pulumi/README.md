@@ -99,12 +99,11 @@ For the values below, make sure they match what you set in the `.env` file.
 yarn install && yarn build
 ```
 
-2. Configure the control plane. This command will read from the `.env` file you defined earlier.
+2. Configure the control plane. This command will read from the `.env` file you defined earlier. The script is idempotent and instances will be created only once.
 
 ```bash
-yarn cp-configure
+yarn prereconcile
 ```
-
 
 ## Configure the Data Plane ##
 
