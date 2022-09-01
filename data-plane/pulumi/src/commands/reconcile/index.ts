@@ -35,12 +35,12 @@ export default class Reconcile extends Command {
     }).connect(authToken ?? { email, password });
 
     if (!organizationName) {
-      console.error ("Must pass in organizationName");
+      console.error ("Error: must pass in organizationName");
       process.exit(1);
     }
     let orgID = await this.getOrgIDFromOrgName(organizationName!);
     if (!orgID) {
-      console.error ("Cannot determine the ID of the organization from the provided name :" + organizationName)
+      console.error ("Error: cannot determine the ID of the organization from the provided name :" + organizationName)
       process.exit(1);
     } else {
       console.log("Organization with name " + organizationName + " exists with id " + orgID)
