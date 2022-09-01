@@ -21,7 +21,10 @@ export const flagDefaults = {
     description: 'developer access token. If used, this overrides the email/password flags.'
   }),
   organization: Flags.string({
-    description: 'an organization in your Nile workspace',
+    description: 'an organization ID in your Nile workspace. If used, this overrides the organizationName flag.',
+  }),
+  organizationName: Flags.string({
+    description: 'an organization name in your Nile workspace',
   }),
   entity: Flags.string({
     description: 'an entity type in your Nile workspace',

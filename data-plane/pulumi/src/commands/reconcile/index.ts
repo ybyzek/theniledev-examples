@@ -20,6 +20,7 @@ export default class Reconcile extends Command {
     const {
       status,
       organization,
+      organizationName,
       entity,
       basePath,
       workspace,
@@ -34,9 +35,22 @@ export default class Reconcile extends Command {
       workspace,
     }).connect(authToken ?? { email, password });
 
+    // Get orgID either as:
+    // -- input parameter of ID (organization)
+    // -- lookup from input parameter of name (organizationName)
+    if (!organization && !organizationName) {
+      console.error ("Must pass in either organization or organizationName");
+      process.exit(1);
+    }
+    let orgID = organization || await this.getOrgIDFromOrgName(organizationName!);
+    if (!orgID) {
+      console.error ("Cannot determine the ID of the organization.  Check input parameters.")
+      process.exit(1);
+    }
+
     // load instances
     const instances = await this.loadNileInstances(
-      String(organization),
+      String(orgID),
       String(entity)
     );
 
@@ -73,17 +87,17 @@ export default class Reconcile extends Command {
 
   /**
    *  Requests all the instances from a single organization, representing Pulumi stacks
-   * @param organization
+   * @param orgID
    * @param entity
    * @returns Array<Instance> info about Pulumi stacks
    */
   async loadNileInstances(
-    organization: string,
+    orgID: string,
     entity: string
   ): Promise<{ [key: string]: Instance }> {
     const instances = (
       await this.nile.entities.listInstances({
-        org: organization,
+        org: orgID,
         type: entity,
       })
     )
@@ -150,4 +164,28 @@ export default class Reconcile extends Command {
       });
     });
   }
+
+  /**
+   * looks up the organization ID from the organization name
+   * @param orgName name of organization to lookup
+   * @returns orgID ID of organization; or null if name not found
+   */
+  private async getOrgIDFromOrgName(
+    orgName: String): Promise< string | null > {
+    this.log(
+      `Looking up the organization ID from the organization name #${orgName}`
+    );
+
+    // Check if organization exists
+    var myOrgs = await this.nile.organizations.listOrganizations()
+    var maybeOrg = myOrgs.find( org => org.name == orgName)
+    if (maybeOrg) {
+      console.log("Organization with name " + orgName + " exists with id " + maybeOrg.id)
+      return maybeOrg.id
+    } else {
+      console.log("Organization with name " + orgName + " does not exist")
+      return null
+    }
+  }
+
 }

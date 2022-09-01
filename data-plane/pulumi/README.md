@@ -148,16 +148,12 @@ pulumi up
 ## Run the reconciler ##
 
 Ensure that the values in your `.env` file match the values used in the setup of the control plane.
-Set `NILE_ORGANIZATION_ID` and comment out `NILE_ORGANIZATION_NAME`.
-Note that `NILE_ORGANIZATION_ID` is not visible in the [Nile Admin Dashboard](https://nad.thenile.dev/) yet, but can be obtained in the Nile Admin Dashboard from the URL when you select an org.
-For example, in the URL `https://nad.thenile.dev/clustify/organization/org_02qfJTCBve6bw0XlxC92CG`, the organization id is `org_02qfJTCBve6bw0XlxC92CG`.
 
 Next, there are several ways to run the reconciler, each described in the following sections:
 
 - [Using yarn](#using-yarn)
 - [Executable binary](#executable-binary)
 - [Docker](#docker) 
-
 
 ### Using `yarn`
 
@@ -193,7 +189,7 @@ source .env
  ./bin/dev reconcile --basePath $NILE_URL \
  --workspace $NILE_WORKSPACE \
  --entity $NILE_ENTITY_NAME \
- --organization $NILE_ORGANIZATION_ID \
+ --organizationName $NILE_ORGANIZATION_NAME \
  --email $NILE_DEVELOPER_EMAIL \
  --password $NILE_DEVELOPER_PASSWORD
  ```
