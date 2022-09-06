@@ -16,7 +16,6 @@
     "@pulumi/pulumi": "^3.36.0",
     "@theniledev/js": "^0.17.0",
     "@types/node-fetch": "^2.6.2",
-    "colors": "^1.4.0",
     "dotenv": "^16.0.1",
     "node-fetch": "^3.2.10"
   },

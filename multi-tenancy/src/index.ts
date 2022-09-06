@@ -1,5 +1,7 @@
 import Nile, { CreateEntityRequest } from "@theniledev/js";
 
+var emoji = require('node-emoji');
+
 import * as dotenv from 'dotenv';
 
 dotenv.config({ override: true });
@@ -14,7 +16,7 @@ let envParams = [
 ]
 envParams.forEach( (key: string) => {
   if (!process.env[key]) {
-    console.error(`Error: missing environment variable ${ key }. See .env.defaults for more info and copy it to .env with your values`);
+    console.error(emoji.get('x'), `Error: missing environment variable ${ key }. See .env.defaults for more info and copy it to .env with your values`);
     process.exit(1);
   }
 });
@@ -47,8 +49,6 @@ const entityDefinition: CreateEntityRequest = {
   }
 };
 
-var colors = require('colors');
-
 // Setup one tenant
 async function setupTenant(userEmail : string, organizationName : string) {
 
@@ -61,18 +61,18 @@ async function setupTenant(userEmail : string, organizationName : string) {
       password: NILE_DEVELOPER_PASSWORD,
     },
   }).catch((error:any) => {
-    console.error(`Error: Failed to login to Nile as developer ${NILE_DEVELOPER_EMAIL}: ` + error.message);
+    console.error(emoji.get('x'), `Error: Failed to login to Nile as developer ${NILE_DEVELOPER_EMAIL}: ` + error.message);
     process.exit(1);
   });
 
   // Get the JWT token
   nile.authToken = nile.developers.authToken;
-  console.log(colors.green("\u2713"), `Logged into Nile as developer ${NILE_DEVELOPER_EMAIL}!\nToken: ` + nile.authToken);
+  console.log(emoji.get('white_check_mark'), `Logged into Nile as developer ${NILE_DEVELOPER_EMAIL}!\nToken: ` + nile.authToken);
 
   // Check if tenant exists, create if not
   var myUsers = await nile.users.listUsers()
   if (myUsers.find( usr => usr.email==userEmail)) {
-      console.log(colors.green("\u2713"), "User " + userEmail + " exists");
+      console.log(emoji.get('white_check_mark'), "User " + userEmail + " exists");
   } else {
     await nile.users.createUser({
       createUserRequest : {
@@ -81,7 +81,7 @@ async function setupTenant(userEmail : string, organizationName : string) {
       }
     }).then ( (usr) => {  
       if (usr != null) 
-        console.log(colors.green("\u2713"), "Created User: " + usr.email);
+        console.log(emoji.get('white_check_mark'), "Created User: " + usr.email);
     })
   }
 
@@ -91,7 +91,7 @@ async function setupTenant(userEmail : string, organizationName : string) {
   var myOrgs = await nile.organizations.listOrganizations();
   var maybeTenant = myOrgs.find( org => org.name == organizationName);
   if (maybeTenant) {
-    console.log(colors.green("\u2713"), "Org " + userEmail + " exists with id " + maybeTenant.id);
+    console.log(emoji.get('white_check_mark'), "Org " + userEmail + " exists with id " + maybeTenant.id);
     orgID = maybeTenant.id;
   } else {
     await nile.organizations.createOrganization({"createOrganizationRequest" : 
@@ -99,14 +99,14 @@ async function setupTenant(userEmail : string, organizationName : string) {
       name : organizationName,
     }}).then ( (org) => {  
       if (org != null) {
-        console.log(colors.green("\u2713"), "Created Tenant: " + org.name);
+        console.log(emoji.get('white_check_mark'), "Created Tenant: " + org.name);
         orgID = org.id;
       }
     }).catch((error:any) => console.error(error.message));
   }
 
   if (!orgID) {
-    console.error(`Unable to find or create organization with name ${organizationName}`);
+    console.error(emoji.get('x'), `Unable to find or create organization with name ${organizationName}`);
     process.exit(1);
   }
 
@@ -121,10 +121,10 @@ async function setupTenant(userEmail : string, organizationName : string) {
   nile.organizations
     .addUserToOrg(body)
     .then((data) => {
-      console.log(colors.green("\u2713"), `Added tenant ${userEmail} to orgID ${orgID}`);
+      console.log(emoji.get('white_check_mark'), `Added tenant ${userEmail} to orgID ${orgID}`);
     }).catch((error:any) => {
       if (error.message.startsWith('User is already in org')) {
-        console.log(colors.green("\u2713"), `User ${userEmail} is already in ${organizationName}`);
+        console.log(emoji.get('white_check_mark'), `User ${userEmail} is already in ${organizationName}`);
       } else {
         console.error(error)
         process.exit(1);
@@ -138,7 +138,7 @@ async function setupTenant(userEmail : string, organizationName : string) {
       })
   var maybeInstance = myInstances.find( instance => instance.type == NILE_ENTITY_NAME)
   if (maybeInstance) {
-    console.log(colors.green("\u2713"), "Entity instance " + NILE_ENTITY_NAME + " exists with id " + maybeInstance.id);
+    console.log(emoji.get('white_check_mark'), "Entity instance " + NILE_ENTITY_NAME + " exists with id " + maybeInstance.id);
   } else {
     console.log(myInstances);
     const identifier = Math.floor(Math.random() * 100000)
@@ -148,7 +148,7 @@ async function setupTenant(userEmail : string, organizationName : string) {
       body: {
         greeting : `Come with me if you want to live: ${identifier}`
       }
-    }).then((entity_instance) => console.log (colors.green("\u2713"), "Created entity instance: " + JSON.stringify(entity_instance, null, 2)))
+    }).then((entity_instance) => console.log (emoji.get('white_check_mark'), "Created entity instance: " + JSON.stringify(entity_instance, null, 2)))
   }
 
   // List instances of the service

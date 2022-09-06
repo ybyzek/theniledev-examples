@@ -1,6 +1,8 @@
 import Nile, { CreateEntityRequest, Entity, Organization} from "@theniledev/js";
 import { CreateEntityOperationRequest } from "@theniledev/js/dist/generated/openapi/src";
 
+var emoji = require('node-emoji');
+
 import * as dotenv from 'dotenv';
 
 dotenv.config({ override: true })
@@ -15,7 +17,7 @@ let envParams = [
 ]
 envParams.forEach( (key: string) => {
   if (!process.env[key]) {
-    console.error(`Error: missing environment variable ${ key }. See .env.defaults for more info and copy it to .env with your values`);
+    console.error(emoji.get('x'), `Error: missing environment variable ${ key }. See .env.defaults for more info and copy it to .env with your values`);
     process.exit(1);
   }
 });
@@ -35,10 +37,6 @@ const nile = Nile({
   workspace: NILE_WORKSPACE,
 });
 
-var colors = require('colors');
-
-
-
 async function run() {
 
   console.log(`\nLogging into Nile at ${NILE_URL}, workspace ${NILE_WORKSPACE}, as developer ${NILE_DEVELOPER_EMAIL}`)
@@ -50,7 +48,7 @@ async function run() {
       password: NILE_DEVELOPER_PASSWORD,
     },
   }).catch((error:any) => {
-    console.error(`Failed to login to Nile as developer ${NILE_DEVELOPER_EMAIL}: ` + error.message);
+    console.error(emoji.get('x'), `Failed to login to Nile as developer ${NILE_DEVELOPER_EMAIL}: ` + error.message);
     process.exit(1);
   });
 
@@ -62,10 +60,10 @@ async function run() {
   var myOrgs = await nile.organizations.listOrganizations()
   var maybeTenant = myOrgs.find( org => org.name == NILE_ORGANIZATION_NAME)
   if (maybeTenant) {
-    console.log(colors.green("\u2713"), "Org " + NILE_ORGANIZATION_NAME + " exists with id " + maybeTenant.id)
+    console.log(emoji.get('white_check_mark'), "Org " + NILE_ORGANIZATION_NAME + " exists with id " + maybeTenant.id)
     tenant_id = maybeTenant.id
   } else {
-    console.error("Cannot find org id for " + NILE_ORGANIZATION_NAME)
+    console.error(emoji.get('x'), "Cannot find org id for " + NILE_ORGANIZATION_NAME)
   }
 
   // Find instance with matching name
@@ -74,7 +72,7 @@ async function run() {
     type: NILE_ENTITY_NAME
   })
   if ( instances.find( i => i.properties.greeting.startsWith('Come with me if you want to live')) != null) {
-    console.log (colors.green("\u2713"), `Found Data Warehouse entry`)
+    console.log (emoji.get('white_check_mark'), `Found Data Warehouse entry`)
   } else {
     console.error (`Error: could not find Data Warehouse entity instance`)
     return process.exit(1)

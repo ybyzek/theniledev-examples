@@ -1,5 +1,7 @@
 import Nile from '@theniledev/js';
 
+var emoji = require('node-emoji');
+
 import * as dotenv from 'dotenv';
 
 dotenv.config({ override: true });
@@ -14,7 +16,7 @@ let envParams = [
 ]
 envParams.forEach( (key: string) => {
   if (!process.env[key]) {
-    console.error(`Error: missing environment variable ${ key }. See .env.defaults for more info and copy it to .env with your values`);
+    console.error(emoji.get('x'), `Error: missing environment variable ${ key }. See .env.defaults for more info and copy it to .env with your values`);
     process.exit(1);
   }
 });
@@ -36,8 +38,6 @@ const nile = Nile({
   workspace: NILE_WORKSPACE,
 });
 
-var colors = require('colors');
-
 async function testTenant(orgID : string, expectEmpty : boolean = false) {
 
   console.log(`\nLogging into Nile at ${NILE_URL}, workspace ${NILE_WORKSPACE}, as tenant ${NILE_TENANT1_EMAIL}`);
@@ -51,7 +51,7 @@ async function testTenant(orgID : string, expectEmpty : boolean = false) {
   })
 
   nile.authToken = nile.users.authToken
-  console.log(colors.green("\u2713"), `--> Logged into Nile as tenant ${NILE_TENANT1_EMAIL}!\nToken: ` + nile.authToken);
+  console.log(emoji.get('white_check_mark'), `--> Logged into Nile as tenant ${NILE_TENANT1_EMAIL}!\nToken: ` + nile.authToken);
 
   // List instances of the service
   await nile.entities.listInstances({
@@ -60,7 +60,7 @@ async function testTenant(orgID : string, expectEmpty : boolean = false) {
   }).then((instances) => {
     console.log("\n--> TENANT: list of allowed instances:", instances);
     if (expectEmpty && instances.length != 0) {
-      console.error(`Error: Tenant should not see ${NILE_ENTITY_NAME} instances`);
+      console.error(emoji.get('x'), `Error: Tenant should not see ${NILE_ENTITY_NAME} instances`);
       process.exit(1);
     }
   }).catch((error: any) => console.error(error));
@@ -93,13 +93,13 @@ async function run() {
       password: NILE_DEVELOPER_PASSWORD,
     },
     }).catch((error:any) => {
-      console.error(`Error: Failed to login to Nile as developer ${NILE_DEVELOPER_EMAIL}: ` + error.message);
+      console.error(emoji.get('x'), `Error: Failed to login to Nile as developer ${NILE_DEVELOPER_EMAIL}: ` + error.message);
       process.exit(1);
     });
 
   // Get the JWT token
   nile.authToken = nile.developers.authToken;
-  console.log(colors.green("\u2713"), `Logged into Nile as developer ${NILE_DEVELOPER_EMAIL}!\nToken: ` + nile.authToken);
+  console.log(emoji.get('white_check_mark'), `Logged into Nile as developer ${NILE_DEVELOPER_EMAIL}!\nToken: ` + nile.authToken);
 
   console.log(`NILE_ORGANIZATION_NAME is ${NILE_ORGANIZATION_NAME}`);
 
@@ -143,13 +143,13 @@ async function run() {
     },
     })
     .catch((error:any) => {
-      console.error(`Error: Failed to login to Nile as developer ${NILE_DEVELOPER_EMAIL}: ` + error.message);
+      console.error(emoji.get('x'), `Error: Failed to login to Nile as developer ${NILE_DEVELOPER_EMAIL}: ` + error.message);
       process.exit(1);
     });
 
   // Get the JWT token
   nile.authToken = nile.developers.authToken;
-  console.log(colors.green("\u2713"), `Logged into Nile as developer ${NILE_DEVELOPER_EMAIL}!\nToken: ` + nile.authToken);
+  console.log(emoji.get('white_check_mark'), `Logged into Nile as developer ${NILE_DEVELOPER_EMAIL}!\nToken: ` + nile.authToken);
 
   // Create rule
   var ruleID;

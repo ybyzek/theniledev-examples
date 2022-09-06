@@ -1,5 +1,7 @@
 import Nile, { CreateEntityRequest } from "@theniledev/js";
 
+var emoji = require('node-emoji');
+
 import * as dotenv from 'dotenv';
 
 dotenv.config({ override: true });
@@ -14,7 +16,7 @@ let envParams = [
 ]
 envParams.forEach( (key: string) => {
   if (!process.env[key]) {
-    console.error(`Error: missing environment variable ${ key }. See .env.defaults for more info and copy it to .env with your values`);
+    console.error(emoji.get('x'), `Error: missing environment variable ${ key }. See .env.defaults for more info and copy it to .env with your values`);
     process.exit(1);
   }
 });
@@ -47,8 +49,6 @@ const entityDefinition: CreateEntityRequest = {
   }
 };
 
-var colors = require('colors');
-
 async function getInstances(
   tenantEmail: string,
   organizationName: string
@@ -65,16 +65,16 @@ async function getInstances(
   })
 
   nile.authToken = nile.users.authToken
-  console.log(colors.green("\u2713"), `Logged into Nile as tenant ${tenantEmail}!`)
+  console.log(emoji.get('white_check_mark'), `Logged into Nile as tenant ${tenantEmail}!`)
 
   let orgID = await getOrgIDFromOrgName (organizationName);
   if (orgID) {
-    console.log(colors.green("\u2713"), "Org " + organizationName + " exists in org id " + orgID);
+    console.log(emoji.get('white_check_mark'), "Org " + organizationName + " exists in org id " + orgID);
   } else {
     console.log(`Logged in as tenant ${tenantEmail}, cannot find organization with name ${organizationName}`);
     return;
   }
-  console.log(colors.green("\u2713"), "Mapped organizationName " + organizationName + " to orgID " + orgID);
+  console.log(emoji.get('white_check_mark'), "Mapped organizationName " + organizationName + " to orgID " + orgID);
 
   // List instances of the service
   const instances = (
@@ -109,20 +109,20 @@ async function addTenant(
       password: NILE_DEVELOPER_PASSWORD,
     },
   }).catch((error:any) => {
-    console.error(`Error: Failed to login to Nile as developer ${NILE_DEVELOPER_EMAIL}: ` + error.message);
+    console.error(emoji.get('x'), `Error: Failed to login to Nile as developer ${NILE_DEVELOPER_EMAIL}: ` + error.message);
     process.exit(1);
   });
 
   // Get the JWT token
   nile.authToken = nile.developers.authToken;
-  console.log(colors.green("\u2713"), `Logged into Nile as developer ${NILE_DEVELOPER_EMAIL}!`);
+  console.log(emoji.get('white_check_mark'), `Logged into Nile as developer ${NILE_DEVELOPER_EMAIL}!`);
 
   // Get orgID
   let orgID = await getOrgIDFromOrgName (organizationName);
   if (orgID) {
-    console.log(colors.green("\u2713"), "Org " + organizationName + " exists in org id " + orgID);
+    console.log(emoji.get('white_check_mark'), "Org " + organizationName + " exists in org id " + orgID);
   } else {
-    console.error(`Error: organization ${organizationName} for tenant ${tenantEmail} should have already been configured`);
+    console.error(emoji.get('x'), `Error: organization ${organizationName} for tenant ${tenantEmail} should have already been configured`);
     process.exit(1);
   }
   //console.log("orgID is: " + orgID);
@@ -137,10 +137,10 @@ async function addTenant(
   nile.organizations
     .addUserToOrg(body)
     .then((data) => {
-      console.log(colors.green("\u2713"), `Added tenant ${tenantEmail} to orgID ${orgID}`);
+      console.log(emoji.get('white_check_mark'), `Added tenant ${tenantEmail} to orgID ${orgID}`);
     }).catch((error:any) => {
       if (error.message.startsWith('User is already in org')) {
-        console.log(colors.green("\u2713"), `User ${tenantEmail} is already in ${organizationName}`);
+        console.log(emoji.get('white_check_mark'), `User ${tenantEmail} is already in ${organizationName}`);
       } else {
         console.error(error)
         process.exit(1);
@@ -186,16 +186,16 @@ async function run() {
   console.log(`\n-->Compare to instances: ${NILE_TENANT2_EMAIL} in ${NILE_ORGANIZATION_NAME}2: ${instances2c}`);
 
   if (instances2b == undefined || instances2c == undefined) {
-    console.error(`Error in setup, need to troubleshoot.`);
+    console.error(emoji.get('x'), `Error in setup, need to troubleshoot.`);
     process.exit(1)
   }
   const diff = getDifference(instances2b, instances2c);
   if (diff != "") {
-    console.error(`Error: ${NILE_TENANT1_EMAIL} should see the same instances as ${NILE_TENANT2_EMAIL} in ${NILE_ORGANIZATION_NAME}2 after being added to that org`);
+    console.error(emoji.get('x'), `Error: ${NILE_TENANT1_EMAIL} should see the same instances as ${NILE_TENANT2_EMAIL} in ${NILE_ORGANIZATION_NAME}2 after being added to that org`);
     console.log("Diff: " + diff);
     process.exit(1)
   } else {
-    console.log(colors.green("\u2713"), `No difference between instances seen by ${NILE_TENANT1_EMAIL} and ${NILE_TENANT2_EMAIL}`);
+    console.log(emoji.get('white_check_mark'), `No difference between instances seen by ${NILE_TENANT1_EMAIL} and ${NILE_TENANT2_EMAIL}`);
   }
 
   // Note: at this time there is no interface to delete a user from an organization
