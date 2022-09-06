@@ -1,16 +1,6 @@
 # Nile Data Plane Example #
 
-## Table of Contents
-
-* [Overview](#overview)
-* [Prerequisites](#prerequisites)
-* [Setup](#setup)
-* [Configure the Control Plane](#configure-the-control-plane)
-* [Configure the Data Plane](#configure-the-data-plane)
-* [Run the reconciler](#run-the-reconciler)
-* [Explanation](#Explanation)
-* [Add or remove instances](#add-or-remove-instances)
-
+![image](../../images/Nile-text-logo.png)
 
 ## Overview
 
@@ -24,6 +14,17 @@ using [Pulumi](https://app.pulumi.com/) to deploy objects into AWS.
 > the [`PulumiAwsDeployment`](./src/commands/reconcile/lib/pulumi/PulumiAwsDeployment.ts) 
 > class in this example with your own deployment implementation.
 
+## Contents
+
+* [Overview](#overview)
+* [Prerequisites](#prerequisites)
+* [Setup](#setup)
+* [Configure the Control Plane](#configure-the-control-plane)
+* [Configure the Data Plane](#configure-the-data-plane)
+* [Run the reconciler](#run-the-reconciler)
+* [Explanation](#Explanation)
+* [Add or remove instances](#add-or-remove-instances)
+
 ## Prerequisites ##
 
 This example assumes you have:
@@ -36,12 +37,12 @@ This example assumes you have:
 
 ## Setup
 
-For future steps, it will be helpful to have a local file with your Nile configuration.
-For that purpose, in this example, you will create a `.env` file with environment variables.
-Copy the `.env.defaults` file to `.env`:
+For all examples, you need a local file with your Nile configuration.
+For that purpose, at the top-level of the examples, copy the `.env.defaults` file to `.env`:
 
 ```bash
-cp .env.defaults .env
+# From the top level of the examples folder
+$ examples> cp .env.defaults .env
 ```
 
 Set the values in this `.env` file to match the values you want in your control plane.
@@ -51,7 +52,7 @@ Set the values in this `.env` file to match the values you want in your control 
 There are a few ways to configure the control plane:
 
 - [Nile Admin Dashboard](#nile-admin-dashboard): use the UI to manually configure the control plane
-- [Programmatically](#programmatically): use the provided script which leverages the SDK
+- [Programmatically](#programmatically): use the provided script which leverages the Nile SDK
 
 ### Nile Admin Dashboard
 
@@ -62,7 +63,7 @@ For the values below, make sure they match what you set in the `.env` file.
 
 1. Login to the [Nile Admin Dashboard](https://nad.thenile.dev/).
 2. If there isn't one already, create a workspace named "clustify".
-3. Create an entity type named "SkyNet". For this example, the entity defintion can have a simple schema:
+3. Create an entity type named "SkyNet". For this example, the entity definition can have a simple schema:
 
 ```json
 {
@@ -182,13 +183,13 @@ source .env
 3. Run the following reconciler executable:
 
 ```bash
- ./bin/dev reconcile --basePath $NILE_URL \
- --workspace $NILE_WORKSPACE \
- --entity $NILE_ENTITY_NAME \
- --organizationName $NILE_ORGANIZATION_NAME \
- --email $NILE_DEVELOPER_EMAIL \
- --password $NILE_DEVELOPER_PASSWORD
- ```
+./bin/dev reconcile --basePath $NILE_URL \
+  --workspace $NILE_WORKSPACE \
+  --entity $NILE_ENTITY_NAME \
+  --organizationName $NILE_ORGANIZATION_NAME \
+  --email $NILE_DEVELOPER_EMAIL \
+  --password $NILE_DEVELOPER_PASSWORD
+```
 
 ### Docker
 

@@ -6,7 +6,8 @@ _Note any breaking changes_
 
 ### Checklist before merge
 
-<!-- - [ ] Validate examples in prod -->
+<!-- - [ ] Manually validate examples in prod -->
+<!-- - [ ] Workflow in GitHub Actions passes -->
 <!-- - [ ] Update relevant READMEs -->
 <!-- - [ ] Spell check (e.g. using `aspell`) -->
 <!-- - [ ] Ensure `Squash and merge` is checked -->
@@ -16,7 +17,8 @@ _Note any breaking changes_
 _Describe the validation already done, or needs to be done, by the PR submitter._
 
 <!-- Uncomment any of the following that are required -->
-<!-- - [ ] nodejs_quickstart -->
+<!-- - [ ] quickstart -->
+<!-- - [ ] multi-tenancy -->
 <!-- - [ ] data-plane/pulumi -->
 <!-- - [ ] python-flask-todo-list -->
 
@@ -25,7 +27,8 @@ _Describe the validation already done, or needs to be done, by the PR submitter.
 _Describe the tasks/validation that the PR submitter is requesting to be done by the reviewer._
 
 <!-- Uncomment any of the following that are required -->
-<!-- - [ ] nodejs_quickstart -->
+<!-- - [ ] quickstart -->
+<!-- - [ ] multi-tenancy -->
 <!-- - [ ] data-plane/pulumi -->
 <!-- - [ ] python-flask-todo-list -->
 

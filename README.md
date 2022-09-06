@@ -1,10 +1,26 @@
-# examples
-Example and demos that show how to use Nile in various languages, environments and use-cases
+# Nile Examples
 
-Each directory contains an individual example or demo. Check the README in each directory to learn more about each example:
+![image](images/Nile-text-logo.png)
 
-| Example | Local | Docker | Description |
-|---------|-------|--------|-------------|
-| [Minimal Quickstart](nodejs_quickstart/) | Y |  N | A minimal example of using some of the core Nile APIs |
-| [Data Plane with Pulumi](data-plane/pulumi/) | Y | N | This example demonstrates how to synchronize your data plane and control plane in real time with Nile events. |
-| [Python + Flask Todo List Webapp](python-flask-todo-list/) | Y | Y |  Taking a basic Todo List webapp written in Python and Flask and turning it to a PLG SaaS product with Nile APIs |
+## Overview
+
+These examples demonstrate how to use Nile as a control plane for an Infrastructure SaaS product.
+
+## Instructions
+
+Start here to configure a base Nile control plane:
+
+| Example | Languages Shown | Description |
+|---------|-----------------|-------------|
+| [Quickstart](quickstart) | JS SDK | Setup a minimal Nile control plane with a single tenant |
+
+You can use Nile for different use cases, so after running the Quickstart, you can run the examples independently.
+They can also be run sequentionally to build on top of one another, in which case, we recommend running them in the following order to build up your SaaS as you go.
+
+| Example | Languages Shown | Description |
+|---------|-----------------|-------------|
+| [Multi-tenancy](multi-tenancy) | JS SDK | Setup the Nile control plane with multiple tenants and users |
+| [Data Plane with Pulumi](data-plane/pulumi/) | JS SDK | Synchronize your data plane and control plane in real time with Nile events. Even if you're using another deployment tool like Kubernetes or Terraform, similar principles apply |
+| Authorization | | _coming soon_ |
+| Metrics | | _coming soon_ |
+| Webapp | | _coming soon_ |
