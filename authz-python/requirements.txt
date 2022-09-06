@@ -1,0 +1,6 @@
+requests
+#os
+#json
+#sys
+python-dotenv
+emoji

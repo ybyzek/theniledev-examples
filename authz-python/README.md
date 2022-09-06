@@ -6,7 +6,7 @@
 
 This example uses Python and the NILE REST API to demonstrate authorization features in Nile in the following workflow:
 
-- List the `SkyNet` instances allowed to be read by the user nora1@demo.io in a given organization
+- List rules
 - Create a new rule that denies the user access to instances of the type `SkyNet` (organization is provided in the request)
 
   ```json
@@ -17,30 +17,17 @@ This example uses Python and the NILE REST API to demonstrate authorization feat
   }
   ```
 
-- List the `SkyNet` instances allowed to be read by the user in a given organization: should be none
 - Delete the rule
-- List the `SkyNet` instances allowed to be read by the user in a given organization
 
 
 ## Install Dependencies
 
+Note that this example has been validated with Python 3.8.9 so please ensure you are using a compatible version.
+
 Run the following command:
 
 ```
-yarn install
-```
-
-Your output should resemble:
-
-```bash
-yarn install v1.22.19
-warning package.json: No license field
-warning No license field
-[1/4] 🔍  Resolving packages...
-[2/4] 🚚  Fetching packages...
-[3/4] 🔗  Linking dependencies...
-[4/4] 🔨  Building fresh packages...
-✨  Done in 2.26s.
+pip3 install -r requirements.txt
 ```
 
 ## Setup
@@ -60,5 +47,5 @@ Set the values in this `.env` file to match the values you want in your control 
 To execute the workflow, run the following command:
 
 ```
-yarn start
+python authz.py
 ```

@@ -11,6 +11,8 @@ _Note any breaking changes_
 <!-- - [ ] Update relevant READMEs -->
 <!-- - [ ] Spell check (e.g. using `aspell`) -->
 <!-- - [ ] Ensure `Squash and merge` is checked -->
+<!-- - [ ] Update GH workflow -->
+<!-- - [ ] Update PR template -->
 
 ### Submitter Validation
 
@@ -20,7 +22,8 @@ _Describe the validation already done, or needs to be done, by the PR submitter.
 <!-- - [ ] quickstart -->
 <!-- - [ ] multi-tenancy -->
 <!-- - [ ] data-plane/pulumi -->
-<!-- - [ ] authorization -->
+<!-- - [ ] authz -->
+<!-- - [ ] authz-python -->
 <!-- - [ ] python-flask-todo-list -->
 
 ### Reviewer Tasks
@@ -31,6 +34,6 @@ _Describe the tasks/validation that the PR submitter is requesting to be done by
 <!-- - [ ] quickstart -->
 <!-- - [ ] multi-tenancy -->
 <!-- - [ ] data-plane/pulumi -->
-<!-- - [ ] authorization -->
+<!-- - [ ] authz -->
+<!-- - [ ] authz-python -->
 <!-- - [ ] python-flask-todo-list -->
-
