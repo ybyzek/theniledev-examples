@@ -114,11 +114,11 @@ async function setup_workflow_developer() {
   // Check if organization exists, create if not
   var myOrgs = await nile.organizations.listOrganizations();
   var maybeTenant = myOrgs.find( org => org.name == NILE_ORGANIZATION_NAME);
-  var tenant_id! : string;
+  var orgID! : string;
 
   if (maybeTenant) {
     console.log(emoji.get('white_check_mark'), "Org " + NILE_ORGANIZATION_NAME + " exists with id " + maybeTenant.id);
-    tenant_id = maybeTenant.id;
+    orgID = maybeTenant.id;
   } else {
     await nile.organizations.createOrganization({"createOrganizationRequest" :
     {
@@ -126,14 +126,14 @@ async function setup_workflow_developer() {
     }}).then ( (org) => {
       if (org != null) {
         console.log(emoji.get('white_check_mark'), "Created Tenant: " + org.name);
-        tenant_id = org.id
+        orgID = org.id
       }
     }).catch((error:any) => console.error(error.message));
   }
 
   // Check if entity instance already exists, create if not
   let myInstances = await nile.entities.listInstances({
-    org: tenant_id,
+    org: orgID,
     type: NILE_ENTITY_NAME,
   });
   let maybeInstance = myInstances.find( instance => instance.type == NILE_ENTITY_NAME);
@@ -143,7 +143,7 @@ async function setup_workflow_developer() {
     console.log(myInstances);
     const identifier = Math.floor(Math.random() * 100000)
     await nile.entities.createInstance({
-      org: tenant_id,
+      org: orgID,
       type: entityDefinition.name,
       body: {
         greeting : `Come with me if you want to live: ${identifier}`
@@ -153,7 +153,7 @@ async function setup_workflow_developer() {
 
   // List instances of the service
   await nile.entities.listInstances({
-    org: tenant_id,
+    org: orgID,
     type: entityDefinition.name
   }).then((entity_instances) => {
     console.log("The following entity instances exist:");

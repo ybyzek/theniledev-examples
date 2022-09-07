@@ -56,25 +56,25 @@ async function run() {
   nile.authToken = nile.developers.authToken;
 
   // Find tenant id
-  var tenant_id;
+  var orgID;
   var myOrgs = await nile.organizations.listOrganizations()
   var maybeTenant = myOrgs.find( org => org.name == NILE_ORGANIZATION_NAME)
   if (maybeTenant) {
     console.log(emoji.get('white_check_mark'), "Org " + NILE_ORGANIZATION_NAME + " exists with id " + maybeTenant.id)
-    tenant_id = maybeTenant.id
+    orgID = maybeTenant.id
   } else {
     console.error(emoji.get('x'), "Cannot find org id for " + NILE_ORGANIZATION_NAME)
   }
 
   // Find instance with matching name
   var instances = await nile.entities.listInstances({
-    org: tenant_id,
+    org: orgID,
     type: NILE_ENTITY_NAME
   })
   if ( instances.find( i => i.properties.greeting.startsWith('Come with me if you want to live')) != null) {
-    console.log (emoji.get('white_check_mark'), `Found Data Warehouse entry`)
+    console.log (emoji.get('white_check_mark'), `Found entity instance ${NILE_ENTITY_NAME}`);
   } else {
-    console.error (`Error: could not find Data Warehouse entity instance`)
+    console.error (`Error: could not find entity instance for ${NILE_ENTITY_NAME}`)
     return process.exit(1)
   }
 

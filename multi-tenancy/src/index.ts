@@ -155,9 +155,8 @@ async function setupTenant(userEmail : string, organizationName : string) {
   await nile.entities.listInstances({
     org: orgID,
     type: NILE_ENTITY_NAME
-  }).then((dws) => {
-    console.log("The following Data Warehouses already exist:");
-    console.log(dws);
+  }).then((instances) => {
+    console.log(`The following entity instances of type ${NILE_ENTITY_NAME} already exist:\n`, instances);
   });
 }
 
