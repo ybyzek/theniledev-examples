@@ -29,6 +29,10 @@ const NILE_DEVELOPER_PASSWORD = process.env.NILE_DEVELOPER_PASSWORD!;
 const NILE_ORGANIZATION_NAME = process.env.NILE_ORGANIZATION_NAME!;
 const NILE_ENTITY_NAME = process.env.NILE_ENTITY_NAME!;
 
+const NILE_TENANT1_EMAIL = 'nora1@demo.io';
+const NILE_TENANT2_EMAIL = 'nora2@demo.io';
+const NILE_TENANT_PASSWORD = 'password';
+
 const nile = Nile({
   basePath: NILE_URL,
   workspace: NILE_WORKSPACE,
@@ -159,6 +163,43 @@ async function setup_workflow_developer() {
     console.log("The following entity instances exist:");
     console.log(entity_instances);
   });
+
+  // Check if tenant exists, create if not
+  var myUsers = await nile.users.listUsers()
+  if (myUsers.find( usr => usr.email==NILE_TENANT1_EMAIL)) {
+      console.log(emoji.get('white_check_mark'), "User " + NILE_TENANT1_EMAIL + " exists");
+  } else {
+    await nile.users.createUser({
+      createUserRequest : {
+        email : NILE_TENANT1_EMAIL,
+        password : NILE_TENANT_PASSWORD
+      }
+    }).then ( (usr) => { 
+      if (usr != null)
+        console.log(emoji.get('white_check_mark'), "Created User: " + usr.email);
+    })
+  }
+
+  // Add user to organization
+  const body = {
+    org: orgID,
+    addUserToOrgRequest: {
+      email: NILE_TENANT1_EMAIL,
+    },
+  };
+  console.log(`Trying to add tenant ${NILE_TENANT1_EMAIL} to orgID ${orgID}`);
+  nile.organizations
+    .addUserToOrg(body)
+    .then((data) => {
+      console.log(emoji.get('white_check_mark'), `Added tenant ${NILE_TENANT1_EMAIL} to orgID ${orgID}`);
+    }).catch((error:any) => {
+      if (error.message.startsWith('User is already in org')) {
+        console.log(emoji.get('white_check_mark'), `User ${NILE_TENANT1_EMAIL} is already in orgID ${orgID}`);
+      } else {
+        console.error(error)
+        process.exit(1);
+      }
+    });
 }
 
 async function setup_control_plane() {

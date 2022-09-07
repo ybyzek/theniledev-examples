@@ -29,9 +29,6 @@ const NILE_DEVELOPER_PASSWORD = process.env.NILE_DEVELOPER_PASSWORD!;
 const NILE_ORGANIZATION_NAME = process.env.NILE_ORGANIZATION_NAME!;
 const NILE_ENTITY_NAME = process.env.NILE_ENTITY_NAME!;
 
-const NILE_TENANT1_EMAIL = 'nora1@demo.io';
-const NILE_TENANT_PASSWORD = 'password';
-
 const nile = Nile({
   basePath: NILE_URL,
   workspace: NILE_WORKSPACE,
