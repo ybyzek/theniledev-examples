@@ -59,6 +59,7 @@
   },
   "scripts": {
     "build": "shx rm -rf dist && tsc -b",
+    "docker-reconcile": "yarn build && ts-node src/reconciler.ts",
     "lint": "eslint . --ext .ts --config .eslintrc",
     "postpack": "shx rm -f oclif.manifest.json",
     "posttest": "yarn lint",

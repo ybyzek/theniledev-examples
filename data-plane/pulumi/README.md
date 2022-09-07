@@ -193,7 +193,13 @@ source .env
 
 ### Docker
 
-1. Back up in the `data-plane/pulumi` directory, run the reconciler Docker image. Ensure that you have valid values for the three input parameters required to connect to S3 (`AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`) and Pulumi (`PULUMI_ACCESS_TOKEN`):
+1. Back up in the `data-plane/pulumi` directory, if you haven't setup your control plane yet, set it up now:
+
+```bash
+yarn prereconcile
+```
+
+2. Run the reconciler Docker image. Ensure that you have valid values for the three input parameters required to connect to S3 (`AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`) and Pulumi (`PULUMI_ACCESS_TOKEN`):
 
 ```bash
 docker run --init --rm \
@@ -201,7 +207,7 @@ docker run --init --rm \
   -e AWS_ACCESS_KEY_ID=$(aws configure get aws_access_key_id) \
   -e AWS_SECRET_ACCESS_KEY=$(aws configure get aws_secret_access_key) \
   -e PULUMI_ACCESS_TOKEN=$PULUMI_ACCESS_TOKEN \
-  theniledev/reconciler:v0.2
+  theniledev/reconciler:v0.3
 ```
 
 ## Explanation

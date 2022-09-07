@@ -25,4 +25,4 @@ WORKDIR /usr/src/reconciler
 RUN ["yarn", "install"]
 RUN ["yarn", "build"]
 
-ENTRYPOINT ["yarn", "reconcile"]
+ENTRYPOINT ["yarn", "docker-reconcile"]
