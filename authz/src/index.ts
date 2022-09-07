@@ -29,8 +29,8 @@ const NILE_ORGANIZATION_NAME = process.env.NILE_ORGANIZATION_NAME!;
 const NILE_ENTITY_NAME = process.env.NILE_ENTITY_NAME!;
 
 // Static
-const NILE_TENANT1_EMAIL = 'nora1@demo.io';
-const NILE_TENANT2_EMAIL = 'nora2@demo.io';
+const NILE_TENANT1_EMAIL = 'nora@demo.io';
+const NILE_TENANT2_EMAIL = 'frank@demo.io';
 const NILE_TENANT_PASSWORD = 'password';
 
 const nile = Nile({

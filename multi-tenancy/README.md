@@ -10,8 +10,8 @@ This example creates (or validates the existence of) the following control plane
 - Create a workspace, which must be globally unique
 - Create an entity called `SkyNet`
 - Create two organizations with one user each:
-  - `sac-norad` with user nora1@demo.io
-  - `sac-norad2` with user nora2@demo.io
+  - `sac-norad` with user nora@demo.io
+  - `sac-norad2` with user frank@demo.io
 - Create a `SkyNet` entity instance in each organization
 
 ## Install Dependencies
@@ -62,7 +62,7 @@ yarn start
 
 ![image](images/nad.png)
 
-2. Validate tenant isolation by running the command below. At first user nora1@demo.io cannot see the organization sac-norad2 nor any instances in it, but after adding nora1@demo.io to sac-norad2, nora1@demo.io can see all the instances in sac-norad2 that nora2@demo.io can see.
+2. Validate tenant isolation by running the command below. At first user nora@demo.io cannot see the organization sac-norad2 nor any instances in it, but after adding nora@demo.io to sac-norad2, nora@demo.io can see all the instances in sac-norad2 that frank@demo.io can see.
 
 ```
 yarn test

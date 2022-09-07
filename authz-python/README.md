@@ -13,7 +13,7 @@ This example uses Python and the NILE REST API to demonstrate authorization feat
   {
     "actions": [ "deny" ],
     "resource": { "type": "SkyNet" },
-    "subject": { "email": "nora1@demo.io" }
+    "subject": { "email": "nora@demo.io" }
   }
   ```
 

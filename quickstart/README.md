@@ -10,7 +10,7 @@ This quickstart creates (or validates the existence of) the following control pl
 - Create a workspace, which must be globally unique
 - Create an entity called `SkyNet`
 - Create an organization with a user:
-  - `sac-norad` with user nora1@demo.io
+  - `sac-norad` with user nora@demo.io
 - Create a `SkyNet` entity instance in the organization
 
 ## Install Dependencies
