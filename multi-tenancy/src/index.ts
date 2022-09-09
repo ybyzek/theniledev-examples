@@ -28,19 +28,14 @@ const NILE_DEVELOPER_PASSWORD = process.env.NILE_DEVELOPER_PASSWORD!;
 const NILE_ORGANIZATION_NAME = process.env.NILE_ORGANIZATION_NAME!;
 const NILE_ENTITY_NAME = process.env.NILE_ENTITY_NAME!;
 
-const NILE_TENANT1_EMAIL = 'nora@demo.io';
-const NILE_TENANT2_EMAIL = 'frank@demo.io';
-const NILE_TENANT_PASSWORD = 'password';
-
 const nile = Nile({
   basePath: NILE_URL,
   workspace: NILE_WORKSPACE,
 });
 
-// Setup one tenant
-async function setupTenant(userEmail : string, organizationName : string) {
+async function login_nile() {
 
-  console.log(`\nLogging into Nile at ${NILE_URL}, workspace ${NILE_WORKSPACE}, as developer ${NILE_DEVELOPER_EMAIL}, to configure tenant ${userEmail} for organizationName ${organizationName}`);
+  console.log(`\nLogging into Nile at ${NILE_URL}, workspace ${NILE_WORKSPACE}, as developer ${NILE_DEVELOPER_EMAIL}`);
 
   // Login developer
   await nile.developers.loginDeveloper({
@@ -57,6 +52,13 @@ async function setupTenant(userEmail : string, organizationName : string) {
   nile.authToken = nile.developers.authToken;
   console.log(emoji.get('white_check_mark'), `Logged into Nile as developer ${NILE_DEVELOPER_EMAIL}!\nToken: ` + nile.authToken);
 
+}
+
+// Setup one tenant
+async function setupTenant(userEmail : string, password : string, organizationName : string) {
+
+  console.log(`\nConfiguring tenant ${userEmail} for organizationName ${organizationName}`);
+
   // Check if tenant exists, create if not
   var myUsers = await nile.users.listUsers()
   if (myUsers.find( usr => usr.email==userEmail)) {
@@ -65,7 +67,7 @@ async function setupTenant(userEmail : string, organizationName : string) {
     await nile.users.createUser({
       createUserRequest : {
         email : userEmail,
-        password : NILE_TENANT_PASSWORD
+        password : password
       }
     }).then ( (usr) => {  
       if (usr != null) 
@@ -148,10 +150,60 @@ async function setupTenant(userEmail : string, organizationName : string) {
   });
 }
 
+async function add_instance_to_org(orgName: string, greeting: string) {
+
+  // Check if organization exists, create if not
+  var myOrgs = await nile.organizations.listOrganizations();
+  var maybeTenant = myOrgs.find( org => org.name == orgName);
+  var orgID! : string;
+
+  if (maybeTenant) {
+    console.log(emoji.get('white_check_mark'), "Org " + orgName + " exists with id " + maybeTenant.id);
+    orgID = maybeTenant.id;
+  } else {
+    await nile.organizations.createOrganization({"createOrganizationRequest" :
+    {
+      name: orgName,
+    }}).then ( (org) => {
+      if (org != null) {
+        console.log(emoji.get('white_check_mark'), "Created new org: " + org.name);
+        orgID = org.id
+      }
+    }).catch((error:any) => console.error(error.message));
+  }
+
+  // Check if entity instance already exists, create if not
+  let myInstances = await nile.entities.listInstances({
+    org: orgID,
+    type: NILE_ENTITY_NAME,
+  });
+  let maybeInstance = myInstances.find( instance => instance.type == NILE_ENTITY_NAME && instance.properties.greeting == greeting );
+  if (maybeInstance) {
+    console.log(emoji.get('white_check_mark'), "Entity instance " + NILE_ENTITY_NAME + " exists with id " + maybeInstance.id);
+  } else {
+    console.log(myInstances);
+    await nile.entities.createInstance({
+      org: orgID,
+      type: NILE_ENTITY_NAME,
+      body: {
+        greeting : greeting
+      }
+    }).then((entity_instance) => console.log (emoji.get('white_check_mark'), "Created entity instance: " + JSON.stringify(entity_instance, null, 2)))
+  }
+}
+
 async function setupMultiTenancy() {
-  // Log in as the tenants
-  await setupTenant(NILE_TENANT1_EMAIL, NILE_ORGANIZATION_NAME);
-  await setupTenant(NILE_TENANT2_EMAIL, `${NILE_ORGANIZATION_NAME}2`);
+  await login_nile();
+
+  const pagesJson = require('../../quickstart/src/datasets/pageList.json');
+  for (let index = 0; index < pagesJson.length ; index++) {
+    await add_instance_to_org(pagesJson[index].org, pagesJson[index].greeting);
+  }
+
+  const usersJson = require('../../quickstart/src/datasets/userList.json');
+  for (let index = 0; index < usersJson.length ; index++) {
+    await setupTenant(usersJson[index].email, usersJson[index].password, usersJson[index].org);
+  }
 }
 
 setupMultiTenancy();

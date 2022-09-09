@@ -9,7 +9,7 @@ This example creates (or validates the existence of) the following control plane
 - Sign up a new developer
 - Create a workspace, which must be globally unique
 - Create an entity called `SkyNet`
-- Create two organizations with one user each:
+- Create two organizations with one user each (see [userList.json](../quickstart/src/datasets/userList.json) for details):
   - `sac-norad` with user nora@demo.io
   - `sac-norad2` with user frank@demo.io
 - Create a `SkyNet` entity instance in each organization

@@ -68,7 +68,7 @@ async function run() {
     org: orgID,
     type: NILE_ENTITY_NAME
   })
-  if ( instances.find( i => i.properties.greeting.startsWith('Come with me if you want to live')) != null) {
+  if ( instances.find( i => i.properties.greeting.startsWith('page')) != null) {
     console.log (emoji.get('white_check_mark'), `Found entity instance ${NILE_ENTITY_NAME}`);
   } else {
     console.error (`Error: could not find entity instance for ${NILE_ENTITY_NAME}`)

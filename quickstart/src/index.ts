@@ -30,9 +30,6 @@ const NILE_DEVELOPER_PASSWORD = process.env.NILE_DEVELOPER_PASSWORD!;
 const NILE_ORGANIZATION_NAME = process.env.NILE_ORGANIZATION_NAME!;
 const NILE_ENTITY_NAME = process.env.NILE_ENTITY_NAME!;
 
-const NILE_TENANT1_EMAIL = 'nora@demo.io';
-const NILE_TENANT_PASSWORD = 'password';
-
 const nile = Nile({
   basePath: NILE_URL,
   workspace: NILE_WORKSPACE,
@@ -108,22 +105,25 @@ async function setup_workflow_developer() {
         console.log(emoji.get('white_check_mark'), 'Created entity: ' + JSON.stringify(data, null, 2));
       }).catch((error:any) => console.error(error.message)); 
   }
+}
+
+async function add_instance_to_org(orgName: string, greeting: string) {
 
   // Check if organization exists, create if not
   var myOrgs = await nile.organizations.listOrganizations();
-  var maybeTenant = myOrgs.find( org => org.name == NILE_ORGANIZATION_NAME);
+  var maybeTenant = myOrgs.find( org => org.name == orgName);
   var orgID! : string;
 
   if (maybeTenant) {
-    console.log(emoji.get('white_check_mark'), "Org " + NILE_ORGANIZATION_NAME + " exists with id " + maybeTenant.id);
+    console.log(emoji.get('white_check_mark'), "Org " + orgName + " exists with id " + maybeTenant.id);
     orgID = maybeTenant.id;
   } else {
     await nile.organizations.createOrganization({"createOrganizationRequest" :
     {
-      name: NILE_ORGANIZATION_NAME,
+      name: orgName,
     }}).then ( (org) => {
       if (org != null) {
-        console.log(emoji.get('white_check_mark'), "Created Tenant: " + org.name);
+        console.log(emoji.get('white_check_mark'), "Created new org: " + org.name);
         orgID = org.id
       }
     }).catch((error:any) => console.error(error.message));
@@ -134,39 +134,62 @@ async function setup_workflow_developer() {
     org: orgID,
     type: NILE_ENTITY_NAME,
   });
-  let maybeInstance = myInstances.find( instance => instance.type == NILE_ENTITY_NAME);
+  let maybeInstance = myInstances.find( instance => instance.type == NILE_ENTITY_NAME && instance.properties.greeting == greeting );
   if (maybeInstance) {
     console.log(emoji.get('white_check_mark'), "Entity instance " + NILE_ENTITY_NAME + " exists with id " + maybeInstance.id);
   } else {
     console.log(myInstances);
-    const identifier = Math.floor(Math.random() * 100000)
     await nile.entities.createInstance({
       org: orgID,
       type: entityDefinition.name,
       body: {
-        greeting : `Come with me if you want to live: ${identifier}`
+        greeting : greeting
       }
     }).then((entity_instance) => console.log (emoji.get('white_check_mark'), "Created entity instance: " + JSON.stringify(entity_instance, null, 2)))
   }
 
-  // List instances of the service
+  // List instances
   await nile.entities.listInstances({
     org: orgID,
     type: entityDefinition.name
   }).then((entity_instances) => {
-    console.log("The following entity instances exist:");
+    console.log("The following entity instances exist in orgID: ", orgID);
     console.log(entity_instances);
   });
+}
+
+
+async function add_tenant(email: string, password: string, orgName: string) {
+
+  // Check if organization exists, create if not
+  var myOrgs = await nile.organizations.listOrganizations();
+  var maybeTenant = myOrgs.find( org => org.name == orgName);
+  var orgID! : string;
+
+  if (maybeTenant) {
+    console.log(emoji.get('white_check_mark'), "Org " + orgName + " exists with id " + maybeTenant.id);
+    orgID = maybeTenant.id;
+  } else {
+    await nile.organizations.createOrganization({"createOrganizationRequest" :
+    {
+      name: orgName,
+    }}).then ( (org) => {
+      if (org != null) {
+        console.log(emoji.get('white_check_mark'), "Created new org: " + org.name);
+        orgID = org.id
+      }
+    }).catch((error:any) => console.error(error.message));
+  }
 
   // Check if tenant exists, create if not
   var myUsers = await nile.users.listUsers()
-  if (myUsers.find( usr => usr.email==NILE_TENANT1_EMAIL)) {
-      console.log(emoji.get('white_check_mark'), "User " + NILE_TENANT1_EMAIL + " exists");
+  if (myUsers.find( usr => usr.email==email)) {
+      console.log(emoji.get('white_check_mark'), "User " + email + " exists");
   } else {
     await nile.users.createUser({
       createUserRequest : {
-        email : NILE_TENANT1_EMAIL,
-        password : NILE_TENANT_PASSWORD
+        email : email,
+        password : password
       }
     }).then ( (usr) => { 
       if (usr != null)
@@ -178,17 +201,17 @@ async function setup_workflow_developer() {
   const body = {
     org: orgID,
     addUserToOrgRequest: {
-      email: NILE_TENANT1_EMAIL,
+      email: email,
     },
   };
-  console.log(`Trying to add tenant ${NILE_TENANT1_EMAIL} to orgID ${orgID}`);
+  console.log(`Trying to add tenant ${email} to orgID ${orgID}`);
   nile.organizations
     .addUserToOrg(body)
     .then((data) => {
-      console.log(emoji.get('white_check_mark'), `Added tenant ${NILE_TENANT1_EMAIL} to orgID ${orgID}`);
+      console.log(emoji.get('white_check_mark'), `Added tenant ${email} to orgID ${orgID}`);
     }).catch((error:any) => {
       if (error.message.startsWith('User is already in org')) {
-        console.log(emoji.get('white_check_mark'), `User ${NILE_TENANT1_EMAIL} is already in orgID ${orgID}`);
+        console.log(emoji.get('white_check_mark'), `User ${email} is already in orgID ${orgID}`);
       } else {
         console.error(error)
         process.exit(1);
@@ -199,6 +222,16 @@ async function setup_workflow_developer() {
 async function setup_control_plane() {
   // Log in as the Nile developer
   await setup_workflow_developer();
+
+  const pagesJson = require('./datasets/pageList.json');
+  // Load first page only
+  const index=0
+  await add_instance_to_org(pagesJson[index].org, pagesJson[index].greeting);
+
+  const usersJson = require('./datasets/userList.json');
+  // Load first user only
+  const index=0
+  await add_tenant(usersJson[index].email, usersJson[index].password, usersJson[index].org);
 }
 
 setup_control_plane();

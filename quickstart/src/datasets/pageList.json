@@ -1,0 +1,16 @@
+[
+  {
+    "//comment": "DO NOT MODIFY",
+    "greeting": "page1",
+    "org": "sac-norad"
+  },
+  {
+    "//comment": "DO NOT MODIFY",
+    "greeting": "page2",
+    "org": "sac-norad2"
+  },
+  {
+    "greeting": "page3",
+    "org": "sac-norad"
+  }
+]

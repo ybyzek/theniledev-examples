@@ -28,10 +28,11 @@ const NILE_DEVELOPER_PASSWORD = process.env.NILE_DEVELOPER_PASSWORD!;
 const NILE_ORGANIZATION_NAME = process.env.NILE_ORGANIZATION_NAME!;
 const NILE_ENTITY_NAME = process.env.NILE_ENTITY_NAME!;
 
-// Static
-const NILE_TENANT1_EMAIL = 'nora@demo.io';
-const NILE_TENANT2_EMAIL = 'frank@demo.io';
-const NILE_TENANT_PASSWORD = 'password';
+const usersJson = require('../../quickstart/src/datasets/userList.json');
+// Load first user only
+const index=0
+const NILE_TENANT1_EMAIL = usersJson[index].email;
+const NILE_TENANT_PASSWORD = usersJson[index].password;
 
 const nile = Nile({
   basePath: NILE_URL,

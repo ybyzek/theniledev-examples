@@ -9,7 +9,7 @@ This quickstart creates (or validates the existence of) the following control pl
 - Sign up a new developer
 - Create a workspace, which must be globally unique
 - Create an entity called `SkyNet`
-- Create an organization with a user:
+- Create an organization with a user (see [userList.json](src/datasets/userList.json) for details):
   - `sac-norad` with user nora@demo.io
 - Create a `SkyNet` entity instance in the organization
 

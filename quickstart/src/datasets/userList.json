@@ -1,0 +1,40 @@
+[
+  {
+    "//comment": "DO NOT MODIFY",
+    "email": "nora@demo.io",
+    "password": "password",
+    "org": "sac-norad",
+    "role": "admin"
+  },
+  {
+    "//comment": "DO NOT MODIFY",
+    "email": "frank@demo.io",
+    "password": "password",
+    "org": "sac-norad2",
+    "role": "admin"
+  },
+  {
+    "email": "shaun@demo.io",
+    "password": "password",
+    "org": "sac-norad",
+    "role": "dev"
+  },
+  {
+    "email": "parker@demo.io",
+    "password": "password",
+    "org": "sac-norad",
+    "role": "billing"
+  },
+  {
+    "email": "lisa@demo.io",
+    "password": "password",
+    "org": "sac-norad2",
+    "role": "terminated"
+  },
+  {
+    "email": "london@demo.io",
+    "password": "password",
+    "org": "sac-norad2",
+    "role": "billing"
+  }
+]
