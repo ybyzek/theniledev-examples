@@ -52,14 +52,14 @@ async function testTenant(orgID : string, expectEmpty : boolean = false) {
   })
 
   nile.authToken = nile.users.authToken
-  console.log(emoji.get('white_check_mark'), `--> Logged into Nile as tenant ${NILE_TENANT1_EMAIL}!\nToken: ` + nile.authToken);
+  console.log(emoji.get('white_check_mark'), `--> Logged into Nile as tenant ${NILE_TENANT1_EMAIL}!`);
 
   // List instances of the service
   await nile.entities.listInstances({
     org: orgID,
     type: NILE_ENTITY_NAME,
   }).then((instances) => {
-    console.log("\n--> TENANT: list of allowed instances:", instances);
+    console.log(`\n--> TENANT: list of allowed instances (expectEmpty is ${expectEmpty}):`, instances);
     if (expectEmpty && instances.length != 0) {
       console.error(emoji.get('x'), `Error: Tenant should not see ${NILE_ENTITY_NAME} instances`);
       process.exit(1);
@@ -170,7 +170,8 @@ async function run() {
     .createRule(body)
     .then((data) => {
       ruleID = JSON.stringify(data.id, null, 2).replace(/['"]+/g, '');
-      console.log(`Created rule with id ${ruleID} to deny ${NILE_TENANT1_EMAIL} from entity ${NILE_ENTITY_NAME}.  Returned data: ` + JSON.stringify(data, null, 2));
+      console.log(emoji.get('white_check_mark'), `Created rule with id ${ruleID} to deny ${NILE_TENANT1_EMAIL} from entity ${NILE_ENTITY_NAME}.`);
+      //console.log(JSON.stringify(data, (key, value) => value instanceof Set ? Array.from(value) : value));
     })
     .catch((error: any) => console.error(error));
 
