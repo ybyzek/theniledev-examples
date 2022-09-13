@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User page</title>
+</head>
+<body>
+  <h1>Welcome <%= email %></h1>
+
+  <!-- <ul></ul> -->
+
+  <button > <a href="/page1">Test authz to page1</a></button><br>
+  <button > <a href="/page2">Test authz to page2</a></button><br>
+  <button > <a href="/page3">Test authz to page3</a></button><br>
+
+  <button class="logout"> <a href="/logout">Log Out</a></button><br>
+
+  <script>
+    const ul = document.querySelector('ul')
+
+    const getUsers = async() => {
+      const res = await fetch('/api/auth/getUsers')
+      const data = await res.json()
+      data.user.map((mappedUser)=> {
+        if (mappedUser.email !== 'admin@demo.io') {
+          let li = `<li> <b>Email</b> => ${mappedUser.email} <br> <b>Role</b> => ${mappedUser.role} </li>`
+          ul.innerHTML += li
+        } else {
+          return null
+        }
+      })
+    }
+    getUsers()
+  </script>
+</body>
+</html>

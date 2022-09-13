@@ -23,6 +23,7 @@ _Describe the validation already done, or needs to be done, by the PR submitter.
 <!-- - [ ] multi-tenancy -->
 <!-- - [ ] data-plane/pulumi -->
 <!-- - [ ] authz -->
+<!-- - [ ] authz-be -->
 <!-- - [ ] authz-python -->
 <!-- - [ ] python-flask-todo-list -->
 
@@ -35,5 +36,6 @@ _Describe the tasks/validation that the PR submitter is requesting to be done by
 <!-- - [ ] multi-tenancy -->
 <!-- - [ ] data-plane/pulumi -->
 <!-- - [ ] authz -->
+<!-- - [ ] authz-be -->
 <!-- - [ ] authz-python -->
 <!-- - [ ] python-flask-todo-list -->

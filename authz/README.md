@@ -4,7 +4,7 @@
 
 ## Overview
 
-This example uses Python and the NILE REST API to demonstrate authorization features in Nile in the following workflow:
+This example uses the NILE JS SDK to demonstrate authorization features in Nile in the following workflow:
 
 - List the `SkyNet` instances allowed to be read by the user nora@demo.io in a given organization
 - Create a new rule that denies the user access to instances of the type `SkyNet` (organization is provided in the request)
