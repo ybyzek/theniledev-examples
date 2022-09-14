@@ -25,6 +25,8 @@ They can also be run sequentially to build on top of one another, in which case,
 
 ## Setup
 
+### Nile Configuration
+
 For all examples, you need to set the following parameters that represent your control plane configuration in Nile.
 These can represent an existing control plane or a new one will be created for you from these values.
 
@@ -42,6 +44,13 @@ cp .env.defaults .env
 ```
 
 Set the values in this `.env` file to match the values you want in your control plane, and it will be used for all the examples.
+
+### Users and Entities
+
+Define the users and entities in the following files, and they will be used by all the examples in this collection.
+
+- [userList.json](quickstart/src/datasets/userList.json)
+- [pageList.json](quickstart/src/datasets/pageList.json)
 
 ## Quickstart
 
@@ -102,3 +111,5 @@ Here are additional examples that you can refer to.
 | Example | Languages | Description |
 |---------|-----------|-------------|
 | [Python + Flask Todo List Webapp](python-flask-todo-list/) | Python REST | Take a basic Todo List webapp written in Python and Flask and turn it to a PLG SaaS product with Nile APIs |
+
+

@@ -6,8 +6,8 @@
 
 This example uses Python and the NILE REST API to demonstrate authorization features in Nile in the following workflow:
 
-- List rules
-- Create a new rule that denies the user access to instances of the type `SkyNet` (organization is provided in the request)
+- List policies
+- Create a new policy that denies the user access to instances of the type `SkyNet` (organization is provided in the request)
 
   ```json
   {
@@ -17,7 +17,7 @@ This example uses Python and the NILE REST API to demonstrate authorization feat
   }
   ```
 
-- Delete the rule
+- Delete the policy
 
 
 ## Install Dependencies
@@ -32,7 +32,7 @@ pip3 install -r requirements.txt
 
 ## Setup
 
-For all examples, you need a local file with your Nile configuration.
+1. For all examples, you need a local file with your Nile configuration.
 For that purpose, at the top-level of the examples, copy the `.env.defaults` file to `.env`:
 
 ```bash
@@ -40,7 +40,14 @@ For that purpose, at the top-level of the examples, copy the `.env.defaults` fil
 $ examples> cp .env.defaults .env
 ```
 
-Set the values in this `.env` file to match the values you want in your control plane.
+2. Set the values in this `.env` file to match the values you want in your control plane.
+
+3. Configure your Nile control plane manually according to the values above, or by running the quickstart
+
+```
+yarn --cwd ../quickstart/ install && yarn --cwd ../quickstart/ start
+```
+
 
 ## Execute
 

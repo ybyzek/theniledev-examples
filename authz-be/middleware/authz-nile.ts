@@ -18,17 +18,11 @@ exports.nileAuthz = async (req, res, next) => {
   const NILE_WORKSPACE = process.env.NILE_WORKSPACE;
   const NILE_ENTITY_NAME = process.env.NILE_ENTITY_NAME;
   
-  console.log(`NILE_URL: ${NILE_URL}`);
-  console.log(`NILE_WORKSPACE: ${NILE_WORKSPACE}`);
-  console.log(`NILE_ENTITY_NAME: ${NILE_ENTITY_NAME}`);
-  
   const nile = Nile.default({
     basePath: NILE_URL,
     workspace: NILE_WORKSPACE,
   });
   
-  console.log(`\nLogging into Nile at ${NILE_URL}, workspace ${NILE_WORKSPACE}, as user ${email}`);
-
   // Login user
   await nile.users.loginUser({
     loginInfo: {
@@ -36,13 +30,13 @@ exports.nileAuthz = async (req, res, next) => {
       password: 'password'
     }
   }).catch((error) => {
-      console.error(emoji.get('x'), `Error: Failed to login to Nile as user ${email}: ` + error.message);
+      console.error(emoji.get('x'), `Error: Failed to login to Nile at ${NILE_URL} in workspace ${NILE_WORKSPACE} as user ${email}: ` + error.message);
       return res.status(401).json({ message: "Cannot login" });
   });
   
   // Get the JWT token
   nile.authToken = nile.users.authToken;
-  console.log(`Logged into Nile as user ${email}!`);
+  console.log("\n" + emoji.get('arrow_right'), ` Logged into Nile at ${NILE_URL} in workspace ${NILE_WORKSPACE} as user ${email}!`);
 
   var orgID;
   var myOrgs = await nile.organizations.listOrganizations();
@@ -55,7 +49,7 @@ exports.nileAuthz = async (req, res, next) => {
     console.error ("Error: cannot determine the ID of the organization from the provided name: " + orgName)
     return false
   } else {
-    console.log('Organization with name ' + orgName + ' exists with id ' + orgID);
+    console.log(emoji.get('dart'), 'Organization with name ' + orgName + ' exists with id ' + orgID);
   }
 
   // Find instance -- this is how we test whether a user has READ access

@@ -33,7 +33,7 @@ app.get("/page2", [userAuth], (req, res) => res.render("page2"));
 app.get("/page3", [userAuth], (req, res) => res.render("page3"));
 
 const server = app.listen(PORT, () =>
-  console.log(`Go to http://localhost:${PORT}`)
+  console.log(`Go to -->\n   http://localhost:${PORT}`)
 );
 
 process.on("unhandledRejection", (err) => {

@@ -1,5 +1,7 @@
 import Nile from '@theniledev/js';
 
+var nileUtils = require('../../utils-module-js/').nileUtils;
+
 var emoji = require('node-emoji');
 
 import * as dotenv from 'dotenv';
@@ -31,66 +33,35 @@ const nile = Nile({
   workspace: NILE_WORKSPACE,
 });
 
-async function login_nile() {
+async function deletePoliciesFromOrg (orgName: string) {
 
-  console.log(`\nLogging into Nile at ${NILE_URL}, workspace ${NILE_WORKSPACE}, as developer ${NILE_DEVELOPER_EMAIL}`);
-
-  // Login developer
-  await nile.developers.loginDeveloper({
-    loginInfo: {
-      email: NILE_DEVELOPER_EMAIL,
-      password: NILE_DEVELOPER_PASSWORD,
-    },
-    }).catch((error:any) => {
-      console.error(emoji.get('x'), `Error: Failed to login to Nile as developer ${NILE_DEVELOPER_EMAIL}: ` + error.message);
-      process.exit(1);
-    });
-
-  // Get the JWT token
-  nile.authToken = nile.developers.authToken;
-  console.log(emoji.get('white_check_mark'), `Logged into Nile as developer ${NILE_DEVELOPER_EMAIL}!\nToken: ` + nile.authToken);
-}
-
-async function delete_rules_org (orgName: string) {
-
-  var orgID;
-  var myOrgs = await nile.organizations.listOrganizations();
-  var maybeTenant = myOrgs.find( org => org.name == orgName);
-  if (maybeTenant) {
-    console.log("Org " + orgName + " exists with id " + maybeTenant.id);
-    orgID = maybeTenant.id;
-  } 
-
-  console.log(`orgID is ${orgID}`);
-
+  // Get orgID
+  let createIfNot = false;
+  let orgID = await nileUtils.maybeCreateOrg (nile, orgName, false);
   if (!orgID) {
     console.error ("Error: cannot determine the ID of the organization from the provided name :" + orgName)
     process.exit(1);
-  } else {
-    console.log('Organization with name ' + orgName + ' exists with id ' + orgID);
-  }
+  } 
 
-  // List rules
+  // List policies
   const body = {
     org: orgID,
   };
-  await nile.authz
-    .listRules(body)
+  await nile.access
+    .listPolicies(body)
     .then((data) => {
-      console.log('Listed rules: ', data);
+      console.log('Listed policies: ', data);
       for (let i=0; i < data.length; i++) {
-        let ruleID = data[i].id;
-        console.log(ruleID);
-        // Delete rule
+        let policyID = data[i].id;
+        // Delete policy
         const delBody = {
           org: orgID,
-          ruleId: ruleID,
+          policyId: policyID,
         };
-        //console.log("\nDeleting rule with delBody: " + JSON.stringify(delBody, null, 2));
-        nile.authz
-          .deleteRule(delBody)
+        nile.access
+          .deletePolicy(delBody)
           .then((res) => {
-            console.log(`Deleted rule: ${ruleID}`);
+            console.log(emoji.get('ghost'), `Deleted policy: ${policyID}`);
           })
           .catch((error: any) => console.error(error));
       }
@@ -99,14 +70,14 @@ async function delete_rules_org (orgName: string) {
 }
 
 async function run() {
-  await login_nile();
+  await nileUtils.loginAsDev(nile, NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD);
 
   var actions;
   const pagesJson = require('../../quickstart/src/datasets/pageList.json');
   const usersJson = require('../../quickstart/src/datasets/userList.json');
   for (let index = 0 ; index < pagesJson.length ; index++) {
     let pageOrg = pagesJson[index].org;
-    await delete_rules_org(pageOrg);
+    await deletePoliciesFromOrg(pageOrg);
   }
 }
 

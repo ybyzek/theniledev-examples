@@ -12,6 +12,7 @@ exports.adminAuth = (req, res, next) => {
         if (decodedToken.role !== "admin") {
           return res.status(401).json({ message: "Not authorized" });
         } else {
+          res.locals.email = decodedToken.email;
           next();
         }
       }

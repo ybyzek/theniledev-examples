@@ -6,7 +6,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@theniledev/js": "^0.18.0",
+    "@theniledev/js": "^0.19.1",
     "@types/node": "^18.0.0",
     "cookie-parser": "^1.4.6",
     "cookieparser": "^0.1.0",
@@ -26,11 +26,11 @@
   },
   "scripts": {
     "prestart": "yarn --cwd ../multi-tenancy/ install && yarn --cwd ../multi-tenancy/ start",
-    "start": "yarn gh-start && node server.js",
-    "prestart-without-authz": "yarn prestart",
+    "start": "yarn gh-start && yarn run-server",
     "start-without-authz": "node server-without-authz.js",
     "gh-start": "ts-node src/index",
-    "gh-clean": "ts-node src/delete-all-rules.ts",
+    "gh-clean": "yarn --cwd ../authz/ install && yarn --cwd ../authz/ clean",
+    "run-server": "node server.js",
     "clean": "./cleanup.sh && yarn gh-clean"
   }
 }

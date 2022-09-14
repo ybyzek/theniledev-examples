@@ -42,17 +42,17 @@ NILE_TENANT1_EMAIL = usersJson[0]['email']
 NILE_TENANT_PASSWORD = usersJson[0]['password']
 
 
-def list_rules():
-    """List all authorization rules in an organization"""
+def list_policies():
+    """List all authorization policies in an organization"""
 
     global org_id
 
     # List
-    path = "/workspaces/{}/orgs/{}/authz/rules".format(NILE_WORKSPACE, org_id)
+    path = "/workspaces/{}/orgs/{}/access/policies".format(NILE_WORKSPACE, org_id)
     #print(headers, NILE_URL, path)
     response = requests.get(NILE_URL+path, headers=headers, timeout=30)
     if response.status_code == 200:
-        print(response.json())
+        print(json.dumps(response.json(), indent=2))
         return response.json()
     else:
         print(emoji.emojize(':red_circle:') + " response status code is {}".format(response.status_code))
@@ -100,45 +100,45 @@ headers = {
 
 org_id = get_org_id_from_org_name(NILE_ORGANIZATION_NAME)
 
-print("\nRules at start:")
-rules_start = list_rules()
+print("\nPolicies at start:")
+policies_start = list_policies()
 
-# Create a new rule
+# Create a new policy
 data = {
     "actions"  : ["deny"],
     "resource" : {"type" : NILE_ENTITY_NAME},
     "subject"  : {"email": NILE_TENANT1_EMAIL}
 }
 json_string = json.dumps(data)
-print("\nCreating new rule {}".format(json_string))
-path = "/workspaces/{}/orgs/{}/authz/rules".format(NILE_WORKSPACE, org_id)
+print("\nCreating new policy {}".format(json_string))
+path = "/workspaces/{}/orgs/{}/access/policies".format(NILE_WORKSPACE, org_id)
 #print(headers, NILE_URL, path)
 response = requests.post(NILE_URL+path, headers=headers, json=data, timeout=30)
 if response.status_code == 201:
-    rule_id=response.json()['id']
-    print(emoji.emojize(':check_mark_button:') + " rule id is {}".format(rule_id))
+    policy_id=response.json()['id']
+    print(emoji.emojize(':check_mark_button:') + " policy id is {}".format(policy_id))
 else:
     print("response status code is {}".format(response.status_code))
     sys.exit(1)
 
-print("\nRules post-create:")
-list_rules()
+print("\nPolicies post-create:")
+list_policies()
 
-# Delete the rule just created
-path = "/workspaces/{}/orgs/{}/authz/rules/{}".format(NILE_WORKSPACE, org_id, rule_id)
+# Delete the policy just created
+path = "/workspaces/{}/orgs/{}/access/policies/{}".format(NILE_WORKSPACE, org_id, policy_id)
 #print(headers, NILE_URL, path)
 response = requests.delete(NILE_URL+path, headers=headers, timeout=30)
 if response.status_code == 204:
-    print(emoji.emojize(':check_mark_button:') + " rule id {} was deleted".format(rule_id))
+    print(emoji.emojize(':check_mark_button:') + " policy id {} is deleted".format(policy_id))
 else:
     print(emoji.emojize(':red_circle:') + "response status code is {}".format(response.status_code))
     sys.exit(1)
 
-print("\nRules post-delete:")
-rules_end = list_rules()
+print("\nPolicies post-delete:")
+policies_end = list_policies()
 
-if rules_start != rules_end:
-    print(emoji.emojize(':red_circle:') + "Something is wrong, rules at start should equal rules at end")
+if policies_start != policies_end:
+    print(emoji.emojize(':red_circle:') + "Something is wrong, policies at start should equal policies at end")
     sys.exit(1)
 
 sys.exit(0)

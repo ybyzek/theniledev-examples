@@ -67,7 +67,7 @@ Notice that all the users have access to all the pages: `page1`, `page2`, `page3
 yarn start
 ```
 
-This time, in addition to running the application, it also sets up the [Nile control plane](src/index.ts), defines entities and entity instances that correspond to the application pages, adds users to different organizations, and configures authorization rules as defined below.  Note that these are just example scripts, you would write your own for your deployment.
+This time, in addition to running the application, it also sets up the [Nile control plane](src/index.ts), defines entities and entity instances that correspond to the application pages, adds users to different organizations, and configures authorization policies as defined below.  Note that these are just example scripts, you would write your own for your deployment.
 
    - [userList.json](../quickstart/src/datasets/userList.json)
    - [pageList.json](../quickstart/src/datasets/pageList.json)
@@ -112,7 +112,7 @@ db.pages.drop();
 db.shutdownServer()
 ```
 
-This script will drop those tables and drop ALL rules for those organizations:
+This script will drop those tables and drop ALL policies for those organizations:
 
 ```
 yarn clean
