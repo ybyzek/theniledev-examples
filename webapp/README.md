@@ -38,8 +38,6 @@ $ examples> cp .env.defaults .env
 
 Set the values in this `.env` file to match the values you want in your control plane.
 
-> For this Next.js example, make sure to define the parameters that start with prefix `NEXT_PUBLIC_` to match.
-
 ## Install Dependencies
 
 ```bash

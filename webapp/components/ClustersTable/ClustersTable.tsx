@@ -5,6 +5,9 @@ import { Organization, User } from '@theniledev/js';
 import { useQuery, InstanceTable, useNile } from '@theniledev/react';
 import Unauthorized from '../Unauthorized';
 
+import getConfig from 'next/config'
+
+
 const useFirstOrg = (): [boolean, User | undefined, Organization | undefined, boolean] => {
   const nile = useNile();
   const { isLoading, data: user, error } = useQuery(['/me'], () => nile.users.me())
@@ -75,6 +78,9 @@ export default function ClustersTable(){
  
   }
 
+  const { publicRuntimeConfig } = getConfig();
+  const { NILE_ENTITY_NAME } = publicRuntimeConfig;
+
   return (
     <Stack spacing={2}>
       <Typography level="h1">Welcome {user?.email}!</Typography>
@@ -94,7 +100,7 @@ export default function ClustersTable(){
         </Stack>
         <InstanceTable 
           org={org.id} 
-          entity={process.env.NEXT_PUBLIC_NILE_ENTITY_NAME} 
+          entity={NILE_ENTITY_NAME} 
           handleRowClick={() => alert('handle a row click')}
           columns={['greeting']} 
         />
