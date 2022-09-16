@@ -96,7 +96,9 @@ You can configure these in the control plane so that they are aligned to your bu
 
 Configure a front-end web application that is customizable on a per-tenant basis.
 
-_coming soon_
+| Example | Languages | Description |
+|---------|-----------|-------------|
+| [Webapp](webapp/) | JS SDK | Builds a self-service frontend that integrates with Nile on the backend |
 
 ## Metrics
 
