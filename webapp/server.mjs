@@ -8,9 +8,21 @@ import nextConfig from './next.config.js';
 
 const app = next({ dev: true, conf: nextConfig });
 const handle = app.getRequestHandler();
+
+let key;
+let cert;
+try {
+  key = readFileSync('./.certificates/localhost.key');
+  cert = readFileSync('./.certificates/localhost.crt');
+} catch (err) {
+  console.error('[ERROR]: Unable to load certificates. Stopping server.')
+  process.exit(0);
+}
+
+
 const httpsOptions = {
-  key: readFileSync('./.certificates/localhost.key'),
-  cert: readFileSync('./.certificates/localhost.crt'),
+  key,
+  cert,
 };
 app.prepare().then(() => {
   createServer(httpsOptions, (req, res) => {
