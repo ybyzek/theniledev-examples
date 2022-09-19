@@ -6,20 +6,20 @@
 
 This example uses the NILE JS SDK to demonstrate authorization features in Nile in the following workflow:
 
-- List the `SkyNet` instances allowed to be read by the user nora@demo.io in a given organization
-- Create a new policy that denies the user access to instances of the type `SkyNet` (organization is provided in the request)
+- List the `SaaSDB` instances allowed to be read by the user nora@demo.io in a given organization
+- Create a new policy that denies the user access to instances of the type `SaaSDB` (organization is provided in the request)
 
   ```json
   {
     "actions": [ "deny" ],
-    "resource": { "type": "SkyNet" },
+    "resource": { "type": "SaaSDB" },
     "subject": { "email": "nora@demo.io" }
   }
   ```
 
-- List the `SkyNet` instances allowed to be read by the user in a given organization: should be none
+- List the `SaaSDB` instances allowed to be read by the user in a given organization: should be none
 - Delete the policy
-- List the `SkyNet` instances allowed to be read by the user in a given organization
+- List the `SaaSDB` instances allowed to be read by the user in a given organization
 
 
 ## Install Dependencies

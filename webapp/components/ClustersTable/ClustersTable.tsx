@@ -48,6 +48,7 @@ const CreateInstance = () => {
 }
 
 export default function ClustersTable(){
+
   const [isLoading, user, org, unauthorized] = useFirstOrg();
 
   if (unauthorized) {
@@ -102,7 +103,7 @@ export default function ClustersTable(){
           org={org.id} 
           entity={NILE_ENTITY_NAME} 
           handleRowClick={() => alert('handle a row click')}
-          columns={['greeting']} 
+          columns={['dbName', 'cloud', 'environment', 'size']} 
         />
       </Card>
     </Stack>

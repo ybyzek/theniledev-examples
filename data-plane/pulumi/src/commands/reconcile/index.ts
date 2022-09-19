@@ -171,7 +171,7 @@ export default class Reconcile extends Command {
   private async getOrgIDFromOrgName(
     orgName: String): Promise< string | null > {
     this.log(
-      `Looking up the organization ID from the organization name #${orgName}`
+      `Looking up the organization ID from the organization name ${orgName}`
     );
 
     // Check if organization exists

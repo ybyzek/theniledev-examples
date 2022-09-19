@@ -8,10 +8,10 @@ This quickstart creates (or validates the existence of) the following control pl
 
 - Sign up a new developer
 - Create a workspace, which must be globally unique
-- Create an entity called `SkyNet`
+- Create an entity type called `SaaSDB` from [this definition](src/models/SaaSDB_Entity_Definition.json), which is also available as a template from the Nile Admin Dashboard.
 - Create an organization with a user (see [userList.json](src/datasets/userList.json) for details):
-  - `sac-norad` with user nora@demo.io
-- Create a `SkyNet` entity instance in the organization
+  - `db-customer1` with user nora@demo.io
+- Create a `SaaSDB` entity instance in the organization, with a value that matches the schema defined earlier
 
 ## Install Dependencies
 
@@ -63,3 +63,5 @@ For the email and password, use the `NILE_DEVELOPER_EMAIL` and `NILE_DEVELOPER_P
 Your dashboard should resemble below:
 
 ![image](images/nad.png)
+
+Nile automatically generates the OpenAPI spec for the new entity, see the `OPENAPI` tab in the dashboard.

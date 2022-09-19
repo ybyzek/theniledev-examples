@@ -1,5 +1,8 @@
 import Nile from "@theniledev/js";
 
+const fs = require('fs');
+const EntityDefinition = JSON.parse(fs.readFileSync('../quickstart/src/models/SaaSDB_Entity_Definition.json'));
+
 var nileUtils = require('../../utils-module-js/').nileUtils;
 
 var emoji = require('node-emoji');
@@ -13,7 +16,6 @@ let envParams = [
   "NILE_WORKSPACE",
   "NILE_DEVELOPER_EMAIL",
   "NILE_DEVELOPER_PASSWORD",
-  "NILE_ENTITY_NAME",
 ]
 envParams.forEach( (key: string) => {
   if (!process.env[key]) {
@@ -26,7 +28,7 @@ const NILE_URL = process.env.NILE_URL!;
 const NILE_WORKSPACE = process.env.NILE_WORKSPACE!;
 const NILE_DEVELOPER_EMAIL = process.env.NILE_DEVELOPER_EMAIL!;
 const NILE_DEVELOPER_PASSWORD = process.env.NILE_DEVELOPER_PASSWORD!;
-const NILE_ENTITY_NAME = process.env.NILE_ENTITY_NAME!;
+const NILE_ENTITY_NAME = EntityDefinition.name;
 
 const nile = Nile({
   basePath: NILE_URL,

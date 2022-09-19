@@ -59,14 +59,14 @@ Define the users and entities in the following files, and they will be used by a
 Start with the quickstart to configure a base Nile control plane.
 This provides a simple setup to learn the concepts but also serves as the foundation for the other examples below.
 
-- [Quickstart](quickstart) | JS SDK | Setup a minimal Nile control plane with a single tenant |
+- [Quickstart](quickstart) | JS SDK | Setup a minimal Nile control plane with a single tenant
 
 ## Multi-tenancy
 
 Tenants have access to specific organizations that have isolated sets of resources.
 Users are allowed to access only the entity instances in the organizations to which they have been added.
 
-- [Multi-tenancy](multi-tenancy/) | JS SDK | Setup the Nile control plane with multiple tenants and users |
+- [Multi-tenancy](multi-tenancy/) | JS SDK | Setup the Nile control plane with multiple tenants and users
 
 ## Data Plane
 
@@ -74,23 +74,23 @@ These examples show how to synchronize, e.g. reconcile, your data plane and cont
 As instances are created or destroyed from the control plane, the example reconciler creates or destroys data plane deployments.
 Even if you're using another deployment tool like Kubernetes or Terraform, similar principles apply as they do for Pulumi.
 
-- [Data Plane with Pulumi](data-plane/pulumi/) | JS SDK | Synchronize your data plane and control plane |
-- [Data Plane with Apache Flink and Kubernetes](data-plane/k8s/)  | JS SDK | Synchronize a control plane built with Nile with data plane that uses Apache Flink and Kubernetes |
+- [Data Plane with Pulumi](data-plane/pulumi/) | JS SDK | Synchronize your data plane and control plane
+- [Data Plane with Apache Flink and Kubernetes](data-plane/k8s/)  | JS SDK | Synchronize a control plane built with Nile with data plane that uses Apache Flink and Kubernetes
 
 ## Authorization
 
 Attribute-based access control (ABAC) is an authorization model that gives you fine-grained authorization capabilities.
 You can configure these in the control plane so that they are aligned to your business's security policies.
 
-- [Authorization](authz/) | JS SDK | Use ABAC to grant and revoke permissions to resources |
-- [Authorization App Backend](authz-be/) | JS SDK | Authorize users against Nile control plane for your backend applications |
-- [Authorization with Python](authz-python/) | Python REST | Use ABAC to grant and revoke permissions to resources |
+- [Authorization](authz/) | JS SDK | Use ABAC to grant and revoke permissions to resources
+- [Authorization App Backend](authz-be/) | JS SDK | Authorize users against Nile control plane for your backend applications
+- [Authorization with Python](authz-python/) | Python REST | Use ABAC to grant and revoke permissions to resources
 
 ## Webapp
 
 Configure a front-end web application that is customizable on a per-tenant basis.
 
-- [Webapp](webapp/) | JS SDK | Builds a self-service frontend that integrates with Nile on the backend |
+- [Webapp](webapp/) | JS SDK | Builds a self-service frontend that integrates with Nile on the backend
 
 ## Metrics
 
@@ -103,4 +103,4 @@ _coming soon_
 
 Here are additional examples that you can refer to.
 
-- [Python + Flask Todo List Webapp](python-flask-todo-list/) | Python REST | Take a basic Todo List webapp written in Python and Flask and turn it to a PLG SaaS product with Nile APIs |
+- [Python + Flask Todo List Webapp](python-flask-todo-list/) | Python REST | Take a basic Todo List webapp written in Python and Flask and turn it to a PLG SaaS product with Nile APIs

@@ -1,16 +1,25 @@
 [
   {
     "//comment": "DO NOT MODIFY",
-    "greeting": "page1",
-    "org": "sac-norad"
+    "dbName": "myDB-products",
+    "cloud": "gcp",
+    "environment": "prod",
+    "size": 100,
+    "org": "db-customer1"
   },
   {
     "//comment": "DO NOT MODIFY",
-    "greeting": "page2",
-    "org": "sac-norad2"
+    "dbName": "myDB-analytics",
+    "cloud": "aws",
+    "environment": "prod",
+    "size": 200,
+    "org": "db-customer2"
   },
   {
-    "greeting": "page3",
-    "org": "sac-norad"
+    "dbName": "myDB-billing",
+    "cloud": "gcp",
+    "environment": "dev",
+    "size": 100,
+    "org": "db-customer1"
   }
 ]

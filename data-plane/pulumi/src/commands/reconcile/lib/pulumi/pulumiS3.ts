@@ -12,14 +12,14 @@ export const pulumiS3 = (instance?: Instance) => {
     });
 
     const instanceProps = instance?.properties as { [key: string]: unknown };
-    const greeting = instanceProps?.greeting || 'Hello, world!';
+    const dbName = instanceProps?.dbName || 'vip-DB';
     const indexContent = `<html><head>
 <title>Hello S3</title><meta charset="UTF-8">
 </head>
 <body>
-<h1>${greeting}</h1>
-<p>Made with ❤️ with <a href="https://pulumi.com">Pulumi</a></p>
-<p>Deployed with nile</p>
+<h1>${dbName}</h1>
+<p>Made with ❤️  by <a href="https://pulumi.com">Pulumi</a></p>
+<p>Deployed with Nile</p>
 <h2>Instance Details</h2>
 <p>${JSON.stringify(instance, null, 2)}</p>
 </body></html>

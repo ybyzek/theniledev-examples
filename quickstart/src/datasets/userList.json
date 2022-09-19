@@ -3,38 +3,38 @@
     "//comment": "DO NOT MODIFY",
     "email": "nora@demo.io",
     "password": "password",
-    "org": "sac-norad",
+    "org": "db-customer1",
     "role": "admin"
   },
   {
     "//comment": "DO NOT MODIFY",
     "email": "frank@demo.io",
     "password": "password",
-    "org": "sac-norad2",
+    "org": "db-customer2",
     "role": "admin"
   },
   {
     "email": "shaun@demo.io",
     "password": "password",
-    "org": "sac-norad",
+    "org": "db-customer1",
     "role": "dev"
   },
   {
     "email": "parker@demo.io",
     "password": "password",
-    "org": "sac-norad",
+    "org": "db-customer1",
     "role": "billing"
   },
   {
     "email": "lisa@demo.io",
     "password": "password",
-    "org": "sac-norad2",
+    "org": "db-customer2",
     "role": "terminated"
   },
   {
     "email": "london@demo.io",
     "password": "password",
-    "org": "sac-norad2",
+    "org": "db-customer2",
     "role": "billing"
   }
 ]

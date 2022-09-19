@@ -1,0 +1,25 @@
+{
+  "name": "SaaSDB",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "dbName": {
+        "type": "string"
+      },
+      "cloud": {
+        "type": "string",
+        "enum": ["aws", "gcp", "azure"]
+      },
+      "environment": {
+        "type": "string",
+        "enum": ["test", "dev", "prod"]
+      },
+      "size": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "dbName"
+    ]
+  }
+}

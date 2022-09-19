@@ -13,7 +13,7 @@ const UserSchema = new Mongoose.Schema({
   },
   org: {
     type: String,
-    default: "sac-norad",
+    default: "db-customer1",
     required: true,
   },
   role: {

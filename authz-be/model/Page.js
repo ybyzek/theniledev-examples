@@ -1,13 +1,13 @@
 const Mongoose = require("mongoose");
 
 const PageSchema = new Mongoose.Schema({
-  greeting: {
+  dbName: {
     type: String,
     required: true,
   },
   org: {
     type: String,
-    default: "sac-norad",
+    default: "db-customer1",
     required: true,
   }
 });

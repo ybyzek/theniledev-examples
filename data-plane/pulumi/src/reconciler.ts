@@ -1,5 +1,8 @@
 import Reconcile from './commands/reconcile/index';
 
++const fs = require('fs');
++const EntityDefinition = JSON.parse(fs.readFileSync('../../../src/models/SaaSDB_Entity_Definition.json'));
+
 import * as dotenv from 'dotenv';
 
 dotenv.config({ override: true });
@@ -10,7 +13,6 @@ let envParams = [
   "NILE_DEVELOPER_EMAIL",
   "NILE_DEVELOPER_PASSWORD",
   "NILE_ORGANIZATION_NAME",
-  "NILE_ENTITY_NAME",
 ]
 envParams.forEach((key: string) => {
   if (!process.env[key]) {
@@ -24,7 +26,7 @@ const workspace = process.env.NILE_WORKSPACE!;
 const email = process.env.NILE_DEVELOPER_EMAIL!;
 const password = process.env.NILE_DEVELOPER_PASSWORD!;
 const organizationName = process.env.NILE_ORGANIZATION_NAME!;
-const entity = process.env.NILE_ENTITY_NAME!;
+const NILE_ENTITY_NAME = EntityDefinition.name;
 
 async function run() {
   await Reconcile.run([

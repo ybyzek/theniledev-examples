@@ -62,34 +62,17 @@ There are a few ways to configure the control plane:
 For the values below, make sure they match what you set in the `.env` file.
 
 1. Login to the [Nile Admin Dashboard](https://nad.thenile.dev/).
-2. If there isn't one already, create a workspace named "clustify".
-3. Create an entity type named "SkyNet". For this example, the entity definition should have a schema that matches the schema defined in [EntitySchema.js](../../quickstart/src/models/EntitySchema.js).
-:
+2. Create a workspace, which must be globally unique
+3. Create an entity type called `SaaSDB` from [this definition](../quickstart/src/models/SaaSDB_Entity_Definition.json), which is also available as a template from the Nile Admin Dashboard.
+4. Create an organization in the workspace named "db-customer1".
+5. Create an entity instance of type "SaaSDB" in the organization, with a value that matches the schema defined earlier:
 
 ```json
 {
-  "name": "SkyNet",
-  "schema": {
-    "type": "object",
-    "properties": {
-      "greeting": {
-        "type": "string"
-      }
-    },
-    "required": [
-      "greeting"
-    ]
-  }
-}
-```
-
-4. Create an organization in the workspace named "sac-norad".
-5. Create a "SkyNet" instance in the organization, with a value that matches 
-   the schema defined earlier:
-
-```json
-{
-  "greeting": "Come with me if you want to live."
+  "dbName": "myDB-products",
+  "cloud": "gcp",
+  "environment": "prod",
+  "size": 100,
 }
 ```
 
@@ -213,7 +196,7 @@ docker run --init --rm \
 
 ## Explanation
 
-The reconciler will immediately find the newly instantiated SkyNet instance in the Nile
+The reconciler will immediately find the newly instantiated SaaSDB instance in the Nile
 control plane and create a Pulumi stack that represents it, defined by the
 [`pulumiS3.ts`](./src/commands/reconcile/lib/pulumi/pulumiS3.ts). Pulumi also
 created a new S3 bucket containing a static website and a bucket policy that
@@ -239,13 +222,13 @@ Resources:
 Duration: 5s
 ```
 
-Pull up that `websiteUrl` in-browser and verify you see the provided "greeting"
+Pull up that `websiteUrl` in-browser and verify you see the provided "dbName"
 as well as all of the instance details.
 
 ## Add or Remove Instances ##
 
 While the reconciler is running, in the [Nile Admin Dashboard](https://nad.thenile.dev/), add one or
-more new SkyNet instances to the organization. This will trigger events that the
+more new SaaSDB instances to the organization. This will trigger events that the
 reconciler receives and the data plane will synchronize accordingly. Deleting an instance in the
 control plane will result in destruction of the corresponding Pulumi stack.
 

@@ -1,5 +1,8 @@
 import Nile from '@theniledev/js';
 
+const fs = require('fs');
+const EntityDefinition = JSON.parse(fs.readFileSync('../quickstart/src/models/SaaSDB_Entity_Definition.json'));
+
 var nileUtils = require('../../utils-module-js/').nileUtils;
 
 var emoji = require('node-emoji');
@@ -13,7 +16,6 @@ let envParams = [
   "NILE_WORKSPACE",
   "NILE_DEVELOPER_EMAIL",
   "NILE_DEVELOPER_PASSWORD",
-  "NILE_ENTITY_NAME",
 ]
 envParams.forEach( (key: string) => {
   if (!process.env[key]) {
@@ -26,7 +28,7 @@ const NILE_URL = process.env.NILE_URL!;
 const NILE_WORKSPACE = process.env.NILE_WORKSPACE!;
 const NILE_DEVELOPER_EMAIL = process.env.NILE_DEVELOPER_EMAIL!;
 const NILE_DEVELOPER_PASSWORD = process.env.NILE_DEVELOPER_PASSWORD!;
-const NILE_ENTITY_NAME = process.env.NILE_ENTITY_NAME!;
+const NILE_ENTITY_NAME = EntityDefinition.name;
 
 const usersJson = require('../../quickstart/src/datasets/userList.json');
 // Load first user only
@@ -53,7 +55,7 @@ async function listPolicies(orgID : string) {
     .catch((error: any) => console.error(error));
 }
 
-async function createAccessPolicy(email: string, orgName: string, greeting: string, actions: string[]) {
+async function createAccessPolicy(email: string, orgName: string, dbName: string, actions: string[]) {
 
   let createIfNot = false;
   let orgID = await nileUtils.maybeCreateOrg (nile, orgName, createIfNot);
@@ -68,12 +70,12 @@ async function createAccessPolicy(email: string, orgName: string, greeting: stri
     org: orgID,
     type: NILE_ENTITY_NAME,
   });
-  let maybeInstance = myInstances.find( instance => instance.type == NILE_ENTITY_NAME && instance.properties.greeting == greeting );
+  let maybeInstance = myInstances.find( instance => instance.type == NILE_ENTITY_NAME && instance.properties.dbName == dbName );
   if (maybeInstance) {
     console.log(emoji.get('dart'), "Entity instance " + NILE_ENTITY_NAME + " exists with id " + maybeInstance.id);
     instance_id = maybeInstance.id;
   } else {
-    console.error(emoji.get('x'), `Error: cannot find instance of type ${NILE_ENTITY_NAME} where greeting is ${greeting}`);
+    console.error(emoji.get('x'), `Error: cannot find instance of type ${NILE_ENTITY_NAME} where dbName is ${dbName}`);
     process.exit(1);
   }
 
@@ -123,7 +125,7 @@ async function run() {
         } else {
           actions = ["deny"];
         }
-        await createAccessPolicy(usersJson[index2].email, pageOrg, pagesJson[index].greeting, actions);
+        await createAccessPolicy(usersJson[index2].email, pageOrg, pagesJson[index].dbName, actions);
       }
     }
     // List policies

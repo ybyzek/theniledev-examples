@@ -7,12 +7,12 @@
 This example uses Python and the NILE REST API to demonstrate authorization features in Nile in the following workflow:
 
 - List policies
-- Create a new policy that denies the user access to instances of the type `SkyNet` (organization is provided in the request)
+- Create a new policy that denies the user access to instances of the type `SaaSDB` (organization is provided in the request)
 
   ```json
   {
     "actions": [ "deny" ],
-    "resource": { "type": "SkyNet" },
+    "resource": { "type": "SaaSDB" },
     "subject": { "email": "nora@demo.io" }
   }
   ```

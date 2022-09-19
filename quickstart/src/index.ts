@@ -1,6 +1,8 @@
 import Nile, { CreateEntityRequest } from "@theniledev/js";
 import { CreateEntityOperationRequest } from "@theniledev/js/dist/generated/openapi/src";
-import { EntitySchema } from './models/EntitySchema';
+
+const fs = require('fs');
+const EntityDefinition = JSON.parse(fs.readFileSync('src/models/SaaSDB_Entity_Definition.json'));
 
 var nileUtils = require('../../utils-module-js/').nileUtils;
 
@@ -15,7 +17,6 @@ let envParams = [
   "NILE_WORKSPACE",
   "NILE_DEVELOPER_EMAIL",
   "NILE_DEVELOPER_PASSWORD",
-  "NILE_ENTITY_NAME",
 ]
 envParams.forEach( (key: string) => {
   if (!process.env[key]) {
@@ -28,7 +29,7 @@ const NILE_URL = process.env.NILE_URL!;
 const NILE_WORKSPACE = process.env.NILE_WORKSPACE!;
 const NILE_DEVELOPER_EMAIL = process.env.NILE_DEVELOPER_EMAIL!;
 const NILE_DEVELOPER_PASSWORD = process.env.NILE_DEVELOPER_PASSWORD!;
-const NILE_ENTITY_NAME = process.env.NILE_ENTITY_NAME!;
+const NILE_ENTITY_NAME = EntityDefinition.name;
 
 const NILE_TENANT_MAX = process.env.NILE_TENANT_MAX || false;
 
@@ -38,10 +39,7 @@ const nile = Nile({
 });
 
 // Schema for the entity that defines the service in the data plane
-const entityDefinition: CreateEntityRequest = {
-    "name": NILE_ENTITY_NAME,
-    "schema": EntitySchema,
-};
+const entityDefinition: CreateEntityRequest = EntityDefinition;
 
 // Workflow for the Nile developer
 async function setupDeveloper() {
@@ -96,7 +94,7 @@ async function setupDeveloper() {
   }
 }
 
-async function addInstanceToOrg(email: string, password: string, orgName: string, greeting: string) {
+async function addInstanceToOrg(email: string, password: string, orgName: string, instanceJson: string) {
 
   // Get orgID
   await nileUtils.loginAsUser(nile, email, password);
@@ -108,7 +106,7 @@ async function addInstanceToOrg(email: string, password: string, orgName: string
     org: orgID,
     type: NILE_ENTITY_NAME,
   });
-  let maybeInstance = myInstances.find( instance => instance.type == NILE_ENTITY_NAME && instance.properties.greeting == greeting );
+  let maybeInstance = myInstances.find( instance => instance.type == NILE_ENTITY_NAME && instance.properties.dbName == instanceJson.dbName );
   if (maybeInstance) {
     console.log(emoji.get('dart'), "Entity instance " + NILE_ENTITY_NAME + " exists with id " + maybeInstance.id);
   } else {
@@ -117,7 +115,10 @@ async function addInstanceToOrg(email: string, password: string, orgName: string
       org: orgID,
       type: entityDefinition.name,
       body: {
-        greeting : greeting
+        dbName : instanceJson.dbName,
+        cloud : instanceJson.cloud,
+        environment : instanceJson.environment,
+        size : instanceJson.size,
       }
     }).then((entity_instance) => console.log (emoji.get('white_check_mark'), "Created entity instance: " + JSON.stringify(entity_instance, null, 2)))
   }
@@ -172,7 +173,7 @@ async function setupControlPlane() {
   for (let index = 0; index < limit ; index++) {
     let adminEmail = usersJson[admins.get(pagesJson[index].org)].email;
     let adminPassword = usersJson[admins.get(pagesJson[index].org)].password;
-    await addInstanceToOrg(adminEmail, adminPassword, pagesJson[index].org, pagesJson[index].greeting);
+    await addInstanceToOrg(adminEmail, adminPassword, pagesJson[index].org, pagesJson[index]);
   }
 
 }

@@ -64,7 +64,7 @@ For the values below, make sure they match what you set in the `.env` file.
 
 1. Login to the [Nile Admin Dashboard](https://nad.thenile.dev/).
 2. If there isn't one already, create a workspace and give it a unique name, "gwen-flink-jobs" for example.
-3. Create an entity type named "FlinkDeployment". For this example, you can create the entity definition by pasting the [example schema](./spec/FlinkDeployment.json)
+3. Create an entity type called `FlinkDeployment` from [this definition](./spec/FlinkDeployment.json), which is also available as a template from the Nile Admin Dashboard.
 4. Create an organization in the workspace named "sac-norad".
 5. Create a "FlinkDeployment" instance in the organization, with a value that matches 
    the schema defined earlier:
