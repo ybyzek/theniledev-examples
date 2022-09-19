@@ -27,6 +27,8 @@ They can also be run sequentially to build on top of one another, in which case,
 
 ### Nile Configuration
 
+To run these examples, you need to access to Nile. Please [reach out](https://www.thenile.dev) for more information.
+
 For all examples, you need to set the following parameters that represent your control plane configuration in Nile.
 These can represent an existing control plane or a new one will be created for you from these values.
 
