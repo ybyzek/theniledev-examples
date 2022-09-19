@@ -2,17 +2,25 @@
 // keeping things consistent with the examples
 const fs = require('fs');
 
-// reads from .env to expose values to the client
-const file = fs.readFileSync('./.env', 'utf8');
-const lines = file.split("\n");
-const runtimeConfig = lines.reduce((accum, line) => {
-  if (line.startsWith('#') || !line)  {
+const envPath = './.env';
+let runtimeConfig = {};
+
+try {
+  // reads from .env to expose values to the client
+  const file = fs.readFileSync(envPath, 'utf8');
+  const lines = file.split("\n");
+  runtimeConfig = lines.reduce((accum, line) => {
+    if (line.startsWith('#') || !line)  {
+      return accum;
+    }
+    const [name, value] = line.split('=');
+    accum[name] = value;
     return accum;
-  }
-  const [name, value] = line.split('=');
-  accum[name] = value;
-  return accum;
-}, {});
+  }, {});
+
+} catch(err) {
+  console.warn('[WARN] local .env file missing, unable to load runtime configs.')
+}
 
 const nextConfig = {
   reactStrictMode: true,
