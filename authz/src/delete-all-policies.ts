@@ -75,10 +75,10 @@ async function run() {
   await nileUtils.loginAsDev(nile, NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD);
 
   var actions;
-  const pagesJson = require('../../quickstart/src/datasets/pageList.json');
+  const dbsJson = require('../../quickstart/src/datasets/dbList.json');
   const usersJson = require('../../quickstart/src/datasets/userList.json');
-  for (let index = 0 ; index < pagesJson.length ; index++) {
-    let pageOrg = pagesJson[index].org;
+  for (let index = 0 ; index < dbsJson.length ; index++) {
+    let pageOrg = dbsJson[index].org;
     await deletePoliciesFromOrg(pageOrg);
   }
 }

@@ -70,7 +70,7 @@ yarn start
 This time, in addition to running the application, it also sets up the [Nile control plane](src/index.ts), defines entities and entity instances that correspond to the application pages, adds users to different organizations, and configures authorization policies as defined below.  Note that these are just example scripts, you would write your own for your deployment.
 
    - [userList.json](../quickstart/src/datasets/userList.json)
-   - [pageList.json](../quickstart/src/datasets/pageList.json)
+   - [dbList.json](../quickstart/src/datasets/dbList.json)
 
 3. View the code changes required for this example application:
 
@@ -86,7 +86,7 @@ diff server.js server-without-authz.js
 1. Log into the [Nile Admin Dashboard](https://nad.thenile.dev/) to see the control plane and entity instances.
 For the email and password, use the `NILE_DEVELOPER_EMAIL` and `NILE_DEVELOPER_PASSWORD` values you specified in the `.env` file.
 
-2. Cross-check which users are authorized to see which pages.  For example, `parker@demo.io` is in org `db-customer1` (per [userList.json](../quickstart/src/datasets/userList.json)) which has entities for `myDB-products` and `myDB-billing` (per [pageList.json](../quickstart/src/datasets/pageList.json)).  Therefore when `parker@demo.io` tries to view either of those entities, he will be able to see those pages:
+2. Cross-check which users are authorized to see which pages.  For example, `parker@demo.io` is in org `db-customer1` (per [userList.json](../quickstart/src/datasets/userList.json)) which has entities for `myDB-products` and `myDB-billing` (per [dbList.json](../quickstart/src/datasets/dbList.json)).  Therefore when `parker@demo.io` tries to view either of those entities, he will be able to see those pages:
 
 ![image](images/allow.png)
 

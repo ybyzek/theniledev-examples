@@ -20,9 +20,9 @@ User.insertMany(usersJson, { ordered: false })
         console.log(error.message)
       });
 
-const pagesJson = require('../quickstart/src/datasets/pageList.json');
-console.log(pagesJson);
-Page.insertMany(pagesJson, { ordered: false })
+const dbsJson = require('../quickstart/src/datasets/dbList.json');
+console.log(dbsJson);
+Page.insertMany(dbsJson, { ordered: false })
       .catch((error) => {
         console.log(error.message)
       });

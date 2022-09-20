@@ -168,12 +168,12 @@ async function setupControlPlane() {
     await addTenant(usersJson[index].email, usersJson[index].password, usersJson[index].org, usersJson[index].role);
   }
 
-  const pagesJson = require('./datasets/pageList.json');
-  let limit = NILE_TENANT_MAX ? pagesJson.length : 1;
+  const dbsJson = require('./datasets/dbList.json');
+  let limit = NILE_TENANT_MAX ? dbsJson.length : 1;
   for (let index = 0; index < limit ; index++) {
-    let adminEmail = usersJson[admins.get(pagesJson[index].org)].email;
-    let adminPassword = usersJson[admins.get(pagesJson[index].org)].password;
-    await addInstanceToOrg(adminEmail, adminPassword, pagesJson[index].org, pagesJson[index]);
+    let adminEmail = usersJson[admins.get(dbsJson[index].org)].email;
+    let adminPassword = usersJson[admins.get(dbsJson[index].org)].password;
+    await addInstanceToOrg(adminEmail, adminPassword, dbsJson[index].org, dbsJson[index]);
   }
 
 }

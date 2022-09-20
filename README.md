@@ -6,8 +6,16 @@
 
 This collection of examples demonstrates how to use Nile as a control plane for an Infrastructure SaaS product.
 
-You can use Nile for different use cases, so after running the [Quickstart](#quickstart), you can run the examples independently.
-They can also be run sequentially to build on top of one another, in which case, we recommend running them in the order presented here to build up your SaaS as you go.
+The mock scenario in these examples is a company that provides databases as SaaS.
+For this SaaS company, you define your example entity schema called `SaaSDB` in the file [SaaSDB_Entity_Definition.json](quickstart/src/models/SaaSDB_Entity_Definition.json) that has a schema for each database instance.
+
+For demonstration purposes, these examples simulate different organizations and entity instances from mock customers:
+
+- [dbList.json](quickstart/src/datasets/dbList.json): list of entity instances, i.e., databases. Each of these instances conforms to the `SaaSDB` schema
+- [userList.json](quickstart/src/datasets/userList.json): list of users of each database
+
+First run the Quickstart to setup your control plane in Nile, and then you can run the other modules for different use cases.
+The modules can also be run sequentially to build on top of one another, in which case, we recommend running them in the order presented here to build up your SaaS as you go.
 
 > Note: the languages presented below are an indication just of which examples have been developed, not of what's available.
 > Please see the Nile API and SDK documentation for details.
@@ -25,12 +33,10 @@ They can also be run sequentially to build on top of one another, in which case,
 
 ## Setup
 
-### Nile Configuration
-
 To run these examples, you need to access to Nile. Please [reach out](https://www.thenile.dev) for more information.
 
 For all examples, you need to set the following parameters that represent your control plane configuration in Nile.
-These can represent an existing control plane or a new one will be created for you from these values.
+These can be an existing control plane or a new one will be created for you from these values.
 
 - `NILE_URL`
 - `NILE_WORKSPACE`
@@ -46,13 +52,6 @@ cp .env.defaults .env
 ```
 
 Set the values in this `.env` file to match the values you want in your control plane, and it will be used for all the examples.
-
-### Users and Entities
-
-Define the users and entities in the following files, and they will be used by all the examples in this collection.
-
-- [userList.json](quickstart/src/datasets/userList.json)
-- [pageList.json](quickstart/src/datasets/pageList.json)
 
 ## Quickstart
 

@@ -110,10 +110,10 @@ async function run() {
   await nileUtils.loginAsDev(nile, NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD);
 
   var actions;
-  const pagesJson = require('../../quickstart/src/datasets/pageList.json');
+  const dbsJson = require('../../quickstart/src/datasets/dbList.json');
   const usersJson = require('../../quickstart/src/datasets/userList.json');
-  for (let index = 0 ; index < pagesJson.length ; index++) {
-    let pageOrg = pagesJson[index].org;
+  for (let index = 0 ; index < dbsJson.length ; index++) {
+    let pageOrg = dbsJson[index].org;
     for (let index2 = 0 ; index2 < usersJson.length ; index2++) {
       if (usersJson[index2].org == pageOrg) {
         if (usersJson[index2].role == "admin") {
@@ -125,7 +125,7 @@ async function run() {
         } else {
           actions = ["deny"];
         }
-        await createAccessPolicy(usersJson[index2].email, pageOrg, pagesJson[index].dbName, actions);
+        await createAccessPolicy(usersJson[index2].email, pageOrg, dbsJson[index].dbName, actions);
       }
     }
     // List policies
