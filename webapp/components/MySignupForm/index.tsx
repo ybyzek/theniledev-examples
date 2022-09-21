@@ -1,35 +1,15 @@
 import { Chip, Link, Stack, Typography } from '@mui/joy';
 import Card from '@mui/joy/Card';
-import { LoginForm, useQuery, useNile } from '@theniledev/react';
+import { SignUpForm } from '@theniledev/react';
 import { useRouter } from 'next/router';
 import React from 'react';
 import ChipDelete from '@mui/joy/ChipDelete';
 import Logo from '~/components/Logo';
 
-export default function MyLoginForm() {
+export default function MySignUpForm() {
 
   const router = useRouter();
-
-  const signup = String(router.query.signup);
   const [error, setErrorMessage] = React.useState<null | string>(null);
-
-  const nile = useNile();
-  const [hadLoginSuccess, setHadLoginSuccess] = React.useState(false);
-  const { isLoading, data: me = {}, error2 } = useQuery(['/anythingelse'], () => nile.users.me(), {
-    enabled: hadLoginSuccess,
-  });
-
-  React.useEffect((): void => {
-    const orgMemberships = me.orgMemberships;
-    if (hadLoginSuccess && orgMemberships != null) {
-      if (Object.keys(orgMemberships).length < 1) {
-        router.push('/createorg');
-      } else {
-        router.push('/instances/clusters');
-      }
-    }
-  }, [router, me, hadLoginSuccess]);
-
   return (
     <Stack
       sx={{
@@ -55,18 +35,9 @@ export default function MyLoginForm() {
             {error}
           </Chip>
         )}
-        {signup != "undefined" && signup == "success" && (
-          <Chip
-            variant="soft"
-            color="success"
-          >
-            Signup success
-          </Chip>
-        )}
-        <LoginForm 
+        <SignUpForm 
           onSuccess={() => {
-            setHadLoginSuccess(true);
-            // router.push('/instances/clusters');
+            router.push('/?signup=success');
           }}
           onError={(error) => {
             // for demo purposes only
@@ -79,13 +50,7 @@ export default function MyLoginForm() {
         />
       </Stack>
       <Typography level="body4" sx={{ marginTop: 1 }}>
-        Sign in using an organization user email and password.
-      </Typography>
-      <Typography level="body4" sx={{ marginTop: 1 }}>
-        New user? {' '}
-        <Link href="signup" target="_blank">
-          Signup
-        </Link>
+        Sign up with your email and choose a password.
       </Typography>
     </Card>
     </Stack>

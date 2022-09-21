@@ -13,7 +13,7 @@ const useFirstOrg = (): [boolean, User | undefined, Organization | undefined, bo
   const { isLoading, data: user, error } = useQuery(['/me'], () => nile.users.me())
 
   const _error: { response: { status: number } } = error as any;
-  const errorStatus = _error ? _error.response.status : null;
+  const errorStatus = _error ? _error?.response?.status : null;
   const unauthorized = errorStatus === 401;
 
 
@@ -42,7 +42,7 @@ const CreateInstance = () => {
         alert('Implement a form for a user to create a cluster instance')
       }}
     >
-      Create Instance
+      Create SaaSDB
     </Button>
   );
 }

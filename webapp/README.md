@@ -5,8 +5,7 @@
 ## Overview
 
 This examples uses [Next.js](https://nextjs.org/) to create a frontend for a SaaS appliation integrated with [Nile](https://thenile.dev/).
-
-It was built from from Nile's [Next.js webapp template](https://github.com/TheNileDev/nextjs/generate).
+The app is completely self-serve, allowing end users to sign up on their own, create their own organization, and manage their own instances.
 
 ## Setup
 
@@ -60,14 +59,19 @@ yarn dev
 
 ## Validate
 
-1. Open [https://local.thenile.dev](http://local.thenile.dev) with your browser and log in a user.
-Use one of the available users defined in [userList.json](../quickstart/src/datasets/userList.json).
+1. As an end user: open [https://local.thenile.dev](http://local.thenile.dev) with your browser and log in as one of the predefine users from [userList.json](../quickstart/src/datasets/userList.json).
 
    The user login screen should resemble below:
 
    ![image](images/login.png)
 
-2. Log into the [Nile Admin Dashboard](https://nad.thenile.dev/) to see the control plane and entity instances.
+2. Once logged in (e.g. as `nora@demo.io`), the user sees the entity instances (e.g. databases in this mock scenario) that she has acccess to.
+
+   ![image](images/instances.png)
+
+3. Logout. Then instead of logging in as an existing user, sign up as a new user.  Enter any email/password, then create an organization name.
+
+3. As a Nile developer: log into the [Nile Admin Dashboard](https://nad.thenile.dev/) to see the control plane and entity instances.
 For the email and password, use the `NILE_DEVELOPER_EMAIL` and `NILE_DEVELOPER_PASSWORD` values you specified in the `.env` file.
 
    Your dashboard should resemble below:
