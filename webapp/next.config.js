@@ -26,6 +26,14 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   publicRuntimeConfig: runtimeConfig,
+  // uncomment the following block to use hardcoded values 
+  /*
+  publicRuntimeConfig: {
+    NILE_WORKSPACE: '<Enter workspace>',
+    NILE_URL: 'https://prod.thenile.dev',
+    NILE_ENTITY_NAME: 'SaaSDB'
+  },
+  */
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/i,
