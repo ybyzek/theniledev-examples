@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Link, Stack, Typography } from '@mui/joy';
+import { Box, Button, Stack, Typography } from '@mui/joy';
 import Card from '@mui/joy/Card';
 import { InstanceTable } from '@theniledev/react';
 import Unauthorized from '../Unauthorized';
@@ -8,10 +8,12 @@ import getConfig from 'next/config'
 import NavBar from '../NavBar';
 import { CreateInstance } from './CreateInstance';
 import { useFirstOrg } from './hooks';
+import { useRouter } from 'next/router';
 
 import { columns } from './FormFields';
 
 export default function ClustersTable(){
+  const router = useRouter();
   const [reRender, setReRender] = React.useState(false);
   const [isLoading, user, org, unauthorized] = useFirstOrg();
   const { publicRuntimeConfig } = getConfig();
@@ -36,8 +38,6 @@ export default function ClustersTable(){
   return (
     <NavBar>
       <Stack spacing={2}>
-        <Typography level="h3">Welcome {user?.email}!</Typography>
-        <Link href="/">Log out</Link>
         <Card variant="outlined" sx={{ background: 'transparent' }}>
           <Stack direction="row" spacing={2} sx={{alignItems: 'center', marginBottom: 3 }}>
             <Typography>Organization:</Typography>
@@ -55,7 +55,9 @@ export default function ClustersTable(){
               <InstanceTable
                 org={org.id}
                 entity={NILE_ENTITY_NAME}
-                handleRowClick={() => alert('handle a row click')}
+                handleRowClick={({ id }) => {
+                  router.push(`/entities/${NILE_ENTITY_NAME}/${id}`)
+                }}
                 columns={tableColumns}
               />
             )
