@@ -2,7 +2,7 @@
 // keeping things consistent with the examples
 const fs = require('fs');
 
-const envPath = './.env';
+const envPath = '../.env';
 let runtimeConfig = {};
 
 try {
@@ -19,21 +19,14 @@ try {
   }, {});
 
 } catch(err) {
-  console.warn('[WARN] local .env file missing, unable to load runtime configs.')
+  console.warn('[WARN] local .env file missing. This must be configured before the demo can be run. ')
+  process.exit(0);
 }
 
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   publicRuntimeConfig: runtimeConfig,
-  // uncomment the following block to use hardcoded values 
-  /*
-  publicRuntimeConfig: {
-    NILE_WORKSPACE: '<Enter workspace>',
-    NILE_URL: 'https://prod.thenile.dev',
-    NILE_ENTITY_NAME: 'SaaSDB'
-  },
-  */
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/i,
