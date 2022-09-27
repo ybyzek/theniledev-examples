@@ -2,38 +2,16 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useNile } from '@theniledev/react';
 
-import WelcomeToNile from '~/components/WelcomeToNile'; // https://www.typescriptlang.org/docs/handbook/module-resolution.html#path-mapping
-import MySignUpForm from '~/components/MySignUpForm';
-
-function Header() {
-  return (
-    <Head>
-      <title>Nile App</title>
-      <meta name="description" content="Welcome to Nile" />
-      <link rel="icon" href="/favicon.ico" />
-    </Head>
-  );
-}
-
+import MySignUpForm from '~/components/MySignupForm';
 
 const Home: NextPage = () => {
-  const nile = useNile();
-  /**
-   * Delete the code block and component after you've updated the workspace name in ./_app.tsx
-   */
-  if (nile.workspace === '<Enter workspace here>') {
-    return (
-      <>
-        <Header />
-        <WelcomeToNile />
-      </>
-    );
-  }
-  /** end delete */
-
   return (
     <>
-      <Header/>
+      <Head>
+        <title>Nile App</title>
+        <meta name="description" content="Welcome to Database SaaS" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       {/** wrapper around the nile login form */}
       <MySignUpForm />
     </>

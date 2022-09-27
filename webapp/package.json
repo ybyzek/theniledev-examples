@@ -12,10 +12,10 @@
   "dependencies": {
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
-    "@mui/joy": "^5.0.0-alpha.41",
+    "@mui/joy": "^5.0.0-alpha.46",
     "@svgr/webpack": "^6.3.1",
-    "@theniledev/js": "^0.19.1",
-    "@theniledev/react": "^0.19.1",
+    "@theniledev/js": "^0.22.1",
+    "@theniledev/react": "^0.22.1",
     "next": "12.2.5",
     "node-emoji": "^1.11.0",
     "react": "18.2.0",

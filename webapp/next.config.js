@@ -19,7 +19,8 @@ try {
   }, {});
 
 } catch(err) {
-  console.warn('[WARN] local .env file missing, unable to load runtime configs.')
+  console.warn('[WARN] local .env file missing. This must be configured before the demo can be run. ')
+  process.exit(0);
 }
 
 const nextConfig = {

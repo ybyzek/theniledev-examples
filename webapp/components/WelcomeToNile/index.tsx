@@ -1,4 +1,4 @@
-import { Button, Box, Stack, Typography } from "@mui/joy";
+import { Button, Box, Stack, Typography, List, ListItem } from "@mui/joy";
 import Card from "@mui/joy/Card";
 import React from "react";
 
@@ -27,10 +27,16 @@ export default function WelcomeToNile() {
         Welcome to <a href="https://thenile.dev" target="_blank" rel="noreferrer">Nile!</a>
       </Typography>
 
-      <Typography level="h3">
-        Start by changing the workspace name in {' '}
-        <code>pages/_app.tsx</code>
-      </Typography>
+      <Stack>
+        <Typography level="h4">
+          Getting started:
+        </Typography>
+        <List>
+          <ListItem><Typography>Uncomment <code>publicRuntimeConfig</code> in {' '}<code>next.config.js</code> and change the values</Typography></ListItem>
+          <ListItem>Restart the server</ListItem>
+          <ListItem>Refresh this page</ListItem>
+        </List>
+        </Stack>
 
       <LearnCard>
         <a href="https://thenile.dev/docs" target="_blank" rel="noreferrer">

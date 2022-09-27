@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import ChipDelete from '@mui/joy/ChipDelete';
 import Logo from '~/components/Logo';
+import getConfig from 'next/config';
 
 export default function MyLoginForm() {
 
@@ -15,20 +16,21 @@ export default function MyLoginForm() {
 
   const nile = useNile();
   const [hadLoginSuccess, setHadLoginSuccess] = React.useState(false);
-  const { isLoading, data: me = {}, error2 } = useQuery(['/anythingelse'], () => nile.users.me(), {
+  const { isLoading, data: me } = useQuery(['/anythingelse'], () => nile.users.me(), {
     enabled: hadLoginSuccess,
   });
-
+  const { publicRuntimeConfig } = getConfig();
+  const { NILE_ENTITY_NAME } = publicRuntimeConfig;
   React.useEffect((): void => {
-    const orgMemberships = me.orgMemberships;
+    const orgMemberships = me?.orgMemberships;
     if (hadLoginSuccess && orgMemberships != null) {
       if (Object.keys(orgMemberships).length < 1) {
-        router.push('/createorg');
+        router.push('/create-org');
       } else {
-        router.push('/instances/clusters');
+        router.push(`/entities/${NILE_ENTITY_NAME}`);
       }
     }
-  }, [router, me, hadLoginSuccess]);
+  }, [router, me, hadLoginSuccess, NILE_ENTITY_NAME]);
 
   return (
     <Stack
@@ -39,7 +41,7 @@ export default function MyLoginForm() {
       }}
     >
     <Card variant="outlined" sx={{ background: 'transparent', padding: 14, paddingTop: 10}}>
-      <Stack spacing={10}>
+      <Stack spacing={2}>
         <Logo width={300}/>
         {error && (
           <Chip 
@@ -55,18 +57,20 @@ export default function MyLoginForm() {
             {error}
           </Chip>
         )}
-        {signup != "undefined" && signup == "success" && (
+        {signup && signup == "success" && (
           <Chip
             variant="soft"
             color="success"
+            sx={{maxWidth:'20em'}}
           >
-            Signup success
+            <Typography padding={2}>
+              Sign up successful! 
+            </Typography>
           </Chip>
         )}
         <LoginForm 
           onSuccess={() => {
             setHadLoginSuccess(true);
-            // router.push('/instances/clusters');
           }}
           onError={(error) => {
             // for demo purposes only
@@ -78,15 +82,17 @@ export default function MyLoginForm() {
           }}
         />
       </Stack>
-      <Typography level="body4" sx={{ marginTop: 1 }}>
-        Sign in using an organization user email and password.
-      </Typography>
-      <Typography level="body4" sx={{ marginTop: 1 }}>
-        New user? {' '}
-        <Link href="signup" target="_blank">
-          Signup
-        </Link>
-      </Typography>
+      <Stack spacing={1} sx={{marginTop: 1}}>
+        <Typography level="body4">
+          Sign in using an organization user email and password.
+        </Typography>
+        <Typography >
+          New user? {' '}
+          <Link href="/signup">
+            Sign up
+          </Link>
+        </Typography>
+      </Stack>
     </Card>
     </Stack>
   );
