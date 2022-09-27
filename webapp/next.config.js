@@ -2,7 +2,7 @@
 // keeping things consistent with the examples
 const fs = require('fs');
 
-const envPath = '../.env';
+const envPath = './.env';
 let runtimeConfig = {};
 
 try {
