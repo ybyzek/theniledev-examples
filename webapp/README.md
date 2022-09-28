@@ -4,18 +4,27 @@
 
 ## Overview
 
-This examples uses [Next.js](https://nextjs.org/) to create a frontend for a SaaS application integrated with [Nile](https://thenile.dev/).
-The app is completely self-serve, allowing end users to sign up on their own, create their own organization, and manage their own instances.
+This example shows a SaaS service integrated with [Nile](https://thenile.dev/). 
+Once a developer defines their service's entity schema, Nile provides: web frontend with self-service (user signup/login, org creation, instance management), multi-tenancy, authorization policies, metrics, events for reconciling Nile with the data plane.
 
-## Setup
+The sample webapp uses Nile React components for [Next.js](https://nextjs.org/) to create a frontend for a SaaS application integrated with [Nile](https://thenile.dev/).
 
-To run these examples, you need to access to Nile. Please [reach out](https://www.thenile.dev) for more information.
+## Contents
+
+* [Overview](#overview)
+* [Setup Certificates](#setup-certificates)
+* [Install Dependencies](#install-dependencies)
+* [Initialize Nile](#initialize-nile)
+* [Run the web server locally](#run-the-web-server-locally)
+* [Validate](#validate)
+
+## Setup Certificates
 
 1. Create certificates for your local machine and accept them. The Nile backend will only serve cookies to `\*.thenile.dev` domains, which is required for login
 
-- edit `/etc/hosts` and add `127.0.0.1 local.thenile.dev`.
-- `mkdir .certificates && cd .certificates`
-- add an ssl key (this one lasts 1 year)
+- Edit `/etc/hosts` and add `127.0.0.1 local.thenile.dev`.
+- Run `mkdir .certificates && cd .certificates`
+- Add an SSL key that lasts 1 year
 
    ```bash
    openssl req -x509 -out localhost.crt -keyout localhost.key \
@@ -29,25 +38,37 @@ To run these examples, you need to access to Nile. Please [reach out](https://ww
 
 3. From the pop up window, open the dropdown for `Trust` and select `Always Trust`.
 
-4. For all examples, you need a local file with your Nile configuration.
-For that purpose, at the top-level of the examples, copy the `.env.defaults` file to `.env`:
-
-```bash
-# From the top level of the examples folder
-$ examples> cp .env.defaults .env
-```
-
-Set the values in this `.env` file to match the values you want in your control plane.
-
 ## Install Dependencies
 
 ```bash
 yarn install
 ```
 
-## Setup
+## Initialize Nile
 
-Run the following command to preconfigure the Nile control plane just so you're not starting from scratch: entity definition called [SaaSDB](../quickstart/src/models/SaaSDB_Entity_Definition.json), two organizations with users from [userList.json](../quickstart/src/datasets/userList.json), and entity instances from [dbList.json](../quickstart/src/datasets/dbList.json).
+To run these examples, you need to access to Nile. Please [reach out](https://www.thenile.dev) for more information.
+
+1. For all examples, you need a local file with your Nile configuration.
+For that purpose, at the top-level of the examples, copy the `.env.defaults` file to `.env`:
+
+   ```bash
+   # From the top level of the examples folder
+   $ examples> cp .env.defaults .env
+   ```
+
+   Set the values in this `.env` file to match the values you want in your control plane.
+
+2. You can run the webapp with the mock SaaSDB use case so that you're not starting from scratch.  But if you want to run with your own configuration, you need to edit or replace:
+
+   - Nile connection configuration: [.env](.env) (see step above)
+   - Entity schema: [SaaSDB_Entity_Definition.json](../quickstart/src/models/SaaSDB_Entity_Definition.json)
+   - List of users and their metadata: [userList.json](../quickstart/src/datasets/userList.json)
+   - List of pre-existing entity instances: [dbList.json](../quickstart/src/datasets/dbList.json)
+   - Webapp column names: [EntityTable.tsx](components/EntityTable/EntityTable.tsx)
+   - Webapp form fields for creating new instances: [FormFields.ts](components/EntityTable/FormFields.ts)
+   - Webapp logo: [cloud-db.svg](public/images/cloud-db.svg)
+
+3. Run the following command to preconfigure the Nile control plane.
 
 ```bash
 yarn setup-nile
