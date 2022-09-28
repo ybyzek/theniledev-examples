@@ -70,7 +70,7 @@ For that purpose, at the top-level of the examples, copy the `.env.defaults` fil
    - Pre-populate Nile with users: [userList.json](../quickstart/src/datasets/userList.json)
    - Pre-populate Nile with entity instances: [dbList.json](../quickstart/src/datasets/dbList.json)
    - Webapp column names and form fields derived from the entity schema: [FormFields.ts](components/EntityTable/FormFields.ts)
-   - Webapp SaaS company logo: [saas-logo.svg](public/images/saas-logo.svg]
+   - Webapp SaaS company logo: [saas-logo.svg](public/images/saas-logo.svg)
 
 3. Run the following command to preconfigure the Nile control plane.
 
