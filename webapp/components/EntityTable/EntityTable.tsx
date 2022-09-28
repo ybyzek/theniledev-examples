@@ -54,7 +54,7 @@ export default function ClustersTable(){
                 org={org.id}
                 entity={NILE_ENTITY_NAME}
                 handleRowClick={() => alert('handle a row click')}
-                columns={['dbName', 'cloud', 'environment', 'size']}
+                columns={['dbName', 'cloud', 'environment', 'size', 'connection', 'status']}
               />
             )
           }
