@@ -4,7 +4,7 @@ import { AttributeType } from "@theniledev/react";
  * manually created from https://github.com/TheNileDev/examples/blob/main/quickstart/src/models/SaaSDB_Entity_Definition.json
  * Customize these values to match your own entities
  */
- const fields = [
+const fields = [
   { name: 'dbName', label: 'Database name', required: true },
   {
     name: 'cloud',
@@ -42,3 +42,6 @@ import { AttributeType } from "@theniledev/react";
   },
 ];
 export default fields;
+
+const columns = ['dbName', 'cloud', 'environment', 'size', 'connection', 'status'];
+export { columns };

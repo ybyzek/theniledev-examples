@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTheme } from '@mui/joy';
 
-import RawLogo from '~/images/cloud-db.svg'; // https://www.typescriptlang.org/docs/handbook/module-resolution.html#path-mapping
+import RawLogo from '~/images/saas-logo.svg'; // https://www.typescriptlang.org/docs/handbook/module-resolution.html#path-mapping
 
 export default function Logo({ width = 131 }: {width?: number}) {
   const theme = useTheme();

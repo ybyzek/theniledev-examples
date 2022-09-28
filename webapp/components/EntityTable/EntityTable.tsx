@@ -9,12 +9,14 @@ import NavBar from '../NavBar';
 import { CreateInstance } from './CreateInstance';
 import { useFirstOrg } from './hooks';
 
+import { columns } from './FormFields';
 
 export default function ClustersTable(){
   const [reRender, setReRender] = React.useState(false);
   const [isLoading, user, org, unauthorized] = useFirstOrg();
   const { publicRuntimeConfig } = getConfig();
   const { NILE_ENTITY_NAME } = publicRuntimeConfig;
+  const { tableColumns } = columns;
 
   // just a simple refresh for now.
   React.useEffect(() => {
@@ -54,7 +56,7 @@ export default function ClustersTable(){
                 org={org.id}
                 entity={NILE_ENTITY_NAME}
                 handleRowClick={() => alert('handle a row click')}
-                columns={['dbName', 'cloud', 'environment', 'size', 'connection', 'status']}
+                columns={tableColumns}
               />
             )
           }
