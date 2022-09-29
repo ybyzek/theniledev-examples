@@ -1,7 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 export function useInterval(callback: () => void, delay: number | null) {
-  const cb = React.useRef(callback)
+  const cb = React.useRef(callback);
 
   React.useEffect(() => {
     cb.current = callback;
@@ -12,13 +12,13 @@ export function useInterval(callback: () => void, delay: number | null) {
     // Don't schedule if no delay is specified.
     // Note: 0 is a valid value for delay.
     if (!delay && delay !== 0) {
-      return
+      return;
     }
 
-    const id = setInterval(() => cb.current(), delay)
+    const id = setInterval(() => cb.current(), delay);
 
-    return () => clearInterval(id)
-  }, [delay])
+    return () => clearInterval(id);
+  }, [delay]);
 }
 
-export default useInterval
+export default useInterval;

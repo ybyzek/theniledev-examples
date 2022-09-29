@@ -1,18 +1,18 @@
 import React from 'react';
-import { Box, Button, Stack, Typography } from '@mui/joy';
+import { Box, Stack, Typography } from '@mui/joy';
 import Card from '@mui/joy/Card';
 import { InstanceTable } from '@theniledev/react';
-import Unauthorized from '../Unauthorized';
-
-import getConfig from 'next/config'
-import NavBar from '../NavBar';
-import { CreateInstance } from './CreateInstance';
-import { useFirstOrg } from './hooks';
+import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 
+import Unauthorized from '../Unauthorized';
+import NavBar from '../NavBar';
+
+import { CreateInstance } from './CreateInstance';
+import { useFirstOrg } from './hooks';
 import { columns } from './FormFields';
 
-export default function ClustersTable(){
+export default function ClustersTable() {
   const router = useRouter();
   const [reRender, setReRender] = React.useState(false);
   const [isLoading, user, org, unauthorized] = useFirstOrg();
@@ -28,7 +28,7 @@ export default function ClustersTable(){
   }, [reRender]);
 
   if (unauthorized) {
-    return <Unauthorized />
+    return <Unauthorized />;
   }
 
   if (isLoading || !user || !org) {
@@ -39,31 +39,39 @@ export default function ClustersTable(){
     <NavBar>
       <Stack spacing={2}>
         <Card variant="outlined" sx={{ background: 'transparent' }}>
-          <Stack direction="row" spacing={2} sx={{alignItems: 'center', marginBottom: 3 }}>
+          <Stack
+            direction="row"
+            spacing={2}
+            sx={{ alignItems: 'center', marginBottom: 3 }}
+          >
             <Typography>Organization:</Typography>
             <Typography component="strong">{org.name}</Typography>
-            <Box sx={{
+            <Box
+              sx={{
                 width: '100%',
                 display: 'flex',
-                justifyContent: 'flex-end'
+                justifyContent: 'flex-end',
               }}
             >
-              <CreateInstance key="create-instance" org={org.id} setReRender={() => setReRender(true)}/>
+              <CreateInstance
+                key="create-instance"
+                org={org.id}
+                setReRender={() => setReRender(true)}
+              />
             </Box>
           </Stack>
           {reRender ? null : (
-              <InstanceTable
-                org={org.id}
-                entity={NILE_ENTITY_NAME}
-                handleRowClick={({ id }) => {
-                  router.push(`/entities/${NILE_ENTITY_NAME}/${id}`)
-                }}
-                columns={tableColumns}
-              />
-            )
-          }
+            <InstanceTable
+              org={org.id}
+              entity={NILE_ENTITY_NAME}
+              handleRowClick={({ id }) => {
+                router.push(`/entities/${NILE_ENTITY_NAME}/${id}`);
+              }}
+              columns={tableColumns}
+            />
+          )}
         </Card>
       </Stack>
     </NavBar>
-  )
+  );
 }

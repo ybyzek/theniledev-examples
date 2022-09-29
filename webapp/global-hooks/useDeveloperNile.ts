@@ -11,22 +11,21 @@ export const useDeveloperNile = (): void | NileApi => {
   const [_nile, setNile] = React.useState<NileApi>();
   const { publicRuntimeConfig } = getConfig();
 
-  const { 
+  const {
     NILE_URL,
     NILE_WORKSPACE,
     NILE_DEVELOPER_EMAIL,
-    NILE_DEVELOPER_PASSWORD
+    NILE_DEVELOPER_PASSWORD,
   } = publicRuntimeConfig;
-
 
   React.useEffect(() => {
     async function getNile() {
-      const nile = await Nile({ 
-        basePath: NILE_URL, 
-        workspace: NILE_WORKSPACE 
-      }).connect({ 
-        email: NILE_DEVELOPER_EMAIL, 
-        password: NILE_DEVELOPER_PASSWORD
+      const nile = await Nile({
+        basePath: NILE_URL,
+        workspace: NILE_WORKSPACE,
+      }).connect({
+        email: NILE_DEVELOPER_EMAIL,
+        password: NILE_DEVELOPER_PASSWORD,
       });
       setNile(nile);
     }
@@ -34,4 +33,4 @@ export const useDeveloperNile = (): void | NileApi => {
   }, [NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD, NILE_URL, NILE_WORKSPACE]);
 
   return _nile;
-}
+};

@@ -1,5 +1,6 @@
-import Head from "next/head";
-import { InstanceMetrics } from "~/components/InstanceMetrics";
+import Head from 'next/head';
+
+import { InstanceMetrics } from '~/components/InstanceMetrics';
 
 export default function InstacePage() {
   return (
@@ -11,5 +12,5 @@ export default function InstacePage() {
       </Head>
       <InstanceMetrics />
     </>
-  )
-};
+  );
+}

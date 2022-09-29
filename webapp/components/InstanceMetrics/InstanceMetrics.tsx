@@ -1,13 +1,15 @@
-import { Box, Button, Link, Stack, Typography } from "@mui/joy";
-import { Queries, useNile, useQuery } from "@theniledev/react";
+import { Box, Button, Stack, Typography } from '@mui/joy';
+import { Queries, useNile, useQuery } from '@theniledev/react';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import getConfig from "next/config";
-import { useRouter } from "next/router";
-import { useFirstOrg } from "../EntityTable/hooks";
-import NavBar from "../NavBar";
-import RequestLineChart from "./RequestsLineChart";
+import getConfig from 'next/config';
+import { useRouter } from 'next/router';
+
+import { useFirstOrg } from '../EntityTable/hooks';
+import NavBar from '../NavBar';
+
+import RequestLineChart from './RequestsLineChart';
 import ThroughputTotal from './ThroughputTotal';
-import UpTime from "./UpTime";
+import UpTime from './UpTime';
 
 export default function InstanceMetrics() {
   const router = useRouter();
@@ -18,42 +20,46 @@ export default function InstanceMetrics() {
   const { NILE_ENTITY_NAME, NILE_ORGANIZATION_NAME } = publicRuntimeConfig;
 
   const nile = useNile();
-  const [loadingOrg, ,org] = useFirstOrg();
+  const [loadingOrg, , org] = useFirstOrg();
 
-  const { isLoading, data: instance} = useQuery(
-    Queries.GetInstance(NILE_ENTITY_NAME, NILE_ORGANIZATION_NAME, instanceId), 
-    () => nile.entities.getInstance({
-      org: String(org?.id),
-      type: NILE_ENTITY_NAME, 
-      id: instanceId
-    }), 
+  const { isLoading, data: instance } = useQuery(
+    Queries.GetInstance(NILE_ENTITY_NAME, NILE_ORGANIZATION_NAME, instanceId),
+    () =>
+      nile.entities.getInstance({
+        org: String(org?.id),
+        type: NILE_ENTITY_NAME,
+        id: instanceId,
+      }),
     { enabled: !!org }
   );
 
-  const { properties } = instance ?? {} as Record<string, any>;
+  const { properties } = instance ?? ({} as Record<string, any>);
 
   return (
-    <NavBar> 
-      <Button 
+    <NavBar>
+      <Button
         href={`/entities/${NILE_ENTITY_NAME}`}
         component="a"
         variant="outlined"
-        startDecorator={<ArrowBackIcon />}>
-          Back to entities
+        startDecorator={<ArrowBackIcon />}
+      >
+        Back to entities
       </Button>
-      <Stack direction="row" sx={{ justifyContent: "space-between", pb: 2 }}>
+      <Stack direction="row" sx={{ justifyContent: 'space-between', pb: 2 }}>
         <Stack>
           <Typography level="h2">{properties?.dbName}</Typography>
           <Typography level="body4">{instance?.id}</Typography>
         </Stack>
         <Stack>
-          <Typography level="h2" sx={{ textAlign: 'end'}}>
+          <Typography level="h2" sx={{ textAlign: 'end' }}>
             {properties?.cloud}
           </Typography>
-          <Stack direction="row" sx={{
+          <Stack
+            direction="row"
+            sx={{
               alignItems: 'center',
               gap: 1,
-              justifyContent: 'flex-end'
+              justifyContent: 'flex-end',
             }}
           >
             <Typography level="body4">Compute resources:</Typography>
@@ -63,10 +69,10 @@ export default function InstanceMetrics() {
       </Stack>
       <UpTime />
       <Stack sx={{ flexWrap: 'wrap', mt: 2 }} direction="row">
-        <Box sx={{width: '50%'}}>
+        <Box sx={{ width: '50%' }}>
           <RequestLineChart />
         </Box>
-        <Box sx={{width: '50%'}}>
+        <Box sx={{ width: '50%' }}>
           <ThroughputTotal />
         </Box>
       </Stack>
