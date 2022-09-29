@@ -44,21 +44,22 @@ const entityDefinition: CreateEntityRequest = EntityDefinition;
 // Workflow for the Nile developer
 async function setupDeveloper() {
 
-  console.log(`\nSigning up for Nile at ${NILE_URL}, workspace ${NILE_WORKSPACE}, as developer ${NILE_DEVELOPER_EMAIL}`);
-
   // Signup developer
-  await nile.developers.createDeveloper({
-    createUserRequest : {
-      email : NILE_DEVELOPER_EMAIL,
-      password : NILE_DEVELOPER_PASSWORD,
-    }
-  }).catch((error:any) => {
+  try {
+    await nile.developers.createDeveloper({
+      createUserRequest : {
+        email : NILE_DEVELOPER_EMAIL,
+        password : NILE_DEVELOPER_PASSWORD,
+      }
+    })
+    console.log(emoji.get('white_check_mark'), `Signing up for Nile at ${NILE_URL}, workspace ${NILE_WORKSPACE}, as developer ${NILE_DEVELOPER_EMAIL}`);
+  } catch (error:any) {
     if (error.message == "user already exists") {
-      console.log(`Developer ${NILE_DEVELOPER_EMAIL} already exists`);
+      console.log(emoji.get('dart'), `Developer ${NILE_DEVELOPER_EMAIL} already exists`);
     } else {
       console.error(error);
     }
-  })
+  };
 
   await nileUtils.loginAsDev(nile, NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD);
 

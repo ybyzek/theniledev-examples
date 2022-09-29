@@ -60,7 +60,7 @@ export default function ThroughputTotal() {
   return (
     <Box sx={{ pl: 1 }}>
       <Card variant="outlined">
-        <Typography level="body3">past 5 seconds</Typography>
+        <Typography level="body1">Average write latency (last 60s)</Typography>
         <Stack
           direction="row"
           sx={{
@@ -72,7 +72,7 @@ export default function ThroughputTotal() {
             {metricValue ? metricValue : '--'}
           </Typography>
           <Typography sx={{ color: 'var(--joy-palette-grey-400)' }}>
-            {metricValue ? '/tbps' : ''}
+            {metricValue ? '/ms' : ''}
           </Typography>
         </Stack>
       </Card>

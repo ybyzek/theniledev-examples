@@ -20,7 +20,7 @@ export default function InstanceMetrics() {
   const { NILE_ENTITY_NAME, NILE_ORGANIZATION_NAME } = publicRuntimeConfig;
 
   const nile = useNile();
-  const [loadingOrg, , org] = useFirstOrg();
+  const [, , org] = useFirstOrg();
 
   const { isLoading, data: instance } = useQuery(
     Queries.GetInstance(NILE_ENTITY_NAME, NILE_ORGANIZATION_NAME, instanceId),
@@ -43,7 +43,7 @@ export default function InstanceMetrics() {
         variant="outlined"
         startDecorator={<ArrowBackIcon />}
       >
-        Back to entities
+        Back to DBs
       </Button>
       <Stack direction="row" sx={{ justifyContent: 'space-between', pb: 2 }}>
         <Stack>
@@ -62,8 +62,8 @@ export default function InstanceMetrics() {
               justifyContent: 'flex-end',
             }}
           >
-            <Typography level="body4">Compute resources:</Typography>
-            <Typography>{properties?.size}</Typography>
+            <Typography level="body4">Size:</Typography>
+            <Typography level="body4">{properties?.size}</Typography>
           </Stack>
         </Stack>
       </Stack>

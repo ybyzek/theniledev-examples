@@ -10,8 +10,8 @@ This example creates (or validates the existence of) the following control plane
 - Create a workspace, which must be globally unique
 - Create an entity type called `SaaSDB` from [this definition](../quickstart/src/models/SaaSDB_Entity_Definition.json), which is also available as a template from the Nile Admin Dashboard.
 - Create two organizations with one user each (see [userList.json](../quickstart/src/datasets/userList.json) for details):
-  - `db-customer1` with user nora@demo.io
-  - `db-customer2` with user frank@demo.io
+  - `customer-org-1` with user nora@demo.io
+  - `customer-org-2` with user frank@demo.io
 - Create a `SaaSDB` entity instance in each organization, with values that match the schema defined earlier
 
 ## Install Dependencies
@@ -62,7 +62,7 @@ yarn start
 
 ![image](images/nad.png)
 
-2. Validate tenant isolation by running the command below. At first user nora@demo.io cannot see the organization `db-customer2` nor any instances in it, but after adding nora@demo.io to `db-customer2`, nora@demo.io can see all the instances in `db-customer2` that frank@demo.io can see.
+2. Validate tenant isolation by running the command below. At first user nora@demo.io cannot see the organization `customer-org-2` nor any instances in it, but after adding nora@demo.io to `customer-org-2`, nora@demo.io can see all the instances in `customer-org-2` that frank@demo.io can see.
 
 ```
 yarn test

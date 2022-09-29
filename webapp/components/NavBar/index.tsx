@@ -1,5 +1,4 @@
 import { Box, Button, Sheet, Stack, Typography } from '@mui/joy';
-import { useNile } from '@theniledev/react';
 import React from 'react';
 
 import { useFirstOrg } from '../EntityTable/hooks';
@@ -8,8 +7,7 @@ import Logo from '~/components/Logo';
 
 export default function NavBar(props: React.PropsWithChildren) {
   const { children } = props;
-  const nile = useNile();
-  const [isLoading, user] = useFirstOrg();
+  const [isLoading, user, org] = useFirstOrg();
   return (
     <Stack>
       <Box
@@ -24,7 +22,7 @@ export default function NavBar(props: React.PropsWithChildren) {
           <Stack direction="row" sx={{ justifyContent: 'space-between' }}>
             <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
               <Logo width={76} />
-              <Typography>{String(nile.workspace)}</Typography>
+              <Typography>{String(org?.name)}</Typography>
             </Stack>
             <Stack direction="row" sx={{ gap: 2, alignItems: 'center' }}>
               <Typography level="h4">Welcome {user?.email}!</Typography>

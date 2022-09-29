@@ -10,7 +10,7 @@ This quickstart creates (or validates the existence of) the following control pl
 - Create a workspace, which must be globally unique
 - Create an entity type called `SaaSDB` from [this definition](src/models/SaaSDB_Entity_Definition.json), which is also available as a template from the Nile Admin Dashboard.
 - Create an organization with a user (see [userList.json](src/datasets/userList.json) for details):
-  - `db-customer1` with user nora@demo.io
+  - `customer-org-1` with user nora@demo.io
 - Create a `SaaSDB` entity instance in the organization, with a value that matches the schema defined earlier
 
 ## Install Dependencies

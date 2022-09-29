@@ -3,38 +3,38 @@
     "//comment": "DO NOT MODIFY",
     "email": "nora@demo.io",
     "password": "password",
-    "org": "db-customer1",
+    "org": "customer-org-1",
     "role": "admin"
   },
   {
     "//comment": "DO NOT MODIFY",
     "email": "frank@demo.io",
     "password": "password",
-    "org": "db-customer2",
+    "org": "customer-org-2",
     "role": "admin"
   },
   {
     "email": "shaun@demo.io",
     "password": "password",
-    "org": "db-customer1",
+    "org": "customer-org-1",
     "role": "RW"
   },
   {
     "email": "parker@demo.io",
     "password": "password",
-    "org": "db-customer1",
+    "org": "customer-org-1",
     "role": "RO"
   },
   {
     "email": "lisa@demo.io",
     "password": "password",
-    "org": "db-customer2",
+    "org": "customer-org-2",
     "role": "deny"
   },
   {
     "email": "london@demo.io",
     "password": "password",
-    "org": "db-customer2",
+    "org": "customer-org-2",
     "role": "RO"
   }
 ]

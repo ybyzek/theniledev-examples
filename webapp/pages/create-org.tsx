@@ -7,7 +7,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Nile App</title>
+        <title>SaaSDB (built on Nile)</title>
         <meta name="description" content="Create Org" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

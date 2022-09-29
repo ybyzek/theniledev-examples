@@ -5,10 +5,10 @@
 ## Overview
 
 This collection of examples demonstrates how to use Nile as a control plane for an Infrastructure SaaS product.
+Nile provides an entity system, event system, and tenant-aware metrics.
 
 The mock scenario in these examples is a company that provides databases as SaaS which is using Nile for its control plane.
 For this SaaS company, you define your example entity schema called `SaaSDB` in the file [SaaSDB_Entity_Definition.json](quickstart/src/models/SaaSDB_Entity_Definition.json) that has a schema for each database instance.
-
 For demonstration purposes, these examples simulate different organizations and entity instances from mock customers:
 
 - [dbList.json](quickstart/src/datasets/dbList.json): list of entity instances, i.e., databases. Each of these instances conforms to the `SaaSDB` schema
@@ -16,9 +16,13 @@ For demonstration purposes, these examples simulate different organizations and 
 
 First run the Quickstart to setup your control plane in Nile, and then you can run the other modules for different use cases.
 The modules can also be run sequentially to build on top of one another, in which case, we recommend running them in the order presented here to build up your SaaS as you go.
+Finally, after you run the webapp example which includes a front-end for self-service provisioning, a user can log in to read and create new entity instances (DBs in this case):
 
-> Note: the languages presented below are an indication just of which examples have been developed, not of what's available.
-> Please see the Nile API and SDK documentation for details.
+![image](webapp/images/instances.png)
+
+And metrics for each of their instances:
+
+![image](webapp/images/metrics.png)
 
 ## Contents
 
@@ -29,7 +33,6 @@ The modules can also be run sequentially to build on top of one another, in whic
 * [Data Plane](#data-plane)
 * [Authorization](#authorization)
 * [Webapp](#webapp)
-* [Metrics](#metrics)
 
 ## Setup
 
@@ -52,6 +55,9 @@ cp .env.defaults .env
 ```
 
 Set the values in this `.env` file to match the values you want in your control plane, and it will be used for all the examples.
+
+> Note: the languages presented below are an indication just of which examples have been developed, not of what's available.
+> Please see the Nile API and SDK documentation for details.
 
 ## Quickstart
 
@@ -88,15 +94,10 @@ You can configure these in the control plane so that they are aligned to your bu
 ## Webapp
 
 Configure a front-end web application that is customizable on a per-tenant basis.
+The webapp includes Nile React components for metrics, because it is critical for any SaaS to be able to measure and monitor consumption and do accurate tenant billing.
+These metrics can be exposed externally to the end user as well as internally for business operations.
 
 - [Webapp](webapp/) | JS SDK | Builds a self-service frontend that integrates with Nile on the backend
-
-## Metrics
-
-Observability is a critical use case for any SaaS to be able to measure and monitor consumption and do accurate tenant billing.
-These metrics should be exposed externally to the end user as well as internally for business operations.
-
-_coming soon_
 
 ## Other
 

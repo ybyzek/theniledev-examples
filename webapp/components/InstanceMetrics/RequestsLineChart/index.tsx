@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Typography } from '@mui/joy';
+import { Card } from '@mui/joy';
 import { MetricsLineChart } from '@theniledev/react';
 import getConfig from 'next/config';
 import { Measurement } from '@theniledev/js';
@@ -13,7 +13,7 @@ import { useFirstOrg } from '~/components/EntityTable/hooks';
 const now = new Date();
 
 const TEN_MINUTES_AGO = new Date(now.getTime() - 0.5 * 60000);
-const METRIC_NAME = 'requests';
+const METRIC_NAME = 'Queries per second (QPS)';
 
 export default function RequestLineChart() {
   const router = useRouter();
@@ -57,7 +57,6 @@ export default function RequestLineChart() {
         minWidth: '560px',
       }}
     >
-      <Typography level="body3">last minute</Typography>
       <MetricsLineChart
         updateInterval={3000}
         filter={metricFilter}

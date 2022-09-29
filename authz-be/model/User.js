@@ -13,7 +13,7 @@ const UserSchema = new Mongoose.Schema({
   },
   org: {
     type: String,
-    default: "db-customer1",
+    default: "customer-org-1",
     required: true,
   },
   role: {

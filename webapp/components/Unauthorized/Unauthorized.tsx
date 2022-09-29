@@ -1,5 +1,4 @@
 import { Box, Button, Stack, Typography } from '@mui/joy';
-import { useNile } from '@theniledev/react';
 import Link from 'next/link';
 
 export default function Unauthorized() {

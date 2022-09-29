@@ -63,7 +63,13 @@ For that purpose, at the top-level of the examples, copy the `.env.defaults` fil
 
    Set the values in this `.env` file to match the values you want in your control plane.
 
-2. You can run the webapp with the mock SaaSDB use case so that you're not starting from scratch.  But if you want to run with your own configuration, you need to edit or replace:
+2. Run the following command to preconfigure the Nile control plane with the mock SaaSDB use case so that you're not starting from scratch.
+
+   ```bash
+   yarn setup-nile
+   ```
+
+3. If you want to run with your own configuration, you need to edit or replace:
 
    - Nile connection configuration: [.env](.env) (see step above)
    - Entity schema: [SaaSDB_Entity_Definition.json](../quickstart/src/models/SaaSDB_Entity_Definition.json)
@@ -72,13 +78,9 @@ For that purpose, at the top-level of the examples, copy the `.env.defaults` fil
    - Webapp column names and form fields derived from the entity schema: [FormFields.ts](components/EntityTable/FormFields.ts)
    - Webapp SaaS company logo: [saas-logo.svg](public/images/saas-logo.svg)
 
-3. Run the following command to preconfigure the Nile control plane.
-
-```bash
-yarn setup-nile
-```
-
 ## Run the web server locally
+
+Run the web server locally:
 
 ```bash
 yarn dev
@@ -96,11 +98,15 @@ yarn dev
 
    ![image](images/instances.png)
 
-3. Logout. Then instead of logging in as an existing user, sign up as a new user.  Enter any email/password, then create an organization name.
+3. Click on one of the instances to see metrics.
 
-4. Create a new SaaSDB instance.
+   ![image](images/metrics.png)
 
-5. As a Nile developer: log into the [Nile Admin Dashboard](https://nad.thenile.dev/) to see the control plane and entity instances.
+4. Logout. Then instead of logging in as an existing user, sign up as a new user.  Enter any email/password, then create an organization name.
+
+5. Create a new SaaSDB instance.
+
+6. As a Nile developer: log into the [Nile Admin Dashboard](https://nad.thenile.dev/) to see the control plane and entity instances.
 For the email and password, use the `NILE_DEVELOPER_EMAIL` and `NILE_DEVELOPER_PASSWORD` values you specified in the `.env` file.
 
    Your dashboard should resemble below:
