@@ -1,6 +1,5 @@
 import { Box, Card, Stack, Typography } from '@mui/joy';
 import { useMetrics } from '@theniledev/react';
-import getConfig from 'next/config';
 import { Tooltip } from '@mui/material';
 import { useRouter } from 'next/router';
 
@@ -8,8 +7,6 @@ import { useMetricsGenerator } from '../hooks';
 import { generateValueRange } from '../../../utils';
 
 import Rect from './rect.svg';
-
-import { useFirstOrg } from '~/components/EntityTable/hooks';
 
 const Tangle = ({ fill }: { fill: 'success' | 'danger' }) => (
   <Box
@@ -30,11 +27,31 @@ const now = new Date();
 const TWENTY_FOUR_HOURS_AG0 = new Date(now.getTime() - 24 * 60 * 60000);
 const THRITY_SECONDS = 30 * 1000;
 
-export default function UpTime() {
+export default function UpTimeLoader() {
   const router = useRouter();
   const instanceId = String(router.query.instance);
+  const entityType = String(router.query.entity);
+  const organizationId = String(router.query.org);
 
-  const [, , org] = useFirstOrg();
+  if (Object.keys(router.query).length === 0) {
+    return null;
+  }
+  return (
+    <UpTime
+      instanceId={instanceId}
+      entityType={entityType}
+      organizationId={organizationId}
+    />
+  );
+}
+
+type Props = {
+  instanceId: string;
+  entityType: string;
+  organizationId: string;
+};
+function UpTime(props: Props) {
+  const { instanceId, entityType, organizationId } = props;
 
   useMetricsGenerator({
     metricName: METRIC_NAME,
@@ -45,12 +62,10 @@ export default function UpTime() {
     },
   });
 
-  const { publicRuntimeConfig } = getConfig();
-  const { NILE_ENTITY_NAME } = publicRuntimeConfig;
   const metricFilter = {
-    entityType: NILE_ENTITY_NAME,
+    entityType,
     metricName: METRIC_NAME,
-    organizationId: org?.id,
+    organizationId,
   };
 
   const { metrics, isLoading } = useMetrics({

@@ -1,31 +1,46 @@
 import React from 'react';
 import { Card } from '@mui/joy';
 import { MetricsLineChart } from '@theniledev/react';
-import getConfig from 'next/config';
 import { Measurement } from '@theniledev/js';
 import { useRouter } from 'next/router';
 
 import { generateValueRange } from '../../../utils';
 import { useMetricsGenerator } from '../hooks';
 
-import { useFirstOrg } from '~/components/EntityTable/hooks';
-
 const now = new Date();
 
 const TEN_MINUTES_AGO = new Date(now.getTime() - 0.5 * 60000);
 const METRIC_NAME = 'Queries per second (QPS)';
 
-export default function RequestLineChart() {
+export default function RequestLineChartLoader() {
   const router = useRouter();
   const instanceId = String(router.query.instance);
-  const { publicRuntimeConfig } = getConfig();
-  const { NILE_ENTITY_NAME } = publicRuntimeConfig;
-  const [, , org] = useFirstOrg();
+  const entityType = String(router.query.entity);
+  const organizationId = String(router.query.org);
+
+  if (Object.keys(router.query).length === 0) {
+    return null;
+  }
+  return (
+    <RequestLineChart
+      instanceId={instanceId}
+      entityType={entityType}
+      organizationId={organizationId}
+    />
+  );
+}
+type Props = {
+  instanceId: string;
+  entityType: string;
+  organizationId: string;
+};
+function RequestLineChart(props: Props) {
+  const { instanceId, entityType, organizationId } = props;
 
   const metricFilter = {
-    entityType: NILE_ENTITY_NAME,
+    entityType,
     metricName: METRIC_NAME,
-    organizationId: org?.id,
+    organizationId,
   };
 
   const [timestamp, setTimeStamp] = React.useState(TEN_MINUTES_AGO);

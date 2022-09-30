@@ -7,7 +7,7 @@
     "dev": "node server.mjs",
     "build": "next build",
     "start": "next start",
-    "lint": "yarn eslint ."
+    "lint": "yarn eslint . --fix --max-warnings=0"
   },
   "dependencies": {
     "@emotion/react": "^11.10.4",

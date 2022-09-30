@@ -17,6 +17,7 @@
     "baseUrl": ".",
     "paths": {
       "~/components/*": ["components/*"],
+      "~/paths": ["paths"],
       "~/images/*": ["public/images/*"]
     }
   },

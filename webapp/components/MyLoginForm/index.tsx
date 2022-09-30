@@ -7,6 +7,7 @@ import ChipDelete from '@mui/joy/ChipDelete';
 import getConfig from 'next/config';
 
 import Logo from '~/components/Logo';
+import paths from '~/paths';
 
 export default function MyLoginForm() {
   const router = useRouter();
@@ -16,22 +17,20 @@ export default function MyLoginForm() {
 
   const nile = useNile();
   const [hadLoginSuccess, setHadLoginSuccess] = React.useState(false);
-  const { isLoading, data: me } = useQuery(
-    ['/anythingelse'],
-    () => nile.users.me(),
-    {
-      enabled: hadLoginSuccess,
-    }
-  );
+  const { data: me } = useQuery(['/anythingelse'], () => nile.users.me(), {
+    enabled: hadLoginSuccess,
+  });
   const { publicRuntimeConfig } = getConfig();
   const { NILE_ENTITY_NAME } = publicRuntimeConfig;
   React.useEffect((): void => {
     const orgMemberships = me?.orgMemberships;
     if (hadLoginSuccess && orgMemberships != null) {
       if (Object.keys(orgMemberships).length < 1) {
-        router.push('/create-org');
+        router.push(paths.org({}).create);
       } else {
-        router.push(`/entities/${NILE_ENTITY_NAME}`);
+        const [org] = Object.keys(orgMemberships);
+        const entity = NILE_ENTITY_NAME;
+        router.push(paths.entities({ org, entity }).index);
       }
     }
   }, [router, me, hadLoginSuccess, NILE_ENTITY_NAME]);
@@ -92,7 +91,7 @@ export default function MyLoginForm() {
             Sign in using an organization user email and password.
           </Typography>
           <Typography>
-            New user? <Link href="/signup">Sign up</Link>
+            New user? <Link href={paths.signup}>Sign up</Link>
           </Typography>
         </Stack>
       </Card>
