@@ -46,7 +46,7 @@ export function CreateInstance(props: {
           {error && <Alert color="danger">{error}</Alert>}
           <EntityForm
             beforeMutate={(data) => {
-              data.provisioning = 'Provisioning';
+              data.status = 'Provisioning';
               data.connection = `server-${data.dbName}:5432`;
               return data;
             }}
