@@ -57,6 +57,13 @@ exports.maybeCreateUser = async function (
     }).then ( (usr) => {
       if (usr != null)
         console.log(emoji.get('white_check_mark'), "Created User: " + usr.email);
+    }).catch((error:any) => {
+      if (error.message == "user already exists") {
+        console.log("User with email " + email + " already exists");
+      } else {
+        console.error(error);
+        process.exit(1);
+      }
     })
   }
 }

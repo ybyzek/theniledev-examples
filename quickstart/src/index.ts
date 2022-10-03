@@ -136,28 +136,6 @@ async function addInstanceToOrg(email: string, password: string, orgName: string
 }
 
 
-async function addTenant(email: string, password: string, orgName: string, role: string) {
-
-  console.log(`\nConfiguring tenant ${email} for orgName ${orgName}`);
-
-  // Create user
-  await nileUtils.loginAsDev(nile, NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD);
-  await nileUtils.maybeCreateUser(nile, email, password, role);
-
-  // Get orgID
-  // User will not be able to get orgID if another user/dev created it, so have developer check first
-  await nileUtils.loginAsDev(nile, NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD);
-  let createIfNot = false;
-  let orgID = await nileUtils.maybeCreateOrg (nile, orgName, createIfNot);
-  if (!orgID) {
-    // Create organization with user
-    await nileUtils.loginAsUser(nile, email, password);
-    let createIfNot = true;
-    orgID = await nileUtils.maybeCreateOrg (nile, orgName, createIfNot);
-  }
-  await nileUtils.maybeAddUserToOrg(nile, email, orgID);
-
-}
 
 async function setupControlPlane() {
 
@@ -167,8 +145,34 @@ async function setupControlPlane() {
   const usersJson = require('./datasets/userList.json');
   let admins = nileUtils.getAdmins(usersJson);
   let limit = NILE_TENANT_MAX ? usersJson.length : 1;
+
   for (let index = 0; index < limit ; index++) {
-    await addTenant(usersJson[index].email, usersJson[index].password, usersJson[index].org, usersJson[index].role);
+
+    let email = usersJson[index].email;
+    let password = usersJson[index].password;
+    let role = usersJson[index].role;
+    let org = usersJson[index].org;
+    let adminEmail = usersJson[admins.get(org)].email;
+    let adminPassword = usersJson[admins.get(org)].password;
+
+    if (index < 2) {
+
+      // user is org creator
+      await nileUtils.maybeCreateUser(nile, email, password, role);
+      await nileUtils.loginAsUser(nile, email, password);
+      let createIfNot = true;
+      let orgID = await nileUtils.maybeCreateOrg (nile, org, createIfNot);
+
+    } else {
+
+      // user is not org creator; let admin user create and invite them
+      await nileUtils.loginAsUser(nile, adminEmail, adminPassword);
+      await nileUtils.maybeCreateUser(nile, email, password, role);
+      let createIfNot = false;
+      let orgID = await nileUtils.maybeCreateOrg (nile, org, createIfNot);
+      await nileUtils.maybeAddUserToOrg(nile, email, orgID);
+
+    }
   }
 
   const dbsJson = require('./datasets/dbList.json');
