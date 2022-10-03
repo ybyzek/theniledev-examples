@@ -1,27 +1,42 @@
 import { Box, Card, Stack, Typography } from '@mui/joy';
 import { Measurement } from '@theniledev/js';
 import { useMetrics } from '@theniledev/react';
-import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import React from 'react';
 
 import { generateValueRange } from '../../../utils';
 import { useMetricsGenerator } from '../hooks';
 
-import { useFirstOrg } from '~/components/EntityTable/hooks';
-
 const METRIC_NAME = 'throughput';
 const FOUR_SECONDS = 1000 * 4;
 
-export default function ThroughputTotal() {
-  const [metricValue, setMetricValue] = React.useState('');
-  const { publicRuntimeConfig } = getConfig();
-  const { NILE_ENTITY_NAME } = publicRuntimeConfig;
-
-  const [, , org] = useFirstOrg();
+export default function ThroughputTotalLoader() {
   const router = useRouter();
   const instanceId = String(router.query.instance);
+  const entityType = String(router.query.entity);
+  const organizationId = String(router.query.org);
 
+  if (Object.keys(router.query).length === 0) {
+    return null;
+  }
+  return (
+    <ThroughputTotal
+      instanceId={instanceId}
+      entityType={entityType}
+      organizationId={organizationId}
+    />
+  );
+}
+
+type Props = {
+  instanceId: string;
+  entityType: string;
+  organizationId: string;
+};
+
+function ThroughputTotal(props: Props) {
+  const { instanceId, entityType, organizationId } = props;
+  const [metricValue, setMetricValue] = React.useState('');
   useMetricsGenerator({
     metricName: METRIC_NAME,
     intervalTimeMs: FOUR_SECONDS,
@@ -39,8 +54,8 @@ export default function ThroughputTotal() {
     fromTimestamp: new Date(),
     filter: {
       metricName: METRIC_NAME,
-      entityType: NILE_ENTITY_NAME,
-      organizationId: org?.id,
+      entityType,
+      organizationId,
     },
   });
 

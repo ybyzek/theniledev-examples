@@ -1,44 +1,41 @@
 import { Box, Button, Stack, Typography } from '@mui/joy';
 import { Queries, useNile, useQuery } from '@theniledev/react';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 
-import { useFirstOrg } from '../EntityTable/hooks';
 import NavBar from '../NavBar';
 
 import RequestLineChart from './RequestsLineChart';
 import ThroughputTotal from './ThroughputTotal';
 import UpTime from './UpTime';
 
+import paths from '~/paths';
+
 export default function InstanceMetrics() {
   const router = useRouter();
   const instanceId = String(router.query.instance);
 
-  const { publicRuntimeConfig } = getConfig();
-
-  const { NILE_ENTITY_NAME, NILE_ORGANIZATION_NAME } = publicRuntimeConfig;
-
+  const entity = String(router.query.entity);
+  const org = String(router.query.org);
   const nile = useNile();
-  const [, , org] = useFirstOrg();
-
-  const { isLoading, data: instance } = useQuery(
-    Queries.GetInstance(NILE_ENTITY_NAME, NILE_ORGANIZATION_NAME, instanceId),
+  const { data: instance } = useQuery(
+    Queries.GetInstance(entity, org, instanceId),
     () =>
       nile.entities.getInstance({
-        org: String(org?.id),
-        type: NILE_ENTITY_NAME,
+        org,
+        type: entity,
         id: instanceId,
       }),
-    { enabled: !!org }
+    { enabled: Object.keys(router.query).length !== 0 }
   );
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { properties } = instance ?? ({} as Record<string, any>);
 
   return (
     <NavBar>
       <Button
-        href={`/entities/${NILE_ENTITY_NAME}`}
+        href={paths.entities(router.query).index}
         component="a"
         variant="outlined"
         startDecorator={<ArrowBackIcon />}

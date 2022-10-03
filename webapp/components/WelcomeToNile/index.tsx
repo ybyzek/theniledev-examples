@@ -2,6 +2,7 @@ import { Button, Stack, Typography, List, ListItem } from '@mui/joy';
 import React from 'react';
 
 const MAX_WIDTH = 600;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function LearnCard({ children }: React.PropsWithChildren<Record<never, any>>) {
   return (
     <Button
@@ -13,6 +14,7 @@ function LearnCard({ children }: React.PropsWithChildren<Record<never, any>>) {
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function LeftH2({ children }: React.PropsWithChildren<Record<never, any>>) {
   return (
     <Typography level="h2" sx={{ textAlign: 'left' }}>

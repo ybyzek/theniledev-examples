@@ -15,6 +15,7 @@ export const useFirstOrg = (): [
     error,
   } = useQuery(['/me'], () => nile.users.me());
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const _error: { response: { status: number } } = error as any;
   const errorStatus = _error ? _error?.response?.status : null;
   const unauthorized = errorStatus === 401;

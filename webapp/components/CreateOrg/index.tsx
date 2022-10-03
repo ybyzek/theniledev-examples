@@ -9,6 +9,8 @@ import getConfig from 'next/config';
 
 import NavBar from '../NavBar';
 
+import paths from '~/paths';
+
 export default function AddOrgForm() {
   const nile = useNile();
   const router = useRouter();
@@ -26,7 +28,9 @@ export default function AddOrgForm() {
         if (!NILE_ENTITY_NAME) {
           alert('no entity type has been entered.');
         } else {
-          router.push(`/entities/${NILE_ENTITY_NAME}`);
+          router.push(
+            paths.entities({ org: data.id, entity: NILE_ENTITY_NAME }).index
+          );
         }
       },
       onError: (e: Error) => {

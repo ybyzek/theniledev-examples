@@ -6,6 +6,7 @@ import React from 'react';
 import ChipDelete from '@mui/joy/ChipDelete';
 
 import Logo from '~/components/Logo';
+import paths from '~/paths';
 
 export default function MySignUpForm() {
   const router = useRouter();
@@ -42,7 +43,7 @@ export default function MySignUpForm() {
           )}
           <SignUpForm
             onSuccess={() => {
-              router.push('/?signup=success');
+              router.push(paths.signupSuccess);
             }}
             onError={(error) => {
               // for demo purposes only

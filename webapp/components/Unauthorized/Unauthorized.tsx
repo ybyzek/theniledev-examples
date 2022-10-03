@@ -1,6 +1,8 @@
 import { Box, Button, Stack, Typography } from '@mui/joy';
 import Link from 'next/link';
 
+import paths from '~/paths';
+
 export default function Unauthorized() {
   return (
     <Stack>
@@ -20,7 +22,7 @@ export default function Unauthorized() {
           <Typography level="h4">
             You don&apos;t have access to this page.
           </Typography>
-          <Link href="/">
+          <Link href={paths.index}>
             <Button>Log out</Button>
           </Link>
         </Stack>

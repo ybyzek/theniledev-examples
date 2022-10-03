@@ -7,7 +7,7 @@ import Logo from '~/components/Logo';
 
 export default function NavBar(props: React.PropsWithChildren) {
   const { children } = props;
-  const [isLoading, user, org] = useFirstOrg();
+  const [, user, org] = useFirstOrg();
   return (
     <Stack>
       <Box

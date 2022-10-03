@@ -2,7 +2,6 @@ import React from 'react';
 import { Box, Stack, Typography } from '@mui/joy';
 import Card from '@mui/joy/Card';
 import { InstanceTable } from '@theniledev/react';
-import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 
 import Unauthorized from '../Unauthorized';
@@ -12,13 +11,12 @@ import { CreateInstance } from './CreateInstance';
 import { useFirstOrg } from './hooks';
 import { columns } from './FormFields';
 
+import paths from '~/paths';
+
 export default function ClustersTable() {
   const router = useRouter();
   const [reRender, setReRender] = React.useState(false);
   const [isLoading, user, org, unauthorized] = useFirstOrg();
-  const { publicRuntimeConfig } = getConfig();
-  const { NILE_ENTITY_NAME } = publicRuntimeConfig;
-  const { tableColumns } = columns;
 
   // just a simple refresh for now.
   React.useEffect(() => {
@@ -62,11 +60,13 @@ export default function ClustersTable() {
           {reRender ? null : (
             <InstanceTable
               org={org.id}
-              entity={NILE_ENTITY_NAME}
+              entity={String(router.query.entity)}
               handleRowClick={({ id }) => {
-                router.push(`/entities/${NILE_ENTITY_NAME}/${id}`);
+                router.push(
+                  paths.entities({ ...router.query, id: String(id) }).view
+                );
               }}
-              columns={tableColumns}
+              columns={columns}
             />
           )}
         </Card>
