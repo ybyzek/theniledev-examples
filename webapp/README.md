@@ -12,8 +12,6 @@ The mock scenario in these examples is a company that provides SaaS, one of the 
 - [Banking as a Service](../usecases/Banking/)
 - [YOLO](../usecases/README.md#yolo)
 
-![image](./images/DB-overview.png)
-
 Everything you need to run this example is in one of the folders above.
 Once a developer defines their service's entity schema, Nile provides web frontend with self-service (user signup/login, org creation, instance management), multi-tenancy, authorization policies, metrics, events for reconciling Nile with the data plane.
 
@@ -84,6 +82,7 @@ For that purpose, at the top-level of the examples, copy the `.env.defaults` fil
    yarn setup-nile
    ```
 
+4. (Optional) If you want to run the data-plane reconciler that synchronizes events between the control plane and data plane (e.g. if you use the webapp to create new entity instances), start the reconciler in a separate window.  See the instructions in the [Pulumi example](../data-plane/pulumi/).
 
 ## Run the web server locally
 
