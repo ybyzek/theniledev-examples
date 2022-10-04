@@ -67,10 +67,13 @@ Notice that all the users have access to all the pages: `page1`, `page2`, `page3
 yarn start
 ```
 
-This time, in addition to running the application, it also sets up the [Nile control plane](src/index.ts), defines entities and entity instances that correspond to the application pages, adds users to different organizations, and configures authorization policies as defined below.  Note that these are just example scripts, you would write your own for your deployment.
+This time, in addition to running the application, it also sets up the [Nile control plane](src/index.ts), defines entities and entity instances that correspond to the application pages, adds users to different organizations, and configures authorization policies as defined below.
+These examples already provide one of the following offerings:
 
-   - [userList.json](../quickstart/src/datasets/userList.json)
-   - [dbList.json](../quickstart/src/datasets/dbList.json)
+- [Database as a Service](../usecases/DB/)
+- [SkyNet as a Service](../usecases/SkyNet/)
+- [Banking as a Service](../usecases/Banking/)
+- [YOLO](../usecases/README.md#yolo)
 
 3. View the code changes required for this example application:
 
@@ -86,11 +89,11 @@ diff server.js server-without-authz.js
 1. Log into the [Nile Admin Dashboard](https://nad.thenile.dev/) to see the control plane and entity instances.
 For the email and password, use the `NILE_DEVELOPER_EMAIL` and `NILE_DEVELOPER_PASSWORD` values you specified in the `.env` file.
 
-2. Cross-check which users are authorized to see which pages.  For example, `parker@demo.io` is in org `customer-org-1` (per [userList.json](../quickstart/src/datasets/userList.json)) which has entities for `myDB-products` and `myDB-billing` (per [dbList.json](../quickstart/src/datasets/dbList.json)).  Therefore when `parker@demo.io` tries to view either of those entities, he will be able to see those pages:
+2. Cross-check which users are authorized to see which pages.  For example, if you used the `Database as a Service` use case, `parker@demo.io` is in org `customer-org-1` which has entities for `myDB-products`(=page1) and `myDB-billing`(=page2).  Therefore when `parker@demo.io` tries to view either of those entities, he will be able to see those pages:
 
 ![image](images/allow.png)
 
-But if `shaun@demo.io` tries to view `myDB-analytics` which belongs to a different org `customer-org-2`, he will not be able to see the page:
+But if `shaun@demo.io` tries to view `myDB-analytics`(=page2) which belongs to a different org `customer-org-2`, he will not be able to see the page:
 
 ![image](images/deny.png)
 

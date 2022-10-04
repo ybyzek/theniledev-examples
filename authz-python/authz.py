@@ -30,16 +30,16 @@ NILE_DEVELOPER_PASSWORD = os.environ.get('NILE_DEVELOPER_PASSWORD')
 NILE_ORGANIZATION_NAME  = os.environ.get('NILE_ORGANIZATION_NAME')
 NILE_ENTITY_NAME        = os.environ.get('NILE_ENTITY_NAME')
 
-f = '../quickstart/src/datasets/userList.json'
+f = '../usecases/'+NILE_ENTITY_NAME+'/init/users.json'
 try:
-  usersJson = json.load(open(f))
+  users = json.load(open(f))
 except:
   print(emoji.emojize(':red_circle:') + " could not load {}".format(f))
   sys.exit(1)
 # Load first user only
 index=0
-NILE_TENANT1_EMAIL = usersJson[0]['email']
-NILE_TENANT_PASSWORD = usersJson[0]['password']
+NILE_TENANT1_EMAIL = users[0]['email']
+NILE_TENANT_PASSWORD = users[0]['password']
 
 
 def list_policies():

@@ -1,9 +1,6 @@
 import Nile, { CreateEntityRequest, Entity, Organization} from "@theniledev/js";
 import { CreateEntityOperationRequest } from "@theniledev/js/dist/generated/openapi/src";
 
-const fs = require('fs');
-const EntityDefinition = JSON.parse(fs.readFileSync('src/models/SaaSDB_Entity_Definition.json'));
-
 var nileUtils = require('../../utils-module-js/').nileUtils;
 
 var emoji = require('node-emoji');
@@ -17,6 +14,7 @@ let envParams = [
   "NILE_WORKSPACE",
   "NILE_DEVELOPER_EMAIL",
   "NILE_DEVELOPER_PASSWORD",
+  "NILE_ENTITY_NAME",
 ]
 envParams.forEach( (key: string) => {
   if (!process.env[key]) {
@@ -29,25 +27,28 @@ const NILE_URL = process.env.NILE_URL!;
 const NILE_WORKSPACE = process.env.NILE_WORKSPACE!;
 const NILE_DEVELOPER_EMAIL = process.env.NILE_DEVELOPER_EMAIL!;
 const NILE_DEVELOPER_PASSWORD = process.env.NILE_DEVELOPER_PASSWORD!;
-const NILE_ENTITY_NAME = EntityDefinition.name;
+const NILE_ENTITY_NAME = process.env.NILE_ENTITY_NAME!;
+
+const fs = require('fs');
+const EntityDefinition = JSON.parse(fs.readFileSync(`../usecases/${NILE_ENTITY_NAME}/entity_definition.json`));
 
 const nile = Nile({
   basePath: NILE_URL,
   workspace: NILE_WORKSPACE,
 });
 
-const usersJson = require('./datasets/userList.json');
+const users = require(`../../usecases/${NILE_ENTITY_NAME}/init/users.json`);
 const index = 0;
-const NILE_ORGANIZATION_NAME = usersJson[index].org;
+const NILE_ORGANIZATION_NAME = users[index].org;
 
 async function run() {
 
   await nileUtils.loginAsDev(nile, NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD);
 
-  const usersJson = require('./datasets/userList.json');
+  const users = require(`../../usecases/${NILE_ENTITY_NAME}/init/users.json`);
   const index=0
-  const userEmail = usersJson[index].email;
-  const userPassword = usersJson[index].password;
+  const userEmail = users[index].email;
+  const userPassword = users[index].password;
 
   // Get orgID
   await nileUtils.loginAsUser(nile, userEmail, userPassword);

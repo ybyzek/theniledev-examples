@@ -10,6 +10,8 @@ plane and control plane in real time with Nile events.
 Nile doesn't prescribe any particular data plane deployment solution. Here we'll be
 using [Apache Flink's Operator](https://github.com/apache/flink-kubernetes-operator) to deploy objects into Kubernetes. 
 
+This example runs only with `NILE_ENTITY_NAME=FlinkDeployment`.
+
 > If your data plane is something other than Flink jobs or does not use Kubernetes, replace 
 > the [`FlinkDeploymentService`](./src/service/FlinkDeploymentService.ts) 
 > class in this example with your own deployment implementation.

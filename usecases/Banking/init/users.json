@@ -1,40 +1,40 @@
 [
   {
-    "//comment": "DO NOT MODIFY",
+    "//comment": "This user must be org creator for first org",
     "email": "nora@demo.io",
     "password": "password",
-    "org": "customer-org-1",
+    "org": "branch-1",
     "role": "admin"
   },
   {
-    "//comment": "DO NOT MODIFY",
+    "//comment": "This user must be org creator for second org",
     "email": "frank@demo.io",
     "password": "password",
-    "org": "customer-org-2",
+    "org": "branch-2",
     "role": "admin"
   },
   {
     "email": "shaun@demo.io",
     "password": "password",
-    "org": "customer-org-1",
+    "org": "branch-1",
     "role": "RW"
   },
   {
     "email": "parker@demo.io",
     "password": "password",
-    "org": "customer-org-1",
+    "org": "branch-1",
     "role": "RO"
   },
   {
     "email": "lisa@demo.io",
     "password": "password",
-    "org": "customer-org-2",
+    "org": "branch-2",
     "role": "deny"
   },
   {
-    "email": "london@demo.io",
+    "email": "bill@demo.io",
     "password": "password",
-    "org": "customer-org-2",
+    "org": "branch-2",
     "role": "RO"
   }
 ]

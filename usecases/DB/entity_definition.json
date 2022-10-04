@@ -1,0 +1,32 @@
+{
+  "name": "DB",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "dbName": {
+        "type": "string"
+      },
+      "cloud": {
+        "type": "string",
+        "enum": ["aws", "gcp", "azure"]
+      },
+      "environment": {
+        "type": "string",
+        "enum": ["test", "dev", "prod"]
+      },
+      "size": {
+        "type": "integer"
+      },
+      "connection": {
+        "type": "string"
+      },
+      "status": {
+        "type": "string",
+        "enum": ["Submitted", "Provisioning", "Up", "Deleted"]
+      }
+    },
+    "required": [
+      "dbName"
+    ]
+  }
+}

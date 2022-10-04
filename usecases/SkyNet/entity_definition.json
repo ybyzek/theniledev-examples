@@ -1,0 +1,18 @@
+{
+  "name": "SkyNet",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "greeting": {
+        "type": "string"
+      },
+      "status": {
+        "type": "string",
+        "enum": ["Submitted", "Provisioning", "Up", "Deleted"]
+      }
+    },
+    "required": [
+      "greeting"
+    ]
+  }
+}

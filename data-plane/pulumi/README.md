@@ -79,9 +79,9 @@ For the values below, make sure they match what you set in the `.env` file.
 
 1. Login to the [Nile Admin Dashboard](https://nad.thenile.dev/).
 2. Create a workspace, which must be globally unique
-3. Create an entity type called `SaaSDB` from [this definition](../quickstart/src/models/SaaSDB_Entity_Definition.json), which is also available as a template from the Nile Admin Dashboard.
+3. Create an entity type called `DB` from [this definition](../quickstart/src/models/SaaSDB_Entity_Definition.json), which is also available as a template from the Nile Admin Dashboard.
 4. Create an organization in the workspace named "customer-org-1".
-5. Create an entity instance of type "SaaSDB" in the organization, with a value that matches the schema defined earlier:
+5. Create an entity instance of type "DB" in the organization, with a value that matches the schema defined earlier:
 
 ```json
 {
@@ -103,7 +103,7 @@ yarn install && yarn build
 2. Configure the control plane. This command will read from the `.env` file you defined earlier. The script is idempotent and instances will be created only once.
 
 ```bash
-yarn prereconcile
+yarn setup-nile
 ```
 
 ## Configure the Data Plane ##
@@ -212,7 +212,7 @@ docker run --init --rm \
 
 ## Explanation
 
-The reconciler will immediately find the newly instantiated SaaSDB instance in the Nile
+The reconciler will immediately find the newly instantiated DB instance in the Nile
 control plane and create a Pulumi stack that represents it, defined by the
 [`pulumiS3.ts`](./src/commands/reconcile/lib/pulumi/pulumiS3.ts). Pulumi also
 created a new S3 bucket containing a static website and a bucket policy that
@@ -244,7 +244,7 @@ as well as all of the instance details.
 ## Add or Remove Instances ##
 
 While the reconciler is running, in the [Nile Admin Dashboard](https://nad.thenile.dev/), add one or
-more new SaaSDB instances to the organization. This will trigger events that the
+more new DB instances to the organization. This will trigger events that the
 reconciler receives and the data plane will synchronize accordingly. Deleting an instance in the
 control plane will result in destruction of the corresponding Pulumi stack.
 

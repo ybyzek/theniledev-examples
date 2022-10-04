@@ -48,7 +48,7 @@ export default class Reconcile extends Command {
     }
     let orgID = await this.getOrgIDFromOrgName(organizationName!);
     if (!orgID) {
-      console.error ("Error: cannot determine the ID of the organization from the provided name :" + organizationName)
+      console.error ("Error: cannot determine the ID of the organization from the provided name: " + organizationName)
       process.exit(1);
     } else {
       console.log(emoji.get('dart'), "Organization with name " + organizationName + " exists with id " + orgID)
@@ -166,13 +166,14 @@ export default class Reconcile extends Command {
    */
   private async listenForNileEvents(orgID: string, entityType: string, fromSeq: number) {
     this.log(
-      `Listening for events for ${entityType} entities from sequence #${fromSeq}`
+      `Listening for events for ${entityType} entities in ${orgID} from sequence #${fromSeq}`
     );
     await new Promise(() => {
       this.nile.events.on({ type: entityType, seq: fromSeq }, async (e) => {
-        this.log(JSON.stringify(e, null, 2));
+        //this.log(JSON.stringify(e, null, 2));
         if (e.after) {
           if (e.after.deleted) {
+            console.log(emoji.get('bell'), `Received an event for instance ${e.after.id}!`);
             // Detected delete instance
             if (await this.isChangeActionable(orgID, entityType, e.after.id, "Deleted")) {
               this.deployment.destroyStack(e.after.id);
@@ -180,6 +181,7 @@ export default class Reconcile extends Command {
             }
           } else {
             // Detected create instance
+            console.log(emoji.get('bell'), `Received an event for instance ${e.after.id}!`);
             if (await this.isChangeActionable(orgID, entityType, e.after.id, "Up")) {
               console.log(emoji.get('white_check_mark'), `Creating new stack for Nile instance ${e.after.id}`);
 
@@ -230,7 +232,7 @@ export default class Reconcile extends Command {
   private async isChangeActionable(
     orgID: string, entityType: string, instanceID: string, status: string): Promise< boolean > {
     this.log(
-      `Checking if the change is actionable for instance ${instanceID}: status=${status}`
+      `Checking if the change is actionable for instance ${instanceID}`
     );
 
     let change = false;
@@ -252,12 +254,6 @@ export default class Reconcile extends Command {
           change = true;
         }
 
-        // Compare the connection
-        properties.status = status;
-        let connectionString = "server-" + properties.dbName + ":5432";
-        if (properties.connection != connectionString) {
-          change = true;
-        }
       }).catch((error:any) => {
             console.error(error);
             process.exit(1);
@@ -282,8 +278,6 @@ export default class Reconcile extends Command {
 
     // Get current instance properties
     var properties;
-    var dbName: String;
-    var connectionString: String;
     const body1 = {
       org: orgID,
       type: entityType,
@@ -293,14 +287,17 @@ export default class Reconcile extends Command {
       .getInstance(body1)
       .then((data) => {
         properties = data.properties as { [key: string]: unknown };
-        // Update the property status
+
+        // For these examples always assume a status field
         properties.status = status;
-        dbName = String(properties.dbName);
-        connectionString = "server-" + dbName + ":5432";
-        // Fake update the connection
-        if (status == "Up") {
-          properties.connection = connectionString;
+
+        // Check if there other fields to update in the Control Plane
+        const { setDataPlaneReturnProp } = require(`../../../../../usecases/${entityType}/init/entity_utils.js`);
+        if (setDataPlaneReturnProp != null) {
+          const { getDataPlaneReturnValue } = require(`../../../../../usecases/${entityType}/init/entity_utils.js`);
+          properties[setDataPlaneReturnProp] = getDataPlaneReturnValue();
         }
+
       }).catch((error:any) => {
             console.error(error);
             process.exit(1);
@@ -322,7 +319,7 @@ export default class Reconcile extends Command {
     await this.nile.entities
       .updateInstance(body)
       .then((data) => {
-        console.log(emoji.get('white_check_mark'), `Updated ${dbName}: status=${status} and connection=${connectionString}`);
+        console.log(emoji.get('white_check_mark'), `Updated instance id ${instanceID}: status=${status}`);
       }).catch((error:any) => {
             console.error(error);
             process.exit(1);

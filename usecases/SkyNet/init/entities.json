@@ -1,0 +1,16 @@
+[
+  {
+    "//comment": "DO NOT MODIFY",
+    "greeting": "hello1",
+    "org": "SN-customer-org-1"
+  },
+  {
+    "//comment": "DO NOT MODIFY",
+    "greeting": "hello2",
+    "org": "SN-customer-org-2"
+  },
+  {
+    "greeting": "hello3",
+    "org": "SN-customer-org-1"
+  }
+]

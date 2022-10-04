@@ -47,7 +47,8 @@ export default function MyLoginForm() {
         variant="outlined"
         sx={{ background: 'transparent', padding: 14, paddingTop: 10 }}
       >
-        <Stack spacing={2}>
+        <Stack spacing={2} sx={{ alignItems: 'center' }}>
+          <Typography padding={2}>SaaS for {NILE_ENTITY_NAME}</Typography>
           <Logo width={300} />
           {error && (
             <Chip

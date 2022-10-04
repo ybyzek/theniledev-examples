@@ -27,7 +27,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <NileProvider basePath={NILE_URL} workspace={NILE_WORKSPACE}>
       <Head>
-        <title>SaaSDB (built on Nile)</title>
+        <title>Your SaaS (built on Nile)</title>
         <meta name="description" content="Welcome to Nile" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

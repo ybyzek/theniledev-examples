@@ -38,3 +38,7 @@ next-env.d.ts
 # nile
 
 .certificates
+
+public/images/logo.svg
+components/EntityTable/FormFields.ts
+

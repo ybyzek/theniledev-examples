@@ -1,8 +1,5 @@
 import Reconcile from './commands/reconcile/index';
 
-const fs = require('fs');
-const EntityDefinition = JSON.parse(fs.readFileSync('./../../quickstart/src/models/SaaSDB_Entity_Definition.json'));
-
 import * as dotenv from 'dotenv';
 
 dotenv.config({ override: true });
@@ -12,7 +9,7 @@ let envParams = [
   "NILE_WORKSPACE",
   "NILE_DEVELOPER_EMAIL",
   "NILE_DEVELOPER_PASSWORD",
-  "NILE_ORGANIZATION_NAME",
+  "NILE_ENTITY_NAME",
 ]
 envParams.forEach((key: string) => {
   if (!process.env[key]) {
@@ -25,8 +22,10 @@ const basePath = process.env.NILE_URL!;
 const workspace = process.env.NILE_WORKSPACE!;
 const email = process.env.NILE_DEVELOPER_EMAIL!;
 const password = process.env.NILE_DEVELOPER_PASSWORD!;
-const organizationName = process.env.NILE_ORGANIZATION_NAME!;
-const NILE_ENTITY_NAME = EntityDefinition.name;
+const entityName = process.env.NILE_ENTITY_NAME!;
+
+const users = require(`../../../usecases/${entityName}/init/users.json`);
+const organizationName = users[0].org;
 
 async function run() {
   await Reconcile.run([
@@ -35,7 +34,7 @@ async function run() {
     '--email', email,
     '--password', password,
     '--organizationName', organizationName,
-    '--entity', NILE_ENTITY_NAME
+    '--entity', entityName,
   ]);
 }
 

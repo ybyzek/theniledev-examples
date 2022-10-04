@@ -1,8 +1,5 @@
 import Nile from "@theniledev/js";
 
-const fs = require('fs');
-const EntityDefinition = JSON.parse(fs.readFileSync('../quickstart/src/models/SaaSDB_Entity_Definition.json'));
-
 var nileUtils = require('../../utils-module-js/').nileUtils;
 
 var emoji = require('node-emoji');
@@ -16,6 +13,7 @@ let envParams = [
   "NILE_WORKSPACE",
   "NILE_DEVELOPER_EMAIL",
   "NILE_DEVELOPER_PASSWORD",
+  "NILE_ENTITY_NAME",
 ]
 envParams.forEach( (key: string) => {
   if (!process.env[key]) {
@@ -28,7 +26,10 @@ const NILE_URL = process.env.NILE_URL!;
 const NILE_WORKSPACE = process.env.NILE_WORKSPACE!;
 const NILE_DEVELOPER_EMAIL = process.env.NILE_DEVELOPER_EMAIL!;
 const NILE_DEVELOPER_PASSWORD = process.env.NILE_DEVELOPER_PASSWORD!;
-const NILE_ENTITY_NAME = EntityDefinition.name;
+const NILE_ENTITY_NAME = process.env.NILE_ENTITY_NAME!;
+
+const fs = require('fs');
+const EntityDefinition = JSON.parse(fs.readFileSync(`../usecases/${NILE_ENTITY_NAME}/entity_definition.json`));
 
 const nile = Nile({
   basePath: NILE_URL,
@@ -103,12 +104,12 @@ function getDifference<T>(a: T[], b: T[]): T[] {
 
 async function run() {
 
-  const usersJson = require('../../quickstart/src/datasets/userList.json');
-  const NILE_ORGANIZATION_NAME1 = usersJson[0].org;
-  const NILE_ORGANIZATION_NAME2 = usersJson[1].org;
-  const NILE_TENANT1_EMAIL = usersJson[0].email;
-  const NILE_TENANT2_EMAIL = usersJson[1].email;
-  const NILE_TENANT_PASSWORD = usersJson[0].password;
+  const users = require(`../../usecases/${NILE_ENTITY_NAME}/init/users.json`);
+  const NILE_ORGANIZATION_NAME1 = users[0].org;
+  const NILE_ORGANIZATION_NAME2 = users[1].org;
+  const NILE_TENANT1_EMAIL = users[0].email;
+  const NILE_TENANT2_EMAIL = users[1].email;
+  const NILE_TENANT_PASSWORD = users[0].password;
 
   // Get instances for NILE_TENANT1_EMAIL
   const instances2a = await getInstances(NILE_TENANT1_EMAIL, `${NILE_ORGANIZATION_NAME2}`);

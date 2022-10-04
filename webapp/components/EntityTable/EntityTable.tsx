@@ -42,7 +42,7 @@ export default function ClustersTable() {
             spacing={2}
             sx={{ alignItems: 'center', marginBottom: 3 }}
           >
-            <Typography>DBs:</Typography>
+            <Typography>Instances:</Typography>
             <Box
               sx={{
                 width: '100%',

@@ -1,9 +1,6 @@
 import Nile, { CreateEntityRequest } from "@theniledev/js";
 import { CreateEntityOperationRequest } from "@theniledev/js/dist/generated/openapi/src";
 
-const fs = require('fs');
-const EntityDefinition = JSON.parse(fs.readFileSync('src/models/SaaSDB_Entity_Definition.json'));
-
 var nileUtils = require('../../utils-module-js/').nileUtils;
 
 var emoji = require('node-emoji');
@@ -17,6 +14,7 @@ let envParams = [
   "NILE_WORKSPACE",
   "NILE_DEVELOPER_EMAIL",
   "NILE_DEVELOPER_PASSWORD",
+  "NILE_ENTITY_NAME",
 ]
 envParams.forEach( (key: string) => {
   if (!process.env[key]) {
@@ -29,7 +27,16 @@ const NILE_URL = process.env.NILE_URL!;
 const NILE_WORKSPACE = process.env.NILE_WORKSPACE!;
 const NILE_DEVELOPER_EMAIL = process.env.NILE_DEVELOPER_EMAIL!;
 const NILE_DEVELOPER_PASSWORD = process.env.NILE_DEVELOPER_PASSWORD!;
-const NILE_ENTITY_NAME = EntityDefinition.name;
+const NILE_ENTITY_NAME = process.env.NILE_ENTITY_NAME!;
+
+const fs = require('fs');
+try {
+  const EntityDefinition = JSON.parse(fs.readFileSync(`../usecases/${NILE_ENTITY_NAME}/entity_definition.json`))
+} catch (err) {
+  console.error(err);
+  console.error(emoji.get('x'), `Did you check that ../usecases/${NILE_ENTITY_NAME}/entity_definition.json exists?`);
+  process.exit(1);
+}
 
 const NILE_TENANT_MAX = process.env.NILE_TENANT_MAX || false;
 
@@ -95,65 +102,23 @@ async function setupDeveloper() {
   }
 }
 
-async function addInstanceToOrg(email: string, password: string, orgName: string, instanceJson: string) {
-
-  // Get orgID
-  await nileUtils.loginAsUser(nile, email, password);
-  let createIfNot = false;
-  let orgID = await nileUtils.maybeCreateOrg (nile, orgName, false);
-
-  // Check if entity instance already exists, create if not
-  let myInstances = await nile.entities.listInstances({
-    org: orgID,
-    type: NILE_ENTITY_NAME,
-  });
-  let maybeInstance = myInstances.find( instance => instance.type == NILE_ENTITY_NAME && instance.properties.dbName == instanceJson.dbName );
-  if (maybeInstance) {
-    console.log(emoji.get('dart'), "Entity instance " + NILE_ENTITY_NAME + " exists with id " + maybeInstance.id);
-  } else {
-    console.log(myInstances);
-    await nile.entities.createInstance({
-      org: orgID,
-      type: entityDefinition.name,
-      body: {
-        dbName : instanceJson.dbName,
-        cloud : instanceJson.cloud,
-        environment : instanceJson.environment,
-        size : instanceJson.size,
-        connection : "server-" + instanceJson.dbName + ":5432",
-        status : "Up"
-      }
-    }).then((entity_instance) => console.log (emoji.get('white_check_mark'), "Created entity instance: " + JSON.stringify(entity_instance, null, 2)))
-  }
-
-  // List instances
-  await nile.entities.listInstances({
-    org: orgID,
-    type: entityDefinition.name
-  }).then((entity_instances) => {
-    console.log(`The following entity instances exist in orgID ${orgID}\n`, entity_instances);
-  });
-}
-
-
-
 async function setupControlPlane() {
 
   // Log in as the Nile developer
   await setupDeveloper();
 
-  const usersJson = require('./datasets/userList.json');
-  let admins = nileUtils.getAdmins(usersJson);
-  let limit = NILE_TENANT_MAX ? usersJson.length : 1;
+  const users = require(`../../usecases/${NILE_ENTITY_NAME}/init/users.json`);
+  let admins = nileUtils.getAdmins(users);
+  let limit = NILE_TENANT_MAX ? users.length : 1;
 
   for (let index = 0; index < limit ; index++) {
 
-    let email = usersJson[index].email;
-    let password = usersJson[index].password;
-    let role = usersJson[index].role;
-    let org = usersJson[index].org;
-    let adminEmail = usersJson[admins.get(org)].email;
-    let adminPassword = usersJson[admins.get(org)].password;
+    let email = users[index].email;
+    let password = users[index].password;
+    let role = users[index].role;
+    let org = users[index].org;
+    let adminEmail = users[admins.get(org)].email;
+    let adminPassword = users[admins.get(org)].password;
 
     if (index < 2) {
 
@@ -162,6 +127,7 @@ async function setupControlPlane() {
       await nileUtils.loginAsUser(nile, email, password);
       let createIfNot = true;
       let orgID = await nileUtils.maybeCreateOrg (nile, org, createIfNot);
+      await nileUtils.maybeAddUserToOrg(nile, email, orgID);
 
     } else {
 
@@ -175,12 +141,28 @@ async function setupControlPlane() {
     }
   }
 
-  const dbsJson = require('./datasets/dbList.json');
-  let limit = NILE_TENANT_MAX ? dbsJson.length : 1;
+  const entities = require(`../../usecases/${NILE_ENTITY_NAME}/init/entities.json`);
+  let limit = NILE_TENANT_MAX ? entities.length : 1;
   for (let index = 0; index < limit ; index++) {
-    let adminEmail = usersJson[admins.get(dbsJson[index].org)].email;
-    let adminPassword = usersJson[admins.get(dbsJson[index].org)].password;
-    await addInstanceToOrg(adminEmail, adminPassword, dbsJson[index].org, dbsJson[index]);
+
+    let adminEmail = users[admins.get(entities[index].org)].email;
+    let adminPassword = users[admins.get(entities[index].org)].password;
+
+    // Get orgID
+    await nileUtils.loginAsUser(nile, adminEmail, adminPassword);
+    let createIfNot = false;
+    let orgID = await nileUtils.maybeCreateOrg (nile, entities[index].org, false);
+
+    const { addInstanceToOrg } = require(`../../usecases/${NILE_ENTITY_NAME}/init/entity_utils.js`);
+    await addInstanceToOrg(nile, orgID, NILE_ENTITY_NAME, entities[index]);
+
+    // List instances
+    await nile.entities.listInstances({
+      org: orgID,
+      type: entityDefinition.name
+    }).then((entity_instances) => {
+      console.log(`The following entity instances exist in orgID ${orgID}\n`, entity_instances);
+    });
   }
 
 }

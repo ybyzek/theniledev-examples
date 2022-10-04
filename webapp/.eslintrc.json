@@ -78,7 +78,7 @@
   },
   "overrides": [
     {
-      "files": ["*.js"],
+      "files": ["*.js","*.tsx"],
       "rules": {
         "@typescript-eslint/no-var-requires": "off",
         "no-console": "off"

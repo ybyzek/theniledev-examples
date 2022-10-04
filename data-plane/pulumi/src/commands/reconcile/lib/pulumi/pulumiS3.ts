@@ -12,12 +12,12 @@ export const pulumiS3 = (instance?: Instance) => {
     });
 
     const instanceProps = instance?.properties as { [key: string]: unknown };
-    const dbName = instanceProps?.dbName || 'vip-DB';
+    const { instanceName } = require(`../../../../../../../usecases/${instance?.type}/init/entity_utils.js`);
     const indexContent = `<html><head>
 <title>Hello S3</title><meta charset="UTF-8">
 </head>
 <body>
-<h1>${dbName}</h1>
+<h1>${instanceName}</h1>
 <p>Made with ❤️  by <a href="https://pulumi.com">Pulumi</a></p>
 <p>Deployed with Nile</p>
 <h2>Instance Details</h2>

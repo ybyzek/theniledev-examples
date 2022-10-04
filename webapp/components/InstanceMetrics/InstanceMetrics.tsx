@@ -4,6 +4,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useRouter } from 'next/router';
 
 import NavBar from '../NavBar';
+import { instanceName } from '../EntityTable/FormFields';
 
 import RequestLineChart from './RequestsLineChart';
 import ThroughputTotal from './ThroughputTotal';
@@ -13,10 +14,11 @@ import paths from '~/paths';
 
 export default function InstanceMetrics() {
   const router = useRouter();
-  const instanceId = String(router.query.instance);
 
   const entity = String(router.query.entity);
+  const instanceId = String(router.query.instance);
   const org = String(router.query.org);
+
   const nile = useNile();
   const { data: instance } = useQuery(
     Queries.GetInstance(entity, org, instanceId),
@@ -40,11 +42,11 @@ export default function InstanceMetrics() {
         variant="outlined"
         startDecorator={<ArrowBackIcon />}
       >
-        Back to DBs
+        Back
       </Button>
       <Stack direction="row" sx={{ justifyContent: 'space-between', pb: 2 }}>
         <Stack>
-          <Typography level="h2">{properties?.dbName}</Typography>
+          <Typography level="h2">{properties?.[instanceName]}</Typography>
           <Typography level="body4">{instance?.id}</Typography>
         </Stack>
         <Stack>

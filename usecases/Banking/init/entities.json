@@ -1,0 +1,25 @@
+[
+  {
+    "//comment": "DO NOT MODIFY",
+    "accountType": "checking",
+    "accountID": "863222978",
+    "firstName": "Tori",
+    "lastName": "Front",
+    "org": "branch-1"
+  },
+  {
+    "//comment": "DO NOT MODIFY",
+    "accountType": "checking",
+    "accountID": "112975423",
+    "firstName": "Tim",
+    "lastName": "Stout",
+    "org": "branch-2"
+  },
+  {
+    "accountType": "savings",
+    "accountID": "203467762",
+    "firstName": "Colin",
+    "lastName": "Truman",
+    "org": "branch-1"
+  }
+]

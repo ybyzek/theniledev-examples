@@ -1,15 +1,20 @@
-# Webapp Frontend
+# Self-serve Webapp
 
 ![image](../images/Nile-text-logo.png)
 
 ## Overview
 
 This example shows a SaaS service integrated with [Nile](https://thenile.dev/). 
-The mock scenario is a company that provides databases as SaaS which is using Nile for its control plane.
+The mock scenario in these examples is a company that provides SaaS, one of the following offerings:
 
-![image](./images/SaaSDB-overview.png)
+- [Database as a Service](../usecases/DB/)
+- [SkyNet as a Service](../usecases/SkyNet/)
+- [Banking as a Service](../usecases/Banking/)
+- [YOLO](../usecases/README.md#yolo)
 
-For this SaaS company, you define your example entity schema called `SaaSDB` in the file [SaaSDB_Entity_Definition.json](../quickstart/src/models/SaaSDB_Entity_Definition.json) that has a schema for each database instance.
+![image](./images/DB-overview.png)
+
+Everything you need to run this example is in one of the folders above.
 Once a developer defines their service's entity schema, Nile provides web frontend with self-service (user signup/login, org creation, instance management), multi-tenancy, authorization policies, metrics, events for reconciling Nile with the data plane.
 
 The sample webapp uses Nile React components for [Next.js](https://nextjs.org/) to create a frontend for a SaaS application integrated with [Nile](https://thenile.dev/).
@@ -25,7 +30,7 @@ The sample webapp uses Nile React components for [Next.js](https://nextjs.org/) 
 
 ## Setup Certificates
 
-1. Create certificates for your local machine and accept them. The Nile backend will only serve cookies to `\*.thenile.dev` domains, which is required for login
+1. At the current time, Nile will only serve cookies to `\*.thenile.dev` domains, which is required for login, so you must put this app in that domain. Create certificates for your local machine and accept them.
 
 - Edit `/etc/hosts` and add `127.0.0.1 local.thenile.dev`.
 - Run `mkdir .certificates && cd .certificates`
@@ -53,7 +58,17 @@ yarn install
 
 To run these examples, you need to access to Nile. Please [reach out](https://www.thenile.dev) for more information.
 
-1. For all examples, you need a local file with your Nile configuration.
+1. Run through the [quickstart](../quickstart) to setup your Nile control plane. Afterwards, you will be able to use these parameters:
+
+   - `NILE_URL`
+   - `NILE_WORKSPACE`
+   - `NILE_DEVELOPER_EMAIL`
+   - `NILE_DEVELOPER_PASSWORD`
+   - `NILE_ENTITY_NAME`: refers to one of your selected [usecases](../usecases/).
+
+   [YOLO](../usecases/README.md#yolo): follow steps to define your own service offering (and thus a new `NILE_ENTITY_NAME`)
+
+2. For all examples, you need a local file with your Nile configuration.
 For that purpose, at the top-level of the examples, copy the `.env.defaults` file to `.env`:
 
    ```bash
@@ -63,20 +78,12 @@ For that purpose, at the top-level of the examples, copy the `.env.defaults` fil
 
    Set the values in this `.env` file to match the values you want in your control plane.
 
-2. Run the following command to preconfigure the Nile control plane with the mock SaaSDB use case so that you're not starting from scratch.
+3. Run the following command to preconfigure the Nile control plane with the mock usecase so that you're not starting from scratch.
 
    ```bash
    yarn setup-nile
    ```
 
-3. If you want to run with your own configuration, you need to edit or replace:
-
-   - Nile connection configuration: [.env](.env) (see step above)
-   - Entity schema: [SaaSDB_Entity_Definition.json](../quickstart/src/models/SaaSDB_Entity_Definition.json)
-   - Pre-populate Nile with users: [userList.json](../quickstart/src/datasets/userList.json)
-   - Pre-populate Nile with entity instances: [dbList.json](../quickstart/src/datasets/dbList.json)
-   - Webapp column names and form fields derived from the entity schema: [FormFields.ts](components/EntityTable/FormFields.ts)
-   - Webapp SaaS company logo: [saas-logo.svg](public/images/saas-logo.svg)
 
 ## Run the web server locally
 
@@ -88,7 +95,7 @@ yarn dev
 
 ## Validate
 
-1. As an end user: open [https://local.thenile.dev](http://local.thenile.dev) with your browser and log in as one of the predefine users from [userList.json](../quickstart/src/datasets/userList.json).
+1. As an end user: open [https://local.thenile.dev](http://local.thenile.dev) with your browser and log in as one of the predefine users from the [usecase](../usecases/).
 
    The user login screen should resemble below:
 
@@ -104,7 +111,7 @@ yarn dev
 
 4. Logout. Then instead of logging in as an existing user, sign up as a new user.  Enter any email/password, then create an organization name.
 
-5. Create a new SaaSDB instance.
+5. Create a new DB instance.
 
 6. As a Nile developer: log into the [Nile Admin Dashboard](https://nad.thenile.dev/) to see the control plane and entity instances.
 For the email and password, use the `NILE_DEVELOPER_EMAIL` and `NILE_DEVELOPER_PASSWORD` values you specified in the `.env` file.

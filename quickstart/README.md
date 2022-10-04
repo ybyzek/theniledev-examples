@@ -4,14 +4,21 @@
 
 ## Overview
 
-This quickstart creates (or validates the existence of) the following control plane in Nile:
+This quickstart setups up your [Nile](https://thenile.dev/) control plane.
+The mock scenario in these examples is a company that provides SaaS, one of the following offerings:
+
+- [Database as a Service](../usecases/DB/)
+- [SkyNet as a Service](../usecases/SkyNet/)
+- [Banking as a Service](../usecases/Banking/)
+- [YOLO](../usecases/README.md#yolo)
+
+When you run this quickstart, it creates (or validates the existence of) the following control plane in Nile:
 
 - Sign up a new developer
 - Create a workspace, which must be globally unique
-- Create an entity type called `SaaSDB` from [this definition](src/models/SaaSDB_Entity_Definition.json), which is also available as a template from the Nile Admin Dashboard.
-- Create an organization with a user (see [userList.json](src/datasets/userList.json) for details):
-  - `customer-org-1` with user nora@demo.io
-- Create a `SaaSDB` entity instance in the organization, with a value that matches the schema defined earlier
+- Create an entity type called that corresponds to whatever `NILE_ENTITY_NAME` is defined in your `.env` file (many are also available as a template from the Nile Admin Dashboard).  The available entity types are [here](../usecases/).
+- Create an organization with a user 
+- Create a entity instance in the organization, with a value that matches the schema defined earlier
 
 ## Install Dependencies
 
@@ -45,7 +52,6 @@ $ examples> cp .env.defaults .env
 ```
 
 Set the values in this `.env` file to match the values you want in your control plane.
-
 
 ## Execute
 

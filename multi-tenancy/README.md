@@ -8,11 +8,9 @@ This example creates (or validates the existence of) the following control plane
 
 - Sign up a new developer
 - Create a workspace, which must be globally unique
-- Create an entity type called `SaaSDB` from [this definition](../quickstart/src/models/SaaSDB_Entity_Definition.json), which is also available as a template from the Nile Admin Dashboard.
-- Create two organizations with one user each (see [userList.json](../quickstart/src/datasets/userList.json) for details):
-  - `customer-org-1` with user nora@demo.io
-  - `customer-org-2` with user frank@demo.io
-- Create a `SaaSDB` entity instance in each organization, with values that match the schema defined earlier
+- Create an entity type called that corresponds to whatever `NILE_ENTITY_NAME` is defined in your `.env` file (many are also available as a template from the Nile Admin Dashboard).  The available entity types are [here](../usecases/).
+- Create two organizations with users
+- Create 2 entity instance in one organization and 1 entity instance in other organization, with a value that matches the schema defined earlier
 
 ## Install Dependencies
 
@@ -62,7 +60,7 @@ yarn start
 
 ![image](images/nad.png)
 
-2. Validate tenant isolation by running the command below. At first user nora@demo.io cannot see the organization `customer-org-2` nor any instances in it, but after adding nora@demo.io to `customer-org-2`, nora@demo.io can see all the instances in `customer-org-2` that frank@demo.io can see.
+2. Validate tenant isolation by running the command below. For example, if you used the `Database as a Service` use case, at first user nora@demo.io cannot see the organization `customer-org-2` nor any instances in it, but after adding nora@demo.io to `customer-org-2`, nora@demo.io can see all the instances in `customer-org-2` that frank@demo.io can see.
 
 ```
 yarn test

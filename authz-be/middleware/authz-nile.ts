@@ -1,7 +1,9 @@
 const User = require("../model/User");
 
-const fs = require('fs');
-const EntityDefinition = JSON.parse(fs.readFileSync('../quickstart/src/models/SaaSDB_Entity_Definition.json'));
+require('dotenv').config({ override: true });
+const NILE_URL = process.env.NILE_URL;
+const NILE_WORKSPACE = process.env.NILE_WORKSPACE;
+const NILE_ENTITY_NAME = process.env.NILE_ENTITY_NAME;
 
 exports.nileAuthz = async (req, res, next) => {
 
@@ -11,23 +13,20 @@ exports.nileAuthz = async (req, res, next) => {
   const user = await User.findOne({ "email" : email });
   const orgName = user.org;
 
+  // Map these generic "pages" to the entity instance names
   var urlDBmap = {};
-  urlDBmap["page1"] = "myDB-products";
-  urlDBmap["page2"] = "myDB-analytics";
-  urlDBmap["page3"] = "myDB-billing";
-  const dbName = urlDBmap[url];
+  const entities = require(`../../usecases/${NILE_ENTITY_NAME}/init/entities.json`);
+  const { instanceName } = require(`../../usecases/${NILE_ENTITY_NAME}/init/entity_utils.js`);
+  urlDBmap["page1"] = entities[0][instanceName];
+  urlDBmap["page2"] = entities[1][instanceName];
+  urlDBmap["page3"] = entities[2][instanceName];
+  const propertyEquivalencyValue = urlDBmap[url];
 
-  console.log("Received: ", role, email, url, dbName, orgName);
+  console.log("Received: ", role, email, url, propertyEquivalencyValue, orgName);
 
   const Nile = require('@theniledev/js');
   
   var emoji = require('node-emoji');
-  
-  require('dotenv').config({ override: true });
-  const NILE_URL = process.env.NILE_URL;
-  const NILE_WORKSPACE = process.env.NILE_WORKSPACE;
-
-  const NILE_ENTITY_NAME = EntityDefinition.name;
   
   const nile = Nile.default({
     basePath: NILE_URL,
@@ -69,13 +68,13 @@ exports.nileAuthz = async (req, res, next) => {
     org: orgID,
     type: NILE_ENTITY_NAME,
   });
-  let maybeInstance = myInstances.find( instance => instance.type === NILE_ENTITY_NAME && instance.properties.dbName === dbName );
+  let maybeInstance = myInstances.find( instance => instance.type === NILE_ENTITY_NAME && instance.properties[instanceName] === propertyEquivalencyValue );
   if (maybeInstance) {
-    console.log(emoji.get('white_check_mark'), `Entity type ${NILE_ENTITY_NAME} with dbName ${dbName} (instance ${maybeInstance.id}) granted read access by ${email}!`);
+    console.log(emoji.get('white_check_mark'), `Entity type ${NILE_ENTITY_NAME} with ${instanceName} ${propertyEquivalencyValue} (instance ${maybeInstance.id}) granted read access by ${email}!`);
     instance_id = maybeInstance.id;
     next();
   } else {
-    console.error(emoji.get('x'), `Entity type ${NILE_ENTITY_NAME} wth dbName ${dbName} not allowed to be read by ${email}!`);
+    console.error(emoji.get('x'), `Entity type ${NILE_ENTITY_NAME} with ${instanceName} ${propertyEquivalencyValue} not allowed to be read by ${email}!`);
     return res.status(401).json({ message: "Not authorized" });
   }
 

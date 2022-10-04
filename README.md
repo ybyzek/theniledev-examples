@@ -7,16 +7,18 @@
 This collection of examples demonstrates how to use Nile as a control plane for an Infrastructure SaaS product.
 Nile provides an entity system, event system, and tenant-aware metrics.
 
-The mock scenario in these examples is a company that provides databases as SaaS which is using Nile for its control plane.
-For this SaaS company, you define your example entity schema called `SaaSDB` in the file [SaaSDB_Entity_Definition.json](quickstart/src/models/SaaSDB_Entity_Definition.json) that has a schema for each database instance.
-For demonstration purposes, these examples simulate different organizations and entity instances from mock customers:
+The mock scenario in these examples is a company that provides SaaS. 
+These examples provide one of the following offerings:
 
-- [dbList.json](quickstart/src/datasets/dbList.json): list of entity instances, i.e., databases. Each of these instances conforms to the `SaaSDB` schema
-- [userList.json](quickstart/src/datasets/userList.json): list of users of each database
+- [Database as a Service](usecases/DB/)
+- [SkyNet as a Service](usecases/SkyNet/)
+- [Banking as a Service](usecases/Banking/)
+- [YOLO](usecases/README.md#yolo)
 
-First run the Quickstart to setup your control plane in Nile, and then you can run the other modules for different use cases.
+First decide which offering you want to use, then run the Quickstart to setup your control plane in Nile.
+Follow on with any of the other modules for different use cases.
 The modules can also be run sequentially to build on top of one another, in which case, we recommend running them in the order presented here to build up your SaaS as you go.
-Finally, after you run the webapp example which includes a front-end for self-service provisioning, a user can log in to read and create new entity instances (DBs in this case):
+Finally, after you run the webapp example which includes a front-end for self-service provisioning, a user can log in to read and create new entity instances, for example:
 
 ![image](webapp/images/instances.png)
 
@@ -48,13 +50,14 @@ To run these examples:
    
 3. Obtain the following parameter values that represent your control plane configuration in Nile.
 These can be an existing control plane or a new one will be created for you from these values.
+`NILE_ENTITY_NAME` refers to one of the [usecases](usecases/).
 
    - `NILE_URL`
    - `NILE_WORKSPACE`
    - `NILE_DEVELOPER_EMAIL`
    - `NILE_DEVELOPER_PASSWORD`
    - `NILE_ORGANIZATION_NAME`
-   - `NILE_ENTITY_NAME`
+   - `NILE_ENTITY_NAME`: choose one of the [usecases](usecases/)
 
    At the top-level of the examples repo, copy the [.env.defaults](.env.defaults) file to `.env` and set the values in this `.env` file to match the values you want in your control plane.  It will be used for all the examples.
 

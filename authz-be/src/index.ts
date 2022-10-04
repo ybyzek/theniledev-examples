@@ -1,8 +1,5 @@
 import Nile from '@theniledev/js';
 
-const fs = require('fs');
-const EntityDefinition = JSON.parse(fs.readFileSync('../quickstart/src/models/SaaSDB_Entity_Definition.json'));
-
 var nileUtils = require('../../utils-module-js/').nileUtils;
 
 var emoji = require('node-emoji');
@@ -16,6 +13,7 @@ let envParams = [
   "NILE_WORKSPACE",
   "NILE_DEVELOPER_EMAIL",
   "NILE_DEVELOPER_PASSWORD",
+  "NILE_ENTITY_NAME",
 ]
 envParams.forEach( (key: string) => {
   if (!process.env[key]) {
@@ -28,13 +26,16 @@ const NILE_URL = process.env.NILE_URL!;
 const NILE_WORKSPACE = process.env.NILE_WORKSPACE!;
 const NILE_DEVELOPER_EMAIL = process.env.NILE_DEVELOPER_EMAIL!;
 const NILE_DEVELOPER_PASSWORD = process.env.NILE_DEVELOPER_PASSWORD!;
-const NILE_ENTITY_NAME = EntityDefinition.name;
+const NILE_ENTITY_NAME = process.env.NILE_ENTITY_NAME!;
 
-const usersJson = require('../../quickstart/src/datasets/userList.json');
+const fs = require('fs');
+const EntityDefinition = JSON.parse(fs.readFileSync(`../usecases/${NILE_ENTITY_NAME}/entity_definition.json`));
+
+const users = require(`../../usecases/${NILE_ENTITY_NAME}/init/users.json`);
 // Load first user only
 const index=0
-const email = usersJson[index].email;
-const NILE_TENANT_PASSWORD = usersJson[index].password;
+const email = users[index].email;
+const NILE_TENANT_PASSWORD = users[index].password;
 
 const nile = Nile({
   basePath: NILE_URL,
@@ -55,7 +56,7 @@ async function listPolicies(orgID : string) {
     .catch((error: any) => console.error(error));
 }
 
-async function createAccessPolicyEntityInstance(email: string, orgID: string, dbName: string, actions: string[]) {
+async function createAccessPolicyEntityInstance(email: string, orgID: string, instanceName: string, propertyValue: string, actions: string[]) {
 
   // Find instance
   var instance_id;
@@ -63,12 +64,12 @@ async function createAccessPolicyEntityInstance(email: string, orgID: string, db
     org: orgID,
     type: NILE_ENTITY_NAME,
   });
-  let maybeInstance = myInstances.find( instance => instance.type == NILE_ENTITY_NAME && instance.properties.dbName == dbName );
+  let maybeInstance = myInstances.find( instance => instance.type == NILE_ENTITY_NAME && instance.properties[instanceName] == propertyValue );
   if (maybeInstance) {
     console.log(emoji.get('dart'), "Entity instance " + NILE_ENTITY_NAME + " exists with id " + maybeInstance.id);
     instance_id = maybeInstance.id;
   } else {
-    console.error(emoji.get('x'), `Error: cannot find instance of type ${NILE_ENTITY_NAME} where dbName is ${dbName}`);
+    console.error(emoji.get('x'), `Error: cannot find instance of type ${NILE_ENTITY_NAME} where ${instanceName} is ${propertyValue}`);
     process.exit(1);
   }
 
@@ -128,11 +129,11 @@ async function run() {
   await nileUtils.loginAsDev(nile, NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD);
 
   var actions;
-  const dbsJson = require('../../quickstart/src/datasets/dbList.json');
-  const usersJson = require('../../quickstart/src/datasets/userList.json');
-  for (let index = 0 ; index < dbsJson.length ; index++) {
+  const entities = require(`../../usecases/${NILE_ENTITY_NAME}/init/entities.json`);
+  const users = require(`../../usecases/${NILE_ENTITY_NAME}/init/users.json`);
+  for (let index = 0 ; index < entities.length ; index++) {
 
-    let pageOrg = dbsJson[index].org;
+    let pageOrg = entities[index].org;
     let createIfNot = false;
     let orgID = await nileUtils.maybeCreateOrg (nile, pageOrg, createIfNot);
     if (!orgID) {
@@ -140,21 +141,21 @@ async function run() {
       process.exit(1);
     }
 
-    for (let index2 = 0 ; index2 < usersJson.length ; index2++) {
-      if (usersJson[index2].org == pageOrg) {
-        if (usersJson[index2].role == "admin") {
+    for (let index2 = 0 ; index2 < users.length ; index2++) {
+      if (users[index2].org == pageOrg) {
+        if (users[index2].role == "admin") {
           // In this scenario, admins have RW for policies and entity instances
-          await createAccessPolicyForPolicies(usersJson[index2].email, orgID);
+          await createAccessPolicyForPolicies(users[index2].email, orgID);
           actions = ["read", "write"];
-        } else if (usersJson[index2].role == "RW") {
+        } else if (users[index2].role == "RW") {
           actions = ["read", "write"];
-        } else if (usersJson[index2].role == "RO") {
+        } else if (users[index2].role == "RO") {
           actions = ["read"];
         } else {
           actions = ["deny"];
         }
-        await createAccessPolicyEntityInstance(usersJson[index2].email, orgID, dbsJson[index].dbName, actions);
-
+        const { instanceName } = require(`../../usecases/${NILE_ENTITY_NAME}/init/entity_utils.js`);
+        await createAccessPolicyEntityInstance(users[index2].email, orgID, instanceName, entities[index][instanceName], actions);
       }
     }
 
