@@ -21,26 +21,27 @@ Use [Database as a Service](./DB/) as a template, copy the files from that folde
 The contents of the use case folder matches the following directory structure (names must be exact):
 
 ```bash
-├── FormFields.ts
+├── app
+│   ├── FormFields.ts
+│   └── logo.svg
 ├── entity_definition.json
-├── init
-│   ├── Page.js
-│   ├── entities.json
-│   ├── entity_utils.js
-│   └── users.json
-└── logo.svg
+└── init
+    ├── Page.js
+    ├── admins.json
+    ├── entities.json
+    ├── entity_utils.js
+    └── users.json
 ```
 
 The purpose of each file is as follows:
 
-- `FormFields.ts`: used by the [webapp](../webapp) for creating new and displaying existing instances
-- `entity_definition.json`: (required) represents the entity schema
-   - In order to use this entity type with the `data-plane/pulumi` example, the schema must include a `status` field
+- `app`: used by the [webapp](../webapp). This folder has files only used by the examples to create a very basic webapp (not required for real production)
+  - `FormFields.ts`: used for creating new and displaying existing instances
+  - `logo.svg`: used to customize the UI
+- `entity_definition.json`: (required) represents the entity schema. (In order to use this entity type with the [data-plane/pulumi](../data-plane/pulumi) example, the schema must include a `status` field)
 - `init/`: this folder is only used by the examples to initialize the Nile control plane with prepopulated values (not required for real production)
+  - `init/admins.json`: (required) starting list of admins, i.e.,  org creators, and their respective organizations
   - `init/Pages.js`: used by the [authz-be](../authz-be) example to create a schema for the local MongoDB table that uses the entity table
   - `init/entity_utils.js`: (required) used by the [quickstart](../quickstart) to check if an entity already exists with some criteria, or create a new instance if not
-  - `init/entities.json`: (required) starting list of entities, must adhere to the schema defined in `entity_definition.json`.
-     - There must be at least three entities
-  - `init/users.json`: (required) starting list of users and their respective organizations
-     - There must be at least two users in two different orgs
-- `logo.svg`: used by the [webapp](../webapp) to customize the UI
+  - `init/entities.json`: (required) starting list of entities, must adhere to the schema defined in `entity_definition.json`. There must be at least three entities
+  - `init/users.json`: (required) starting list of users and their respective organizations.

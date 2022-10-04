@@ -18,33 +18,33 @@ try {
     // Copy logo.svg
     if (name === 'NILE_ENTITY_NAME') {
       fs.copyFile(
-        `../usecases/${value}/logo.svg`,
+        `../usecases/${value}/app/logo.svg`,
         './public/images/logo.svg',
         (err) => {
           if (err) {
             console.log(
-              `Error: could not copy ../usecases/${value}/logo.svg to ./public/images/logo.svg`
+              `Error: could not copy ../usecases/${value}/app/logo.svg to ./public/images/logo.svg`
             );
             process.exit(0);
           } else {
             console.log(
-              `Success: copied ../usecases/${value}/logo.svg to ./public/images/logo.svg`
+              `Success: copied ../usecases/${value}/app/logo.svg to ./public/images/logo.svg`
             );
           }
         }
       );
       fs.copyFile(
-        `../usecases/${value}/FormFields.ts`,
+        `../usecases/${value}/app/FormFields.ts`,
         './components/EntityTable/FormFields.ts',
         (err) => {
           if (err) {
             console.log(
-              `Error: could not copy ../usecases/${value}/FormFields.ts to ./components/EntityTable/FormFields.ts`
+              `Error: could not copy ../usecases/${value}/app/FormFields.ts to ./components/EntityTable/FormFields.ts`
             );
             process.exit(0);
           } else {
             console.log(
-              `Success: copied ../usecases/${value}/FormFields.ts to ./components/EntityTable/FormFields.ts`
+              `Success: copied ../usecases/${value}/app/FormFields.ts to ./components/EntityTable/FormFields.ts`
             );
           }
         }
