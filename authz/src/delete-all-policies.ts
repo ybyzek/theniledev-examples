@@ -1,6 +1,6 @@
 import Nile from '@theniledev/js';
 
-var nileUtils = require('../../utils-module-js/').nileUtils;
+var exampleUtils = require('../../utils-module-js/').exampleUtils;
 
 var emoji = require('node-emoji');
 
@@ -40,7 +40,7 @@ async function deletePoliciesFromOrg (orgName: string) {
 
   // Get orgID
   let createIfNot = false;
-  let orgID = await nileUtils.maybeCreateOrg (nile, orgName, false);
+  let orgID = await exampleUtils.maybeCreateOrg (nile, orgName, false);
   if (!orgID) {
     console.error ("Error: cannot determine the ID of the organization from the provided name :" + orgName)
     process.exit(1);
@@ -73,7 +73,7 @@ async function deletePoliciesFromOrg (orgName: string) {
 }
 
 async function run() {
-  await nileUtils.loginAsDev(nile, NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD);
+  await exampleUtils.loginAsDev(nile, NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD);
 
   var actions;
   const entities = require(`../../usecases/${NILE_ENTITY_NAME}/init/entities.json`);

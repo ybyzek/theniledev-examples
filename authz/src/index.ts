@@ -1,6 +1,6 @@
 import Nile from '@theniledev/js';
 
-var nileUtils = require('../../utils-module-js/').nileUtils;
+var exampleUtils = require('../../utils-module-js/').exampleUtils;
 
 var emoji = require('node-emoji');
 
@@ -49,7 +49,7 @@ console.log(`export NILE_WORKSPACE=${NILE_WORKSPACE}`);
 
 async function testTenant(orgID : string, expectEmpty : boolean = false) {
 
-  await nileUtils.loginAsUser(nile, NILE_TENANT1_EMAIL, NILE_TENANT_PASSWORD);
+  await exampleUtils.loginAsUser(nile, NILE_TENANT1_EMAIL, NILE_TENANT_PASSWORD);
 
   // List instances of the service
   await nile.entities.listInstances({
@@ -72,7 +72,7 @@ async function listPolicies(orgID : string) {
 
   console.log(`\nLogging into Nile at ${NILE_URL}, workspace ${NILE_WORKSPACE}, as developer ${NILE_DEVELOPER_EMAIL} in order to listPolicies for ${orgID}`);
 
-  await nileUtils.loginAsDev(nile, NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD);
+  await exampleUtils.loginAsDev(nile, NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD);
 
   // List policies
   const body = {
@@ -95,12 +95,12 @@ async function run() {
 
   console.log(`\nLogging into Nile at ${NILE_URL}, workspace ${NILE_WORKSPACE}, as developer ${NILE_DEVELOPER_EMAIL}`);
 
-  await nileUtils.loginAsDev(nile, NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD);
+  await exampleUtils.loginAsDev(nile, NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD);
 
   console.log(`NILE_ORGANIZATION_NAME is ${NILE_ORGANIZATION_NAME}`);
 
   let createIfNot = false;
-  let orgID = await nileUtils.maybeCreateOrg (nile, NILE_ORGANIZATION_NAME, false);
+  let orgID = await exampleUtils.maybeCreateOrg (nile, NILE_ORGANIZATION_NAME, false);
   if (!orgID) {
     console.error ("Error: cannot determine the ID of the organization from the provided name: " + NILE_ORGANIZATION_NAME)
     process.exit(1);
@@ -121,7 +121,7 @@ async function run() {
   console.log('Test tenant before');
   await testTenant(orgID, false);
 
-  await nileUtils.loginAsDev(nile, NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD);
+  await exampleUtils.loginAsDev(nile, NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD);
 
   // Create policy
   var policyID;
@@ -152,7 +152,7 @@ async function run() {
   console.log('Test tenant after');
   await testTenant(orgID, true);
 
-  await nileUtils.loginAsDev(nile, NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD);
+  await exampleUtils.loginAsDev(nile, NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD);
 
   // Delete policy
   const body = {

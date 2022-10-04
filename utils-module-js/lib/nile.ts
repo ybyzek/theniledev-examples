@@ -76,7 +76,7 @@ exports.maybeCreateOrg = async function (
   var maybeOrg = myOrgs.find( org => org.name == orgName);
   if (maybeOrg) {
     console.log(emoji.get('dart'), "Org " + orgName + " exists with id " + maybeOrg.id);
-    console.log(`export NILE_ORGANIZATION_ID=${maybeOrg.id}`);
+    //console.log(`export NILE_ORGANIZATION_ID=${maybeOrg.id}`);
     return maybeOrg.id;
   } else if (createIfNot == true) {
     await nile.organizations.createOrganization({"createOrganizationRequest" :
@@ -96,7 +96,7 @@ exports.maybeCreateOrg = async function (
         process.exit(1);
       }
     })
-    console.log(`export NILE_ORGANIZATION_ID=${orgID}`);
+    //console.log(`export NILE_ORGANIZATION_ID=${orgID}`);
     return(orgID);
   } else {
     return null;
@@ -128,12 +128,14 @@ exports.maybeAddUserToOrg = async function (
     });
 }
 
-exports.getAdmins = function (
-  usersJson: string) {
+exports.getAdminForOrg = function (
+  admins: string, orgID: string) {
 
-  let admins = new Map<string, number>()
-  admins.set(usersJson[0].org, 0);
-  admins.set(usersJson[1].org, 1);
-
-  return admins;
+  for (let index = 0; index < admins.length ; index++) {
+    let org = admins[index].org;
+    if (org === orgID) {
+      return admins[index];
+    }
+  }
+  return null;
 }

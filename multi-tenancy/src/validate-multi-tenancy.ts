@@ -1,6 +1,6 @@
 import Nile from "@theniledev/js";
 
-var nileUtils = require('../../utils-module-js/').nileUtils;
+var exampleUtils = require('../../utils-module-js/').exampleUtils;
 
 var emoji = require('node-emoji');
 
@@ -44,10 +44,10 @@ async function getInstances(
   console.log(`\nLogging into Nile at ${NILE_URL}, workspace ${NILE_WORKSPACE}, as tenant ${tenantEmail}`)
 
   // Login tenant
-  await nileUtils.loginAsUser(nile, tenantEmail, "password");
+  await exampleUtils.loginAsUser(nile, tenantEmail, "password");
 
   let createIfNot = false;
-  let orgID = await nileUtils.maybeCreateOrg (nile, orgName, false);
+  let orgID = await exampleUtils.maybeCreateOrg (nile, orgName, false);
   if (!orgID) {
     return [];
   }
@@ -78,11 +78,11 @@ async function addTenant(
 
   console.log(`Logging into Nile at ${NILE_URL}, workspace ${NILE_WORKSPACE}, as developer ${NILE_DEVELOPER_EMAIL}, to add ${tenantEmail} to ${orgName}`);
 
-  await nileUtils.loginAsDev(nile, NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD);
+  await exampleUtils.loginAsDev(nile, NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD);
 
   // Get orgID
   let createIfNot = false;
-  let orgID = await nileUtils.maybeCreateOrg (nile, orgName, false);
+  let orgID = await exampleUtils.maybeCreateOrg (nile, orgName, false);
   if (orgID) {
     console.log(emoji.get('white_check_mark'), "Org " + orgName + " exists in org id " + orgID);
   } else {
@@ -92,7 +92,7 @@ async function addTenant(
   //console.log("orgID is: " + orgID);
 
   // Add user to organization
-  await nileUtils.maybeAddUserToOrg(nile, tenantEmail, orgID);
+  await exampleUtils.maybeAddUserToOrg(nile, tenantEmail, orgID);
 
 }
 

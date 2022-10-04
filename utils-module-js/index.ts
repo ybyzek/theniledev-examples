@@ -1,3 +1,3 @@
-var nileUtils = require('./lib/nile');
+var exampleUtils = require('./lib/nile');
 
-exports.nileUtils = nileUtils;
+exports.exampleUtils = exampleUtils;

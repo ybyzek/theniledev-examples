@@ -1,6 +1,6 @@
 import Nile from '@theniledev/js';
 
-var nileUtils = require('../../utils-module-js/').nileUtils;
+var exampleUtils = require('../../utils-module-js/').exampleUtils;
 
 var emoji = require('node-emoji');
 
@@ -126,7 +126,7 @@ async function run() {
 
   // For ease of demo: the Nile developer creates all the access policies
   // However, in practice, the organization's admin user can create the necessary policies
-  await nileUtils.loginAsDev(nile, NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD);
+  await exampleUtils.loginAsDev(nile, NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD);
 
   var actions;
   const entities = require(`../../usecases/${NILE_ENTITY_NAME}/init/entities.json`);
@@ -135,7 +135,7 @@ async function run() {
 
     let pageOrg = entities[index].org;
     let createIfNot = false;
-    let orgID = await nileUtils.maybeCreateOrg (nile, pageOrg, createIfNot);
+    let orgID = await exampleUtils.maybeCreateOrg (nile, pageOrg, createIfNot);
     if (!orgID) {
       console.error ("Error: cannot determine the ID of the organization from the provided name :" + orgName)
       process.exit(1);

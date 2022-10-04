@@ -1,7 +1,7 @@
 import Nile, { CreateEntityRequest, Entity, Organization} from "@theniledev/js";
 import { CreateEntityOperationRequest } from "@theniledev/js/dist/generated/openapi/src";
 
-var nileUtils = require('../../utils-module-js/').nileUtils;
+var exampleUtils = require('../../utils-module-js/').exampleUtils;
 
 var emoji = require('node-emoji');
 
@@ -43,7 +43,7 @@ const NILE_ORGANIZATION_NAME = users[index].org;
 
 async function run() {
 
-  await nileUtils.loginAsDev(nile, NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD);
+  await exampleUtils.loginAsDev(nile, NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD);
 
   const users = require(`../../usecases/${NILE_ENTITY_NAME}/init/users.json`);
   const index=0
@@ -51,9 +51,9 @@ async function run() {
   const userPassword = users[index].password;
 
   // Get orgID
-  await nileUtils.loginAsUser(nile, userEmail, userPassword);
+  await exampleUtils.loginAsUser(nile, userEmail, userPassword);
   let createIfNot = false;
-  let orgID = await nileUtils.maybeCreateOrg (nile, NILE_ORGANIZATION_NAME, false);
+  let orgID = await exampleUtils.maybeCreateOrg (nile, NILE_ORGANIZATION_NAME, false);
   if (!orgID) {
     console.error(emoji.get('x'), "Cannot find org id for " + NILE_ORGANIZATION_NAME)
     process.exit(1);

@@ -1,7 +1,7 @@
 import Nile, { CreateEntityRequest } from "@theniledev/js";
 import { CreateEntityOperationRequest } from "@theniledev/js/dist/generated/openapi/src";
 
-var nileUtils = require('../../utils-module-js/').nileUtils;
+var exampleUtils = require('../../utils-module-js/').exampleUtils;
 
 var emoji = require('node-emoji');
 
@@ -68,7 +68,7 @@ async function setupDeveloper() {
     }
   };
 
-  await nileUtils.loginAsDev(nile, NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD);
+  await exampleUtils.loginAsDev(nile, NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD);
 
   // Check if workspace exists, create if not
   var myWorkspaces = await nile.workspaces.listWorkspaces()
@@ -102,59 +102,87 @@ async function setupDeveloper() {
   }
 }
 
+async function addAdmin(admin: string, nile: nileApi) {
+  let email = admin.email;
+  let password = admin.password;
+  let role = admin.role;
+  let org = admin.org;
+
+  // user is org creator
+  await exampleUtils.maybeCreateUser(nile, email, password, role);
+  await exampleUtils.loginAsUser(nile, email, password);
+  let createIfNot = true;
+  await exampleUtils.maybeCreateOrg (nile, org, createIfNot);
+}
+
+async function addUser(user: string, nile: nileApi, admins: string) {
+  let email = user.email;
+  let password = user.password;
+  let role = user.role;
+  let org = user.org;
+  let admin = exampleUtils.getAdminForOrg(admins, org);
+
+  // user is not org creator; let admin user create and add them into the org
+  await exampleUtils.loginAsUser(nile, admin.email, admin.password);
+  await exampleUtils.maybeCreateUser(nile, email, password, role);
+  let createIfNot = false;
+  let orgID = await exampleUtils.maybeCreateOrg (nile, org, createIfNot);
+  await exampleUtils.maybeAddUserToOrg(nile, email, orgID);
+}
+
+async function addEntity(entity: string, nile: nileApi, admins: string) {
+  let org = entity.org;
+  let admin = exampleUtils.getAdminForOrg(admins, org);
+
+  // Get orgID
+  await exampleUtils.loginAsUser(nile, admin.email, admin.password);
+  let createIfNot = false;
+  let orgID = await exampleUtils.maybeCreateOrg (nile, org, false);
+
+  // Note: this example uses entity_utils.js to programmatically handle any differences
+  // in what is required to add a new entity type. This does not necessarily represent
+  // what you would do in production
+  const { addInstanceToOrg } = require(`../../usecases/${NILE_ENTITY_NAME}/init/entity_utils.js`);
+  await addInstanceToOrg(nile, orgID, NILE_ENTITY_NAME, entity);
+}
+
+// This function prepopulates data in the Control Plane
+// Value is for running the examples and does not represent exactly how this would work in production
 async function setupControlPlane() {
 
-  // Log in as the Nile developer
+  // Sign up and log in as the Nile developer
   await setupDeveloper();
 
-  const users = require(`../../usecases/${NILE_ENTITY_NAME}/init/users.json`);
-  let admins = nileUtils.getAdmins(users);
-  let limit = NILE_TENANT_MAX ? users.length : 1;
-
-  for (let index = 0; index < limit ; index++) {
-
-    let email = users[index].email;
-    let password = users[index].password;
-    let role = users[index].role;
-    let org = users[index].org;
-    let adminEmail = users[admins.get(org)].email;
-    let adminPassword = users[admins.get(org)].password;
-
-    if (index < 2) {
-
-      // user is org creator
-      await nileUtils.maybeCreateUser(nile, email, password, role);
-      await nileUtils.loginAsUser(nile, email, password);
-      let createIfNot = true;
-      let orgID = await nileUtils.maybeCreateOrg (nile, org, createIfNot);
-      await nileUtils.maybeAddUserToOrg(nile, email, orgID);
-
-    } else {
-
-      // user is not org creator; let admin user create and invite them
-      await nileUtils.loginAsUser(nile, adminEmail, adminPassword);
-      await nileUtils.maybeCreateUser(nile, email, password, role);
-      let createIfNot = false;
-      let orgID = await nileUtils.maybeCreateOrg (nile, org, createIfNot);
-      await nileUtils.maybeAddUserToOrg(nile, email, orgID);
-
-    }
+  // Add admins and create their orgs
+  const admins = require(`../../usecases/${NILE_ENTITY_NAME}/init/admins.json`);
+  for (let index = 0; index < admins.length ; index++) {
+    await addAdmin(admins[index], nile);
   }
 
+  // Add users
+  const users = require(`../../usecases/${NILE_ENTITY_NAME}/init/users.json`);
+  let limit = NILE_TENANT_MAX ? users.length : 1;
+  for (let index = 0; index < limit ; index++) {
+    await addUser(users[index], nile, admins);
+  }
+
+  // Add entities
   const entities = require(`../../usecases/${NILE_ENTITY_NAME}/init/entities.json`);
   let limit = NILE_TENANT_MAX ? entities.length : 1;
   for (let index = 0; index < limit ; index++) {
+    await addEntity(entities[index], nile, admins);
+  }
 
-    let adminEmail = users[admins.get(entities[index].org)].email;
-    let adminPassword = users[admins.get(entities[index].org)].password;
+  // List instances
+  const admins = require(`../../usecases/${NILE_ENTITY_NAME}/init/admins.json`);
+  for (let index = 0; index < admins.length ; index++) {
+    let email = admins[index].email;
+    let password = admins[index].password;
+    await exampleUtils.loginAsUser(nile, email, password);
 
-    // Get orgID
-    await nileUtils.loginAsUser(nile, adminEmail, adminPassword);
+    let org = admins[index].org;
     let createIfNot = false;
-    let orgID = await nileUtils.maybeCreateOrg (nile, entities[index].org, false);
-
-    const { addInstanceToOrg } = require(`../../usecases/${NILE_ENTITY_NAME}/init/entity_utils.js`);
-    await addInstanceToOrg(nile, orgID, NILE_ENTITY_NAME, entities[index]);
+    let orgID = await exampleUtils.maybeCreateOrg (nile, org, createIfNot);
 
     // List instances
     await nile.entities.listInstances({
