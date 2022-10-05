@@ -81,7 +81,7 @@ function UpTime(props: Props) {
   return (
     <Card variant="outlined" sx={{ overflow: 'scroll' }}>
       <Stack direction="row" sx={{ justifyContent: 'space-between', mb: 1 }}>
-        <Typography>Up time</Typography>
+        <Typography level="h4">Up time</Typography>
         <Typography level="body3">past 24 hours</Typography>
       </Stack>
       <Stack direction="row">

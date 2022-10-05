@@ -1,19 +1,19 @@
 import React from 'react';
 import { Alert, Button, Modal, ModalClose, Sheet, Stack } from '@mui/joy';
-import getConfig from 'next/config';
-import { EntityForm } from '@theniledev/react';
+import { EntityForm, Attribute } from '@theniledev/react';
+import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 
-import fields from './FormFields';
+import { getFormFields } from '~/form-fields';
 
 export function CreateInstance(props: {
   org: string;
-  setReRender: () => void;
+  setReRender?: () => void;
+  entity: string;
 }) {
-  const { org, setReRender } = props;
-  const { publicRuntimeConfig } = getConfig();
-  const { NILE_ENTITY_NAME } = publicRuntimeConfig;
+  const { org, setReRender, entity } = props;
   const [open, setOpen] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
+  const { fields } = getFormFields(entity) ?? {};
   return (
     <Stack>
       <Modal
@@ -50,22 +50,28 @@ export function CreateInstance(props: {
               data.connection = 'N/A';
               return data;
             }}
-            fields={fields}
-            entityType={NILE_ENTITY_NAME}
+            fields={fields as Attribute[]}
+            entityType={entity}
             onSuccess={() => {
               setOpen(false);
-              setReRender();
+              setReRender && setReRender();
             }}
             org={org}
             onError={(e) => {
               if (e instanceof Error) {
-                setError(`Failed to create ${NILE_ENTITY_NAME}.`);
+                setError(`Failed to create ${entity}.`);
               }
             }}
           />
         </Sheet>
       </Modal>
-      <Button onClick={() => setOpen(true)}>Create {NILE_ENTITY_NAME}</Button>
+      <Button
+        sx={{ justifyContent: 'flex-start' }}
+        startDecorator={<AddCircleOutlineOutlinedIcon />}
+        onClick={() => setOpen(true)}
+      >
+        Create {entity}
+      </Button>
     </Stack>
   );
 }

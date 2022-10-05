@@ -1,8 +1,5 @@
 import { AttributeType } from '@theniledev/react';
 
-/**
- * manually created from entity_definition.json
- */
 const fields = [
   {
     name: 'accountType',
@@ -27,16 +24,8 @@ const fields = [
     required: true,
   },
 ];
-export default fields;
 
-const columns = [
-  'accountType',
-  'accountID',
-  'firstName',
-  'lastName',
-  'status'
-];
-export { columns };
+const columns = ['accountType', 'accountID', 'firstName', 'lastName', 'status'];
 
 const instanceName = 'accountID';
-export { instanceName };
+export { instanceName, fields, columns };

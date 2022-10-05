@@ -9,15 +9,16 @@ import NavBar from '../NavBar';
 
 import { CreateInstance } from './CreateInstance';
 import { useFirstOrg } from './hooks';
-import { columns } from './FormFields';
 
+import { getFormFields } from '~/form-fields';
 import paths from '~/paths';
 
 export default function ClustersTable() {
   const router = useRouter();
   const [reRender, setReRender] = React.useState(false);
+  const entity = String(router.query.entity);
   const [isLoading, user, org, unauthorized] = useFirstOrg();
-
+  const { columns } = getFormFields(entity) ?? {};
   // just a simple refresh for now.
   React.useEffect(() => {
     if (reRender === true) {
@@ -35,7 +36,7 @@ export default function ClustersTable() {
 
   return (
     <NavBar>
-      <Stack spacing={2}>
+      <Stack spacing={2} sx={{ mt: 8 }}>
         <Card variant="outlined" sx={{ background: 'transparent' }}>
           <Stack
             direction="row"
@@ -53,6 +54,7 @@ export default function ClustersTable() {
               <CreateInstance
                 key="create-instance"
                 org={org.id}
+                entity={String(router.query.entity)}
                 setReRender={() => setReRender(true)}
               />
             </Box>

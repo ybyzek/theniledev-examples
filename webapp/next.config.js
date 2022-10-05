@@ -33,22 +33,6 @@ try {
           }
         }
       );
-      fs.copyFile(
-        `../usecases/${value}/app/FormFields.ts`,
-        './components/EntityTable/FormFields.ts',
-        (err) => {
-          if (err) {
-            console.log(
-              `Error: could not copy ../usecases/${value}/app/FormFields.ts to ./components/EntityTable/FormFields.ts`
-            );
-            process.exit(0);
-          } else {
-            console.log(
-              `Success: copied ../usecases/${value}/app/FormFields.ts to ./components/EntityTable/FormFields.ts`
-            );
-          }
-        }
-      );
     }
 
     accum[name] = value;

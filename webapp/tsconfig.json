@@ -18,7 +18,8 @@
     "paths": {
       "~/components/*": ["components/*"],
       "~/paths": ["paths"],
-      "~/images/*": ["public/images/*"]
+      "~/images/*": ["public/images/*"],
+      "~/form-fields": ["form-fields/index.ts"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

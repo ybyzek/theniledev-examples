@@ -1,4 +1,4 @@
-import { Chip, Link, Stack, Typography } from '@mui/joy';
+import { Box, Chip, Link, Sheet, Stack, Typography } from '@mui/joy';
 import Card from '@mui/joy/Card';
 import { LoginForm, useQuery, useNile } from '@theniledev/react';
 import { useRouter } from 'next/router';
@@ -7,6 +7,7 @@ import ChipDelete from '@mui/joy/ChipDelete';
 import getConfig from 'next/config';
 
 import Logo from '~/components/Logo';
+import LoginBG from '~/images/loginbg.svg';
 import paths from '~/paths';
 
 export default function MyLoginForm() {
@@ -21,7 +22,7 @@ export default function MyLoginForm() {
     enabled: hadLoginSuccess,
   });
   const { publicRuntimeConfig } = getConfig();
-  const { NILE_ENTITY_NAME } = publicRuntimeConfig;
+  const { NILE_ENTITY_NAME, NILE_WORKSPACE } = publicRuntimeConfig;
   React.useEffect((): void => {
     const orgMemberships = me?.orgMemberships;
     if (hadLoginSuccess && orgMemberships != null) {
@@ -36,66 +37,87 @@ export default function MyLoginForm() {
   }, [router, me, hadLoginSuccess, NILE_ENTITY_NAME]);
 
   return (
-    <Stack
-      sx={{
-        height: '98vh',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
-      <Card
-        variant="outlined"
-        sx={{ background: 'transparent', padding: 14, paddingTop: 10 }}
+    <Sheet>
+      <Box
+        sx={{
+          backgroundColor: 'var(--mui-palette-primary-light)',
+          position: 'absolute',
+          right: 0,
+          top: 0,
+          bottom: 0,
+          height: '100vh',
+          width: '50em',
+          overflow: 'hidden',
+        }}
       >
-        <Stack spacing={2} sx={{ alignItems: 'center' }}>
-          <Typography padding={2}>SaaS for {NILE_ENTITY_NAME}</Typography>
-          <Logo width={300} />
-          {error && (
-            <Chip
-              variant="soft"
-              color="danger"
-              endDecorator={
-                <ChipDelete
-                  variant="plain"
-                  onClick={() => {
-                    setErrorMessage(null);
-                  }}
-                />
-              }
-            >
-              {error}
-            </Chip>
-          )}
-          {signup && signup == 'success' && (
-            <Chip variant="soft" color="success" sx={{ maxWidth: '20em' }}>
-              <Typography padding={2}>Sign up successful!</Typography>
-            </Chip>
-          )}
-          <LoginForm
-            onSuccess={() => {
-              setHadLoginSuccess(true);
-            }}
-            onError={(error) => {
-              // for demo purposes only
-              if (/workspace .* not found/.test(error.message)) {
-                setErrorMessage(
-                  'Double check your workspace name in pages/_app.tsx'
-                );
-              } else {
-                setErrorMessage(error.message);
-              }
-            }}
-          />
-        </Stack>
-        <Stack spacing={1} sx={{ marginTop: 1 }}>
-          <Typography level="body4">
-            Sign in using an organization user email and password.
-          </Typography>
-          <Typography>
-            New user? <Link href={paths.signup}>Sign up</Link>
-          </Typography>
-        </Stack>
-      </Card>
-    </Stack>
+        <Box sx={{ opacity: 0.3 }}>
+          <LoginBG width="545px" style={{ transform: 'scale(2)' }} />
+        </Box>
+      </Box>
+      <Stack
+        sx={{
+          height: '98vh',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: 'calc(100vw - 50em)',
+        }}
+      >
+        <Card
+          variant="outlined"
+          sx={{ background: 'transparent', padding: 14, paddingTop: 10 }}
+        >
+          <Stack spacing={2}>
+            <Stack sx={{ alignItems: 'center' }}>
+              <Logo width={300} />
+              <Typography level="h4">{NILE_WORKSPACE} SaaS</Typography>
+            </Stack>
+            {error && (
+              <Chip
+                variant="soft"
+                color="danger"
+                endDecorator={
+                  <ChipDelete
+                    variant="plain"
+                    onClick={() => {
+                      setErrorMessage(null);
+                    }}
+                  />
+                }
+              >
+                {error}
+              </Chip>
+            )}
+            {signup && signup == 'success' && (
+              <Chip variant="soft" color="success" sx={{ maxWidth: '20em' }}>
+                <Typography padding={2}>Sign up successful!</Typography>
+              </Chip>
+            )}
+            <LoginForm
+              onSuccess={() => {
+                setHadLoginSuccess(true);
+              }}
+              onError={(error) => {
+                // for demo purposes only
+                if (/workspace .* not found/.test(error.message)) {
+                  setErrorMessage(
+                    'Double check your workspace name in pages/_app.tsx'
+                  );
+                } else {
+                  setErrorMessage(error.message);
+                }
+              }}
+            />
+          </Stack>
+          <Stack spacing={1} sx={{ marginTop: 1 }}>
+            <Typography level="body4">
+              Sign in using an organization user email and password.
+            </Typography>
+            <Typography>
+              New user? <Link href={paths.signup}>Sign up</Link>
+            </Typography>
+          </Stack>
+        </Card>
+      </Stack>
+    </Sheet>
   );
 }

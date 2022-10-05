@@ -17,7 +17,7 @@ const Clusters: NextPage = () => {
     return (
       <>
         <Head>Not found</Head>
-        <NavBar>
+        <NavBar entity={NILE_ENTITY_NAME}>
           <Stack
             sx={{
               height: 'calc(calc(100vh - 64px) / 2)',
@@ -36,14 +36,14 @@ const Clusters: NextPage = () => {
   }
 
   return (
-    <>
+    <Stack>
       <Head>
         <title>Clusters | Nile</title>
         <meta name="description" content="Clusters by user organization" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <EntityTable />
-    </>
+    </Stack>
   );
 };
 export default Clusters;

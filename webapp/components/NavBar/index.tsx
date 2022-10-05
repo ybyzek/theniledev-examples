@@ -1,41 +1,81 @@
-import { Box, Button, Sheet, Stack, Typography } from '@mui/joy';
+import {
+  Avatar,
+  Badge,
+  Box,
+  CircularProgress,
+  Container,
+  IconButton,
+  Sheet,
+  Stack,
+} from '@mui/joy';
 import React from 'react';
 
 import { useFirstOrg } from '../EntityTable/hooks';
+import RightSidebar from '../db/RightSidebar';
 
-import Logo from '~/components/Logo';
+import LeftNavigation from './LeftNavigation';
 
-export default function NavBar(props: React.PropsWithChildren) {
-  const { children } = props;
-  const [, user, org] = useFirstOrg();
+export default function NavBar(
+  props: React.PropsWithChildren & {
+    hasRightSidebar?: boolean;
+    allowCreation?: boolean;
+    entity?: string;
+  }
+) {
+  const { children, hasRightSidebar = false, allowCreation, entity } = props;
+  const [isLoading, user] = useFirstOrg();
+
+  const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
+  if (isLoading) {
+    return <CircularProgress />;
+  }
+  const [name] = user?.email.split('@') ?? [];
+
+  const shortName = name?.length > 1 ? `${name[0]}${name[1]}` : name[0];
   return (
-    <Stack>
-      <Box
+    <Stack
+      direction="row"
+      sx={{
+        width: '100%',
+      }}
+    >
+      <LeftNavigation allowCreation={allowCreation} entity={entity} />
+      <Sheet
         sx={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
+          width: '100%',
         }}
       >
-        <Sheet variant="soft" sx={{ padding: 1 }}>
-          <Stack direction="row" sx={{ justifyContent: 'space-between' }}>
-            <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
-              <Logo width={76} />
-              <Typography>{String(org?.name)}</Typography>
-            </Stack>
-            <Stack direction="row" sx={{ gap: 2, alignItems: 'center' }}>
-              <Typography level="h4">Welcome {user?.email}!</Typography>
-              <Box>
-                <Button variant="plain" component="a" href="/">
-                  Log out
-                </Button>
-              </Box>
-            </Stack>
-          </Stack>
-        </Sheet>
-      </Box>
-      <Box sx={{ marginTop: 12 }}>{children}</Box>
+        <Container>
+          <Box
+            sx={{
+              pl: 2,
+              width: '100%',
+              position: 'relative',
+            }}
+          >
+            {children}
+          </Box>
+        </Container>
+        {hasRightSidebar && (
+          <Box sx={{ position: 'absolute', top: 0, right: 0 }}>
+            <IconButton
+              sx={{ m: 2 }}
+              variant="plain"
+              onClick={() => setIsSidebarOpen(true)}
+            >
+              <Badge>
+                <Avatar size="lg">{shortName}</Avatar>
+              </Badge>
+            </IconButton>
+          </Box>
+        )}
+      </Sheet>
+      {hasRightSidebar && (
+        <RightSidebar
+          setIsSidebarOpen={setIsSidebarOpen}
+          isSidebarOpen={isSidebarOpen}
+        />
+      )}
     </Stack>
   );
 }
