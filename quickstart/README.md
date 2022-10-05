@@ -10,6 +10,7 @@ The mock scenario in these examples is a company that provides SaaS, one of the 
 - [Database as a Service](../usecases/DB/)
 - [SkyNet as a Service](../usecases/SkyNet/)
 - [Banking as a Service](../usecases/Banking/)
+- [Clusters as a Service](../usecases/clusters/)
 - [YOLO](../usecases/README.md#yolo)
 
 When you run this quickstart, it creates (or validates the existence of) the following control plane in Nile:
@@ -52,6 +53,8 @@ $ examples> cp .env.defaults .env
 ```
 
 Set the values in this `.env` file to match the values you want in your control plane.
+
+To match the Nile quickstart from the docs, set `NILE_ENTITY_NAME=clusters` (see [Clusters as a Service](../usecases/clusters/) for details). 
 
 ## Execute
 

@@ -1,0 +1,26 @@
+[
+  {
+    "email": "anthony@demo.io",
+    "password": "password",
+    "org": "Colton Labs",
+    "role": "RW"
+  },
+  {
+    "email": "allison@demo.io",
+    "password": "password",
+    "org": "Colton Labs",
+    "role": "RO"
+  },
+  {
+    "email": "paul@demo.io",
+    "password": "password",
+    "org": "Quickstart-org-2",
+    "role": "deny"
+  },
+  {
+    "email": "ahmed@demo.io",
+    "password": "password",
+    "org": "Quickstart-org-2",
+    "role": "RO"
+  }
+]

@@ -13,6 +13,7 @@ These examples provide one of the following offerings:
 - [Database as a Service](usecases/DB/)
 - [SkyNet as a Service](usecases/SkyNet/)
 - [Banking as a Service](usecases/Banking/)
+- [Clusters as a Service](usecases/clusters/): same as in the Nile Quickstart
 - [YOLO](usecases/README.md#yolo)
 
 First decide which offering you want to use, then run the Quickstart to setup your control plane in Nile.

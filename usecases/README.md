@@ -10,6 +10,7 @@ This examples repo provides a few use cases out-of-the-box for running with Nile
 - [Database as a Service](DB/)
 - [SkyNet as a Service](SkyNet/)
 - [Banking as a Service](Banking/)
+- [Clusters as a Service](clusters/): same as in the Nile Quickstart
 
 ## YOLO
 

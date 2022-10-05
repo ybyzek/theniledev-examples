@@ -73,6 +73,7 @@ These examples already provide one of the following offerings:
 - [Database as a Service](../usecases/DB/)
 - [SkyNet as a Service](../usecases/SkyNet/)
 - [Banking as a Service](../usecases/Banking/)
+- [Clusters as a Service](../usecases/clusters/)
 - [YOLO](../usecases/README.md#yolo)
 
 3. View the code changes required for this example application:

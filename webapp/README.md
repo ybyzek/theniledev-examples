@@ -10,6 +10,7 @@ The mock scenario in these examples is a company that provides SaaS, one of the 
 - [Database as a Service](../usecases/DB/)
 - [SkyNet as a Service](../usecases/SkyNet/)
 - [Banking as a Service](../usecases/Banking/)
+- [Clusters as a Service](../usecases/clusters/)
 - [YOLO](../usecases/README.md#yolo)
 
 Everything you need to run this example is in one of the folders above.
