@@ -41,11 +41,7 @@ To run this example:
 
 1. You must have access to Nile, please [reach out](https://www.thenile.dev) for more information.
 
-2. Validate your environment has the minimum required Node version as defined in [.nvmrc](./.nvmrc) .  If you are running earlier versions, you may encounter errors such as `ReferenceError: fetch is not defined`.
-
-   ```
-   nvm use
-   ```
+2. Validate your environment has the minimum required Node version v18.0.0 or higher. If you are running earlier versions, you may encounter errors such as `ReferenceError: fetch is not defined`. (If you use `nvm`, run `nvm use`).
 
 3. Obtain the following parameter values that represent your control plane configuration in Nile.
 These can be an existing control plane or a new one will be created for you from these values.

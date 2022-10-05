@@ -35,6 +35,6 @@
     "clean": "./cleanup.sh && yarn gh-clean"
   },
   "engines": {
-    "node": ">=18.9.0"
+    "node": ">=18.0.0"
   }
 }
