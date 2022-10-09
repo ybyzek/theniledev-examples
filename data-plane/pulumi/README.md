@@ -4,8 +4,16 @@
 
 ## Overview
 
-This example demonstrates how to synchronize (i.e., `reconcile`) the data
-plane and control plane in real time with Nile events.
+As described in the [top-level README](../../README.md), the mock scenario in these examples is a company that provides SaaS.
+
+Consider an end user who logs into the SaaS and wants to provision a new instance of the service offering:
+
+![image](../../images/events-p1.png)
+
+This example demonstrates how to leverage Nile events to synchronize (i.e., `reconcile`) the data
+plane and control plane in real time.
+
+![image](../../images/events-p2.png)
 
 Nile doesn't prescribe any particular deployment solution, but here we'll be
 using [Pulumi](https://app.pulumi.com/) to deploy objects into AWS. 

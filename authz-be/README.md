@@ -4,6 +4,19 @@
 
 ## Overview
 
+As described in the [top-level README](../README.md), the mock scenario in these examples is a company that provides SaaS.
+
+![image](../images/saas.png)
+
+These examples let you choose what kind of SaaS offering is provided, one of:
+
+- [Clusters as a Service](../usecases/clusters/) (same as in the Nile Quickstart)
+- [Database as a Service](../usecases/DB/)
+- [SkyNet as a Service](../usecases/SkyNet/)
+- [Banking as a Service](../usecases/Banking/)
+- [YOLO](../usecases/README.md#yolo)
+
+For this service, you can use Nile's built-in entities to enforce access policies.
 This example demonstrates how to use your existing backend applications and add a middleware to use authorization from Nile.
 It starts with an application that does just basic user authentication and then layers in [authorization](middleware/authz-nile.ts) by calling out to Nile to validate the logged in user is allowed to access the resources.
 
@@ -70,10 +83,10 @@ yarn start
 This time, in addition to running the application, it also sets up the [Nile control plane](src/index.ts), defines entities and entity instances that correspond to the application pages, adds users to different organizations, and configures authorization policies as defined below.
 These examples already provide one of the following offerings:
 
+- [Clusters as a Service](../usecases/clusters/) (same as in the Nile Quickstart)
 - [Database as a Service](../usecases/DB/)
 - [SkyNet as a Service](../usecases/SkyNet/)
 - [Banking as a Service](../usecases/Banking/)
-- [Clusters as a Service](../usecases/clusters/)
 - [YOLO](../usecases/README.md#yolo)
 
 3. View the code changes required for this example application:

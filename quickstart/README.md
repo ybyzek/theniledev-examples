@@ -4,15 +4,19 @@
 
 ## Overview
 
-This quickstart setups up your [Nile](https://thenile.dev/) control plane.
+As described in the [top-level README](../README.md), the mock scenario in these examples is a company that provides SaaS.
+
+![image](../images/saas.png)
+
 The mock scenario in these examples is a company that provides SaaS, one of the following offerings:
 
+- [Clusters as a Service](../usecases/clusters/) (same as in the Nile Quickstart)
 - [Database as a Service](../usecases/DB/)
 - [SkyNet as a Service](../usecases/SkyNet/)
 - [Banking as a Service](../usecases/Banking/)
-- [Clusters as a Service](../usecases/clusters/)
 - [YOLO](../usecases/README.md#yolo)
 
+This quickstart programmatically setups up your [Nile](https://thenile.dev/) control plane similar to what is done in the Nile quickstart documentation.
 When you run this quickstart, it creates (or validates the existence of) the following control plane in Nile:
 
 - Sign up a new developer

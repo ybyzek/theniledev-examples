@@ -4,6 +4,19 @@
 
 ## Overview
 
+As described in the [top-level README](../README.md), the mock scenario in these examples is a company that provides SaaS.
+
+![image](../images/saas.png)
+
+These examples let you choose what kind of SaaS offering is provided, one of:
+
+- [Clusters as a Service](../usecases/clusters/) (same as in the Nile Quickstart)
+- [Database as a Service](../usecases/DB/)
+- [SkyNet as a Service](../usecases/SkyNet/)
+- [Banking as a Service](../usecases/Banking/)
+- [YOLO](../usecases/README.md#yolo)
+
+For this service, you can use Nile's built-in entities to enforce access policies.
 This example uses Python and the NILE REST API to demonstrate authorization features in Nile in the following workflow:
 
 - List policies

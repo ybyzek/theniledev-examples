@@ -8,13 +8,18 @@ This collection of examples demonstrates how to use Nile as a control plane for 
 Nile provides an entity system, event system, and tenant-aware metrics.
 
 The mock scenario in these examples is a company that provides SaaS. 
-These examples provide one of the following offerings:
 
+![image](images/multi-tenancy.png)
+
+These examples let you choose what kind of SaaS offering is provided, one of:
+
+- [Clusters as a Service](usecases/clusters/) (same as in the Nile Quickstart)
 - [Database as a Service](usecases/DB/)
 - [SkyNet as a Service](usecases/SkyNet/)
 - [Banking as a Service](usecases/Banking/)
-- [Clusters as a Service](usecases/clusters/): same as in the Nile Quickstart
 - [YOLO](usecases/README.md#yolo)
+
+### Where to start
 
 First decide which offering you want to use, then run the Quickstart to setup your control plane in Nile.
 Follow on with any of the other modules for different use cases.
@@ -23,7 +28,7 @@ Finally, after you run the webapp example which includes a front-end for self-se
 
 ![image](webapp/images/instances.png)
 
-And metrics for each of their instances:
+And view metrics for each of their instances:
 
 ![image](webapp/images/metrics.png)
 

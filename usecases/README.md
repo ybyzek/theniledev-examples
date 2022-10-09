@@ -1,16 +1,17 @@
 # Overview
 
-These are usecases (think: data models and data sets) for running the examples.
+As described in the [top-level README](../README.md), the mock scenario in these examples is a company that provides SaaS.
+
+![image](../images/saas.png)
 
 ## Out of the Box
 
-Nile supports many different use cases.
-This examples repo provides a few use cases out-of-the-box for running with Nile:
+This repo provides a few sample "service offerings" that you can use to run these examples.
 
+- [Clusters as a Service](clusters/) (same as in the Nile Quickstart)
 - [Database as a Service](DB/)
 - [SkyNet as a Service](SkyNet/)
 - [Banking as a Service](Banking/)
-- [Clusters as a Service](clusters/): same as in the Nile Quickstart
 
 ## YOLO
 

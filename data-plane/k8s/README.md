@@ -4,13 +4,20 @@
 
 ## Overview
 
-This example demonstrates how to synchronize (i.e., `reconcile`) the data
-plane and control plane in real time with Nile events. 
+As described in the [top-level README](../../README.md), the mock scenario in these examples is a company that provides SaaS.
+
+Consider an end user who logs into the SaaS and wants to provision a new instance of the service offering:
+
+![image](../../images/events-p1.png)
+
+This example demonstrates how to leverage Nile events to synchronize (i.e., `reconcile`) the data
+plane and control plane in real time.
+
+![image](../../images/events-p2.png)
 
 Nile doesn't prescribe any particular data plane deployment solution. Here we'll be
 using [Apache Flink's Operator](https://github.com/apache/flink-kubernetes-operator) to deploy objects into Kubernetes. 
-
-This example runs only with `NILE_ENTITY_NAME=FlinkDeployment`.
+Note: this example runs only with `NILE_ENTITY_NAME=FlinkDeployment`.
 
 > If your data plane is something other than Flink jobs or does not use Kubernetes, replace 
 > the [`FlinkDeploymentService`](./src/service/FlinkDeploymentService.ts) 

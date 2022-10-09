@@ -5,18 +5,26 @@
 ## Overview
 
 This example shows a SaaS service integrated with [Nile](https://thenile.dev/). 
-The mock scenario in these examples is a company that provides SaaS, one of the following offerings:
+Nile provides an entity system, event system, and tenant-aware metrics.
 
+The mock scenario in these examples is a company that provides SaaS.
+
+![image](../images/saas.png)
+
+These examples let you choose what kind of SaaS offering is provided, one of:
+
+- [Clusters as a Service](../usecases/clusters/) (same as in the Nile Quickstart)
 - [Database as a Service](../usecases/DB/)
 - [SkyNet as a Service](../usecases/SkyNet/)
 - [Banking as a Service](../usecases/Banking/)
-- [Clusters as a Service](../usecases/clusters/)
 - [YOLO](../usecases/README.md#yolo)
 
 Everything you need to run this example is in one of the folders above.
-Once a developer defines their service's entity schema, Nile provides web frontend with self-service (user signup/login, org creation, instance management), multi-tenancy, authorization policies, metrics, events for reconciling Nile with the data plane.
+Once a developer initializes their control plane in Nile with their service's entity schema, they can capture events as end users create new instances to reconcile Nile with their data plane, get built-in multi-tenancy and authorization policies, and show metrics to users for consumption and billing.
+This webapp demonstrates a sample frontend for their SaaS application that integrates with the control plane using Nile React components for [Next.js](https://nextjs.org/).
+It provides self-service workflows for user signup/login, org creation, and instance management.
 
-The sample webapp uses Nile React components for [Next.js](https://nextjs.org/) to create a frontend for a SaaS application integrated with [Nile](https://thenile.dev/).
+![image](../images/webapp.png)
 
 ## Contents
 

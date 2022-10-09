@@ -4,7 +4,12 @@
 
 ## Overview
 
-This example creates (or validates the existence of) the following control plane in Nile and demonstrates multi-tenancy.
+As described in the [top-level README](../README.md), the mock scenario in these examples is a company that provides SaaS.
+
+![image](../images/multi-tenancy.png)
+
+This example demonstrates multi-tenancy with multiple organizations and isolated users within each organization.
+It sets up the following control plane in Nile:
 
 - Sign up a new developer
 - Create a workspace, which must be globally unique
@@ -65,3 +70,5 @@ yarn start
 ```
 yarn test
 ```
+
+![image](../images/multi-tenancy-users.png)
