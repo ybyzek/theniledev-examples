@@ -122,7 +122,7 @@ jobs:
         working-directory: data-plane/pulumi
         run: yarn install --no-lockfile
 
-      - name: yarn prereconcile
+      - name: yarn setup-nile
         working-directory: data-plane/pulumi
         run: yarn setup-nile
 

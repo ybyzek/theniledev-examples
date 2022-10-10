@@ -18,9 +18,10 @@ plane and control plane in real time.
 Nile doesn't prescribe any particular deployment solution, but here we'll be
 using [Pulumi](https://app.pulumi.com/) to deploy objects into AWS. 
 
-> If you're using another tool like Kubernetes or Terraform, replace
-> the [`PulumiAwsDeployment`](./src/commands/reconcile/lib/pulumi/PulumiAwsDeployment.ts) 
-> class in this example with your own deployment implementation.
+If you're using another tool like Kubernetes or Terraform, replace
+the [`PulumiAwsDeployment`](./src/commands/reconcile/lib/pulumi/PulumiAwsDeployment.ts) 
+class in this example with your own deployment implementation.
+You may also refer to the example [Data Plane with Apache Flink and Kubernetes](../k8s/).
 
 ## Contents
 
@@ -30,7 +31,7 @@ using [Pulumi](https://app.pulumi.com/) to deploy objects into AWS.
 * [Configure the Control Plane](#configure-the-control-plane)
 * [Configure the Data Plane](#configure-the-data-plane)
 * [Run the reconciler](#run-the-reconciler)
-* [Explanation](#Explanation)
+* [Explanation](#explanation)
 * [Add or remove instances](#add-or-remove-instances)
 
 ## Prerequisites ##
@@ -42,6 +43,8 @@ This example assumes you have:
   [connected to your AWS account](https://www.pulumi.com/docs/get-started/aws/begin/)
 * [The Pulumi CLI installed](https://www.pulumi.com/docs/reference/cli/)
 * A Nile developer account using an email address and password
+
+Note that this example creates real AWS resources so be sure to manually destroy all resources to avoid unexpected charges from AWS.
 
 ## Setup
 
@@ -148,9 +151,23 @@ pulumi up
 
 ## Run the reconciler ##
 
-Ensure that the values in your `.env` file match the values used in the setup of the control plane.
+1. Ensure that the values in your `.env` file match the values used in the setup of the control plane.
 
-Next, there are several ways to run the reconciler, each described in the following sections:
+2. Decide which mode you want to run in:
+
+   - `NILE_RECONCILER_MODE=S3`: (default) great for kicking the tires, provision a fake "database" in AWS that is actually just an S3 bucket under the hood. In contrast to above, creating an S3 bucket is very quick.
+
+     ```bash
+     export NILE_RECONCILER_MODE=S3
+     ```
+
+   - `NILE_RECONCILER_MODE=DB`: provision a MySQL database in AWS, useful for realistic demos. AWS can take a few minutes to provision these resources.
+
+     ```bash
+     export NILE_RECONCILER_MODE=DB
+     ```
+
+There are several ways to run the reconciler, each described in the following sections:
 
 - [Using yarn](#using-yarn)
 - [Executable binary](#executable-binary)
@@ -167,7 +184,7 @@ yarn install && yarn build
 2. Run the reconciler. This command will read from the `.env` file you defined earlier.
 
 ```bash
-yarn reconcile
+yarn start
 ```
 
 ### Executable binary
@@ -200,14 +217,15 @@ source .env
 1. Back up in the `data-plane/pulumi` directory, if you haven't setup your control plane yet, set it up now:
 
 ```bash
-yarn prereconcile
+yarn setup-nile
 ```
 
-2. Run the reconciler Docker image. Ensure that you have valid values for the three input parameters required to connect to S3 (`AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`) and Pulumi (`PULUMI_ACCESS_TOKEN`):
+2. Run the reconciler Docker image. Ensure that you have valid values for the three input parameters required to connect to AWS (`AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`) and Pulumi (`PULUMI_ACCESS_TOKEN`):
 
 ```bash
 docker run --init --rm \
   --env-file .env \
+  -e NILE_RECONCILER_MODE=S3 \
   -e AWS_ACCESS_KEY_ID=$(aws configure get aws_access_key_id) \
   -e AWS_SECRET_ACCESS_KEY=$(aws configure get aws_secret_access_key) \
   -e PULUMI_ACCESS_TOKEN=$PULUMI_ACCESS_TOKEN \
@@ -217,24 +235,26 @@ docker run --init --rm \
 ## Explanation
 
 The reconciler will immediately find the newly instantiated DB instance in the Nile
-control plane and create a Pulumi stack that represents it, defined by the
-[`pulumiS3.ts`](./src/commands/reconcile/lib/pulumi/pulumiS3.ts). Pulumi also
-created a new S3 bucket containing a static website and a bucket policy that
-allows public access.
+control plane and create a Pulumi stack that represents it.
+The Pulumi API creates these resources in AWS with public access.
+The reconciler will also log the instance properties and update the instance in the Nile control plane with its status and connection information.
 
-The reconciler will also log out the instance properties, including the 
-`websiteUrl` of the object created by the [`pulumis3` program](./src/commands/reconcile/lib/pulumi/pulumiS3.ts):
+### Modes
+
+As mentioned earlier, there are two modes:
+
+1. `NILE_RECONCILER_MODE=S3`: (default) fake "database" in AWS S3 bucket created by [`pulumiS3.ts`](./src/commands/reconcile/lib/pulumi/pulumiS3.ts). Runs faster.
+
 
 ```bash
+ +  aws:s3:BucketObject index created 
+
+ +  pulumi:pulumi:Stack pulumi-clustify-inst_02r9hCo4dxhwqkHHDwfRGg created 
+
 Outputs:
 
-    bucketPolicy: {
-        // ...redacted...
-    }
-    object      : {
-        // ...redacted...
-    }
-    websiteUrl  : "s3-website-bucket-5c7d7bc.s3-website.us-east-2.amazonaws.com"
+    ....
+    websiteUrl  : "https://nile-demo-0f0f150.s3.us-east-2.amazonaws.com/index.html"
 
 Resources:
     + 4 created
@@ -242,8 +262,31 @@ Resources:
 Duration: 5s
 ```
 
-Pull up that `websiteUrl` in-browser and verify you see the provided "dbName"
-as well as all of the instance details.
+![image](images/aws-s3.jpg)
+
+Coolness! You can now view this page by navigating to `websiteUrl` from your browser.
+
+2. `NILE_RECONCILER_MODE=DB`: MySQL database in AWS created by [`pulumiDB.ts`](./src/commands/reconcile/lib/pulumi/pulumiDB.ts). Runs slower.
+
+```bash
+ +  aws:rds:Instance nile-demo created 
+
+ +  pulumi:pulumi:Stack pulumi-clustify-inst_02r9iq53n2fvsNjJQBr91m created 
+ 
+
+Outputs:
+    address : "nile-demoa9f81e9.clrb45fomzui.us-east-2.rds.amazonaws.com"
+    endpoint: "nile-demoa9f81e9.clrb45fomzui.us-east-2.rds.amazonaws.com:3306"
+
+Resources:
+    + 2 created
+
+Duration: 4m8s
+```
+
+![image](images/aws-rds.jpg)
+
+Coolness! You can now connect to this database (e.g. with a local MySQL client or Docker `docker run -it --rm mysql mysql -h${address} -ufoo -ppassword` or your preferred means) and then run `show databases;` to see your newly created database. If you have problems connecting, doublecheck that the AWS security group is properly configured.
 
 ## Add or Remove Instances ##
 

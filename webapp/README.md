@@ -103,13 +103,13 @@ yarn dev
 
 ## Validate
 
-1. As an end user: open [https://local.thenile.dev](http://local.thenile.dev) with your browser and log in as one of the predefine users from the [usecase](../usecases/).
+1. As an end user: open [https://local.thenile.dev](http://local.thenile.dev) with your browser and log in as one of the predefined users for the entity type from the [usecases](../usecases/).
 
    The user login screen should resemble below:
 
    ![image](images/login.png)
 
-2. Once logged in (e.g. as `nora@demo.io`), the user sees the entity instances (e.g. databases in this mock scenario) that she has access to.
+2. Once logged in, the user sees the entity instances (e.g. databases in this mock scenario) that she has access to.
 
    ![image](images/instances.png)
 

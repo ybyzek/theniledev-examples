@@ -18,7 +18,7 @@ exports.addInstanceToOrg = async function (nile, orgID, entityName, instanceJson
         cloud : instanceJson.cloud,
         environment : instanceJson.environment,
         size : instanceJson.size,
-        connection : "server-" + instanceJson.dbName + ":5432",
+        connection : "server-" + instanceJson.dbName + ":3306",
         status : "Up"
       }
     }).then((entity_instance) => console.log ("Created entity instance: " + JSON.stringify(entity_instance, null, 2)))
@@ -32,5 +32,5 @@ exports.setDataPlaneReturnProp = "connection";
 exports.getDataPlaneReturnValue = function () {
   min = Math.ceil(100);
   max = Math.floor(999);
-  return (String("server-" + Math.floor(Math.random() * (max - min + 1)) + min) + ":5432");
+  return (String("server-" + Math.floor(Math.random() * (max - min + 1)) + min) + ":3306");
 }

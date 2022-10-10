@@ -67,7 +67,7 @@
     "posttest": "yarn lint",
     "prepack": "yarn build && oclif manifest && oclif readme",
     "setup-nile": "yarn --cwd ../../multi-tenancy/ install && yarn --cwd ../../multi-tenancy/ start",
-    "reconcile": "yarn build && ts-node src/reconciler.ts",
+    "start": "yarn build && ts-node src/reconciler.ts",
     "test": "mocha --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif readme && git add README.md"
   },

@@ -3,7 +3,8 @@ import Nile, { Instance, NileApi } from '@theniledev/js';
 
 import { ReconciliationPlan } from '../../model/ReconciliationPlan';
 
-import { pulumiS3, PulumiAwsDeployment } from './lib/pulumi';
+import { pulumiS3, pulumiDB, PulumiAwsDeployment } from './lib/pulumi';
+
 import { flagDefaults } from './flagDefaults';
 
 var emoji = require('node-emoji');
@@ -61,10 +62,20 @@ export default class Reconcile extends Command {
     );
 
     // pulumi setup
-    this.deployment = await PulumiAwsDeployment.create(
-      'pulumi-clustify',
-      pulumiS3
-    );
+    // For example purpose only: branch on mode S3 (default) or DB
+    let mode = process.env.NILE_RECONCILER_MODE || "S3";
+    console.log(emoji.get('dart'), `Running in mode ${mode}`);
+    if (mode === "DB") {
+       this.deployment = await PulumiAwsDeployment.create(
+         'pulumi-clustify',
+         pulumiDB
+       );
+     } else {
+       this.deployment = await PulumiAwsDeployment.create(
+         'pulumi-clustify',
+         pulumiS3
+       );
+    }
     const stacks = await this.deployment.loadPulumiStacks();
 
     // stitch Nile and Pulumi together
@@ -134,7 +145,7 @@ export default class Reconcile extends Command {
    * Parses the reconciliation plan between Nile and Pulumi, to create or destroy stacks based on Nile as the source of truth
    * @param plan ReconciliationPlan
    */
-  private async synchronizeDataPlane(orgID: string, entity: string, plan: ReconciliationPlan) {
+  private async synchronizeDataPlane(orgID: string, entityType: string, plan: ReconciliationPlan) {
     this.debug('Synchronizing data and control planes...');
     this.debug(plan);
 
@@ -145,16 +156,8 @@ export default class Reconcile extends Command {
 
     // create any stacks that should exist
     for (const spec of plan.creationSpecs) {
-      if (await this.isChangeActionable(orgID, entity, spec.id, "Up")) {
-        console.log(emoji.get('white_check_mark'), `Creating new stack for Nile instance ${spec.id}`);
-
-        // Suppress Pulumi output during `createStack()`
-        let old_console_log = console.log;
-        console.log = function() {}
-        await this.deployment.createStack(spec);
-        console.log = old_console_log;
-
-        await this.updateInstanceStatus(orgID, entity, spec.id, "Up");
+      if (await this.isChangeActionable(orgID, entityType, spec.id, "Submitted")) {
+        await this.createAndUpdate(orgID, entityType, spec);
       }
     }
   }
@@ -172,32 +175,48 @@ export default class Reconcile extends Command {
       this.nile.events.on({ type: entityType, seq: fromSeq }, async (e) => {
         //this.log(JSON.stringify(e, null, 2));
         if (e.after) {
+          console.log("\n");
+          console.log(emoji.get('bell'), `Received an event for instance ${e.after.id}!`);
           if (e.after.deleted) {
-            console.log(emoji.get('bell'), `Received an event for instance ${e.after.id}!`);
             // Detected delete instance
             if (await this.isChangeActionable(orgID, entityType, e.after.id, "Deleted")) {
               this.deployment.destroyStack(e.after.id);
-              this.updateInstanceStatus(orgID, entityType, e.after.id, "Deleted")
+              await this.updateInstance(orgID, entityType, e.after.id, "Deleted", "N/A")
             }
           } else {
             // Detected create instance
-            console.log(emoji.get('bell'), `Received an event for instance ${e.after.id}!`);
-            if (await this.isChangeActionable(orgID, entityType, e.after.id, "Up")) {
-              console.log(emoji.get('white_check_mark'), `Creating new stack for Nile instance ${e.after.id}`);
-
-              // Suppress Pulumi output during `createStack()`
-              let old_console_log = console.log;
-              console.log = function() {}
-              await this.deployment.createStack(e.after);
-              console.log = old_console_log;
-
-              await this.updateInstanceStatus(orgID, entityType, e.after.id, "Up");
+            if (await this.isChangeActionable(orgID, entityType, e.after.id, "Submitted")) {
+              await this.createAndUpdate(orgID, entityType, e.after);
             }
           }
         }
       });
     });
   }
+
+  private async createAndUpdate(orgID: string, entityType: string, instance: Instance) {
+    console.log(emoji.get('white_check_mark'), `Creating new stack for Nile instance ${instance.id}`);
+
+    await this.updateInstance(orgID, entityType, instance.id, "Provisioning", "-");
+
+    var createResult = await this.deployment.createStack(instance);
+    var endpoint;
+    try {
+      endpoint = createResult.outputs.endpoint.value;
+    } catch {
+      const { setDataPlaneReturnProp } = require(`../../../../../usecases/${entityType}/init/entity_utils.js`);
+      if (setDataPlaneReturnProp != null) {
+        const { getDataPlaneReturnValue } = require(`../../../../../usecases/${entityType}/init/entity_utils.js`);
+        endpoint = getDataPlaneReturnValue();
+      } else {
+        endpoint = "Unknown";
+      }
+    }
+    console.log(`DB endpoint: ${endpoint}`);
+
+    await this.updateInstance(orgID, entityType, instance.id, "Up", endpoint);
+  }
+
 
   /**
    * looks up the organization ID from the organization name
@@ -226,14 +245,11 @@ export default class Reconcile extends Command {
    * @param ID name of organization to lookup
    * @param entity type
    * @param instance ID
-   * @param status properties field
+   * @param statusToActOn value
    * @returns boolean of change detected that data plane should act on
    */
   private async isChangeActionable(
-    orgID: string, entityType: string, instanceID: string, status: string): Promise< boolean > {
-    this.log(
-      `Checking if the change is actionable for instance ${instanceID}`
-    );
+    orgID: string, entityType: string, instanceID: string, statusToActOn: string): Promise< boolean > {
 
     let change = false;
 
@@ -250,7 +266,7 @@ export default class Reconcile extends Command {
         properties = data.properties as { [key: string]: unknown };
 
         // Compare the status
-        if (properties.status != status) {
+        if (properties.status == statusToActOn) {
           change = true;
         }
 
@@ -258,6 +274,12 @@ export default class Reconcile extends Command {
             console.error(error);
             process.exit(1);
           });
+
+    if (change) {
+      console.log(emoji.get('white_check_mark'), `Event analyzed for instance ${instanceID}: change is actionable`);
+    } else {
+      console.log(emoji.get('x'), `Event analyzed for instance ${instanceID}: change is not actionable`);
+    }
 
     return change;
   }
@@ -270,11 +292,11 @@ export default class Reconcile extends Command {
    * @param instance ID
    * @param status properties field
    */
-  private async updateInstanceStatus(
-    orgID: string, entityType: string, instanceID: string, status: string): Promise< null > {
-    this.log(
-      `Updating Instance ${instanceID} status to ${status}`
-    );
+  private async updateInstance(
+    orgID: string, entityType: string, instanceID: string, status: string, connection: string): Promise< null > {
+    //this.log(
+     // `Updating Instance ${instanceID}: status=${status}, connection=${connection}`
+    //);
 
     // Get current instance properties
     var properties;
@@ -291,12 +313,16 @@ export default class Reconcile extends Command {
         // For these examples always assume a status field
         properties.status = status;
 
-        // Check if there other fields to update in the Control Plane
-        const { setDataPlaneReturnProp } = require(`../../../../../usecases/${entityType}/init/entity_utils.js`);
-        if (setDataPlaneReturnProp != null) {
-          const { getDataPlaneReturnValue } = require(`../../../../../usecases/${entityType}/init/entity_utils.js`);
-          properties[setDataPlaneReturnProp] = getDataPlaneReturnValue();
-        }
+        if (entityType == "DB") {
+          properties.connection = connection;
+        } else {
+          // Check if there other fields to update in the Control Plane
+          const { setDataPlaneReturnProp } = require(`../../../../../usecases/${entityType}/init/entity_utils.js`);
+          if (setDataPlaneReturnProp != null) {
+            const { getDataPlaneReturnValue } = require(`../../../../../usecases/${entityType}/init/entity_utils.js`);
+            properties[setDataPlaneReturnProp] = getDataPlaneReturnValue();
+          }
+       }
 
       }).catch((error:any) => {
             console.error(error);
@@ -319,7 +345,7 @@ export default class Reconcile extends Command {
     await this.nile.entities
       .updateInstance(body)
       .then((data) => {
-        console.log(emoji.get('white_check_mark'), `Updated instance id ${instanceID}: status=${status}`);
+        console.log(emoji.get('white_check_mark'), `Updated Instance ${instanceID}: status=${status}, connection=${connection}`);
       }).catch((error:any) => {
             console.error(error);
             process.exit(1);

@@ -5,7 +5,7 @@ import { Instance } from '@theniledev/js';
 export const pulumiS3 = (instance?: Instance) => {
   return async () => {
     // Create a bucket and expose a website index document.
-    const siteBucket = new aws.s3.Bucket('s3-website-bucket', {
+    const siteBucket = new aws.s3.Bucket('nile-demo', {
       website: {
         indexDocument: 'index.html',
       },
@@ -13,13 +13,17 @@ export const pulumiS3 = (instance?: Instance) => {
 
     const instanceProps = instance?.properties as { [key: string]: unknown };
     const { instanceName } = require(`../../../../../../../usecases/${instance?.type}/init/entity_utils.js`);
+    let uniqueValue = "dummy";
+    if (String(instanceProps[instanceName]) !== "undefined") {
+      uniqueValue = String(instanceProps[instanceName]);
+    }
+
     const indexContent = `<html><head>
 <title>Hello S3</title><meta charset="UTF-8">
 </head>
 <body>
-<h1>${instanceName}</h1>
-<p>Made with ❤️  by <a href="https://pulumi.com">Pulumi</a></p>
-<p>Deployed with Nile</p>
+<h1>${uniqueValue}</h1>
+<p>Built with ❤️  on <a href="https://www.thenile.dev">Nile</a></p>
 <h2>Instance Details</h2>
 <p>${JSON.stringify(instance, null, 2)}</p>
 </body></html>

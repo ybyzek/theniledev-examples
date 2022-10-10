@@ -19,7 +19,7 @@ These examples let you choose what kind of SaaS offering is provided, one of:
 For this service, you can use Nile's built-in entities to enforce access policies.
 This example uses the NILE JS SDK to demonstrate authorization features in Nile in the following workflow:
 
-- List the instances of `DB` entity type allowed to be read by the user nora@demo.io in a given organization
+- List the instances of `DB` entity type allowed to be read in a given organization by one of the predefined users from the [usecases](../usecases/)
 - Create a new policy that denies the user access to instances of the type `DB` (organization is provided in the request)
 
   ```json
