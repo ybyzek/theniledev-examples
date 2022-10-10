@@ -1,0 +1,11 @@
+remove:
+- all node_modules folders to reduce size of image
+- pulumi subfolder
+- .env with local info
+cd data-plane/pulumi
+DOCKER_BUILDKIT=0 docker build ./../../ -f Dockerfile -t reconciler:test
+# test Docker image
+docker tag reconciler:test theniledev/reconciler:v0.5 # change version
+docker push theniledev/reconciler:v0.5
+# update README
+# commit changes into GitHub

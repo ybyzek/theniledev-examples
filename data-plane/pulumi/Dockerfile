@@ -19,8 +19,8 @@ RUN source $NVM_DIR/nvm.sh \
 ENV NODE_PATH $NVM_INSTALL_PATH/lib/node_modules
 ENV PATH $NVM_INSTALL_PATH/bin:$PATH
 
-COPY . /usr/src/reconciler
-WORKDIR /usr/src/reconciler
+COPY . /usr/examples/
+WORKDIR /usr/examples/data-plane/pulumi
 
 RUN ["yarn", "install"]
 RUN ["yarn", "build"]
