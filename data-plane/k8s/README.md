@@ -126,7 +126,7 @@ yarn install  --ignore-engines
 2. Configure the control plane. This command will read from the `.env` file you defined earlier and create a workspace, tenant organization, FlinkDeployment entity and an example Flink job. The script is idempotent and instances will be created only once.
 
 ```bash
-yarn setup
+yarn setup-nile
 ```
 
 3. In the previous step you created a FlinkDeployment entity. Nile automatically generated an OpenAPI spec for the entity, which our script then downloaded. 

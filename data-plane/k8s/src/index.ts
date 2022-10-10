@@ -12,8 +12,7 @@ let envParams = [
   "NILE_URL",
   "NILE_WORKSPACE",
   "NILE_DEVELOPER_EMAIL",
-  "NILE_DEVELOPER_PASSWORD",
-  "NILE_ORGANIZATION_NAME"
+  "NILE_DEVELOPER_PASSWORD"
 ]
 envParams.forEach( (key: string) => {
   if (!process.env[key]) {
@@ -26,7 +25,6 @@ const NILE_URL = process.env.NILE_URL!;
 const NILE_WORKSPACE = process.env.NILE_WORKSPACE!;
 const NILE_DEVELOPER_EMAIL = process.env.NILE_DEVELOPER_EMAIL!;
 const NILE_DEVELOPER_PASSWORD = process.env.NILE_DEVELOPER_PASSWORD!;
-const NILE_ORGANIZATION_NAME = process.env.NILE_ORGANIZATION_NAME!;
 const CHECK_STATUS = process.env.CHECK_STATUS; // optional, and therefore not included earlier for verification
 
 var deploymentService!: FlinkDeploymentService;
@@ -56,7 +54,6 @@ async function run() {
   console.log(emoji.get('white_check_mark'), `Logged into Nile as developer ${NILE_DEVELOPER_EMAIL}!`);
 
   const instances = await loadInstances(
-    String(NILE_ORGANIZATION_NAME),
     entityDefinition.name
   );
   const requiredDeployments = toDeployments(instances);
@@ -95,33 +92,20 @@ async function run() {
 run();
 
 /**
- * Requests all the instances from a single organization, representing Flink deployments
- * @param organization
+ * Requests all the instances from all organizations in a workspace, representing Flink deployments
  * @param entity
  * @returns Array<Instance>
  */
 async function loadInstances(
-  organization: string,
   entity: string
 ): Promise<Instance[]> {
 
-  var all_orgs = await nile.organizations.listOrganizations({
-    workspace: NILE_WORKSPACE
-  })
-
-  var curr_org = all_orgs.find(org => org.name == organization)
-  if (!curr_org) {
-    console.error(emoji.get('x'), "Failed to find " + organization + " in workspace " + NILE_WORKSPACE + ". Try running `yarn setup` again.");
-    process.exit(1);
-  }
-
   const instances = (
-    await nile.entities.listInstances({
-      org: curr_org.id,
+    await nile.entities.listInstancesInWorkspace({
       type: entity,
     })
   )
-    .filter((value: Instance) => value !== null && value !== undefined)
+
   debug('Loaded Instances', instances);
   return instances;
 }

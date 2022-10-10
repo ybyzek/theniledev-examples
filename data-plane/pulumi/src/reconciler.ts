@@ -24,16 +24,12 @@ const email = process.env.NILE_DEVELOPER_EMAIL!;
 const password = process.env.NILE_DEVELOPER_PASSWORD!;
 const entityName = process.env.NILE_ENTITY_NAME!;
 
-const users = require(`../../../usecases/${entityName}/init/users.json`);
-const organizationName = users[0].org;
-
 async function run() {
   await Reconcile.run([
     '--basePath', basePath,
     '--workspace', workspace,
     '--email', email,
     '--password', password,
-    '--organizationName', organizationName,
     '--entity', entityName,
   ]);
 }

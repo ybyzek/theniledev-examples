@@ -22,7 +22,6 @@ export default class Reconcile extends Command {
     const { flags } = await this.parse(Reconcile);
     const {
       status,
-      organizationName,
       entity,
       basePath,
       workspace,
@@ -43,24 +42,6 @@ export default class Reconcile extends Command {
     }).connect(authToken ?? { email, password });
     console.log("\n" + emoji.get('arrow_right'), ` Logged into Nile`);
 
-    if (!organizationName) {
-      console.error ("Error: must pass in organizationName");
-      process.exit(1);
-    }
-    let orgID = await this.getOrgIDFromOrgName(organizationName!);
-    if (!orgID) {
-      console.error ("Error: cannot determine the ID of the organization from the provided name: " + organizationName)
-      process.exit(1);
-    } else {
-      console.log(emoji.get('dart'), "Organization with name " + organizationName + " exists with id " + orgID)
-    }
-
-    // load instances
-    const instances = await this.loadNileInstances(
-      String(orgID),
-      String(entity)
-    );
-
     // pulumi setup
     // For example purpose only: branch on mode S3 (default) or DB
     let mode = process.env.NILE_RECONCILER_MODE || "S3";
@@ -78,6 +59,9 @@ export default class Reconcile extends Command {
     }
     const stacks = await this.deployment.loadPulumiStacks();
 
+    // load instances from all orgs
+    var instances = await this.loadNileInstances(entity);
+
     // stitch Nile and Pulumi together
     const plan = new ReconciliationPlan(instances, stacks);
 
@@ -93,40 +77,36 @@ export default class Reconcile extends Command {
     }
 
     // load or remove stacks based on Nile
-    await this.synchronizeDataPlane(orgID, entity, plan);
+    await this.synchronizeDataPlane(entity, plan);
 
     // listen to updates from nile and handle stacks accordingly
     await this.listenForNileEvents(
-      orgID,
       String(flags.entity),
       this.findLastSeq(Object.values(instances))
     );
   }
 
   /**
-   *  Requests all the instances from a single organization, representing Pulumi stacks
-   * @param orgID
-   * @param entity
-   * @returns Array<Instance> info about Pulumi stacks
-   */
-  async loadNileInstances(
-    orgID: string,
-    entity: string
-  ): Promise<{ [key: string]: Instance }> {
-    const instances = (
-      await this.nile.entities.listInstances({
-        org: orgID,
-        type: entity,
-      })
-    )
-      .filter((value: Instance) => value !== null && value !== undefined)
-      .reduce((acc, instance: Instance) => {
-        acc[instance.id] = instance;
-        return acc;
-      }, {} as { [key: string]: Instance });
-    this.debug('Nile Instances', instances);
-    return instances;
-  }
+    * Requests all the instances from all organizations in a workspace
+    * @param entity
+    * @returns Array<Instance> info about Pulumi stacks
+    */
+   async loadNileInstances(
+     entityType: string
+   ): Promise<{ [key: string]: Instance }> {
+     const instances = (
+       await this.nile.entities.listInstancesInWorkspace({
+         type: entityType,
+       })
+     )
+       .filter((value: Instance) => value !== null && value !== undefined)
+       .reduce((acc, instance: Instance) => {
+         acc[instance.id] = instance;
+         return acc;
+       }, {} as { [key: string]: Instance });
+     this.debug('Nile Instances', instances);
+     return instances;
+   }
 
   /**
    *
@@ -145,7 +125,7 @@ export default class Reconcile extends Command {
    * Parses the reconciliation plan between Nile and Pulumi, to create or destroy stacks based on Nile as the source of truth
    * @param plan ReconciliationPlan
    */
-  private async synchronizeDataPlane(orgID: string, entityType: string, plan: ReconciliationPlan) {
+  private async synchronizeDataPlane(entityType: string, plan: ReconciliationPlan) {
     this.debug('Synchronizing data and control planes...');
     this.debug(plan);
 
@@ -156,9 +136,19 @@ export default class Reconcile extends Command {
 
     // create any stacks that should exist
     for (const spec of plan.creationSpecs) {
-      if (await this.isChangeActionable(orgID, entityType, spec.id, "Submitted")) {
-        await this.createAndUpdate(orgID, entityType, spec);
+      let orgID = await this.getOrgIDFromInstanceID(spec.id, entityType);
+      if (!orgID) {
+        console.log("orgID is undefined?");
+        process.exit(1);
       }
+      console.log(emoji.get('white_check_mark'), `Creating new stack for Nile instance ${spec.id}`);
+      // Get Instance from the instance ID
+      let myI = await this.getInstanceFromInstanceID(orgID, spec.id, entityType);
+      if (!myI) {
+        console.log("myInstance is undefined?");
+        process.exit(1);
+      }
+      await this.createAndUpdate(orgID, entityType, myI);
     }
   }
 
@@ -167,9 +157,9 @@ export default class Reconcile extends Command {
    * @param entityType Entity to listen for events
    * @param fromSeq the starting point to begin listening for events (0 is from the beginning of time)
    */
-  private async listenForNileEvents(orgID: string, entityType: string, fromSeq: number) {
+  private async listenForNileEvents(entityType: string, fromSeq: number) {
     this.log(
-      `Listening for events for ${entityType} entities in ${orgID} from sequence #${fromSeq}`
+      `Listening for events for ${entityType} entities from sequence #${fromSeq}`
     );
     await new Promise(() => {
       this.nile.events.on({ type: entityType, seq: fromSeq }, async (e) => {
@@ -177,6 +167,11 @@ export default class Reconcile extends Command {
         if (e.after) {
           console.log("\n");
           console.log(emoji.get('bell'), `Received an event for instance ${e.after.id}!`);
+          let orgID = await this.getOrgIDFromInstanceID(e.after.id, entityType);
+          if (!orgID) {
+            console.log("${orgID} is undefined?");
+            process.exit(1);
+          }
           if (e.after.deleted) {
             // Detected delete instance
             if (await this.isChangeActionable(orgID, entityType, e.after.id, "Deleted")) {
@@ -212,7 +207,7 @@ export default class Reconcile extends Command {
         endpoint = "Unknown";
       }
     }
-    console.log(`DB endpoint: ${endpoint}`);
+    //console.log(`DB endpoint: ${endpoint}`);
 
     await this.updateInstance(orgID, entityType, instance.id, "Up", endpoint);
   }
@@ -239,6 +234,63 @@ export default class Reconcile extends Command {
     }
   }
 
+
+  /**
+   * looks up the organization ID from the organization name
+   * @param orgName name of organization to lookup
+   * @returns orgID ID of organization; or null if name not found
+   */
+  private async getOrgIDFromInstanceID(
+    instanceID: String,
+    entityType: string ): Promise< string | null > {
+
+    // Search through all instances in all orgs to find which org an instance belongs to
+    var organizations = await this.nile.organizations.listOrganizations();
+    for (let i=0; i < organizations.length; i++) {
+      let orgID = organizations[i].id;
+      let instances = await this.nile.entities.listInstances({
+          org: orgID,
+          type: entityType,
+      });
+      if (instances.find( instance => instance.id==instanceID)) {
+        console.log(emoji.get('dart'), `InstanceID ${instanceID} is in org ${orgID}`);
+        return orgID;
+      }
+    }
+
+    console.error(emoji.get('x'), `Could not determine org for InstanceID ${instanceID}`);
+    process.exit(1);
+
+    return "dummy";
+
+  }
+
+  /**
+   * returns an Instance from the instanceID
+   */
+  private async getInstanceFromInstanceID(
+    orgID: string,
+    instanceID: string,
+    entityType: string ): Promise< Instance | null > {
+
+    const body = {
+      org: orgID,
+      type: entityType,
+      id: instanceID
+    };
+    
+    var myInstance = await this.nile.entities
+      .getInstance(body);
+    if (myInstance) {
+      console.log(emoji.get('dart'), `Found Instance for instanceID ${instanceID}: ${myInstance}`);
+      return myInstance;
+    } else {
+      console.error(emoji.get('x'), `Could not get Instance from InstanceID ${instanceID}`);
+      process.exit(1);
+      return null;
+    }
+
+  }
 
   /**
    * Check metadata change before taking action

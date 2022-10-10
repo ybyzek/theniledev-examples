@@ -10,13 +10,15 @@ Consider an end user who logs into the SaaS and wants to provision a new instanc
 
 ![image](../../images/events-p1.png)
 
-This example demonstrates how to leverage Nile events to synchronize (i.e., `reconcile`) the data
-plane and control plane in real time.
+This example demonstrates how to synchronize (i.e., `reconcile`) the data
+plane and control plane in real time with Nile events.
+It operates on all the organizations within a Nile workspace, first synchronizing
+the current state and then listening for new events.
 
 ![image](../../images/events-p2.png)
 
-Nile doesn't prescribe any particular deployment solution, but here we'll be
-using [Pulumi](https://app.pulumi.com/) to deploy objects into AWS. 
+Nile doesn't prescribe any particular data plane deployment solution, but here we'll
+use [Pulumi](https://app.pulumi.com/) to deploy objects into AWS. 
 
 If you're using another tool like Kubernetes or Terraform, replace
 the [`PulumiAwsDeployment`](./src/commands/reconcile/lib/pulumi/PulumiAwsDeployment.ts) 
@@ -207,7 +209,6 @@ source .env
 ./bin/dev reconcile --basePath $NILE_URL \
   --workspace $NILE_WORKSPACE \
   --entity $NILE_ENTITY_NAME \
-  --organizationName $NILE_ORGANIZATION_NAME \
   --email $NILE_DEVELOPER_EMAIL \
   --password $NILE_DEVELOPER_PASSWORD
 ```
@@ -291,7 +292,7 @@ Coolness! You can now connect to this database (e.g. with a local MySQL client o
 ## Add or Remove Instances ##
 
 While the reconciler is running, in the [Nile Admin Dashboard](https://nad.thenile.dev/), add one or
-more new DB instances to the organization. This will trigger events that the
+more new DB instances. This will trigger events that the
 reconciler receives and the data plane will synchronize accordingly. Deleting an instance in the
 control plane will result in destruction of the corresponding Pulumi stack.
 

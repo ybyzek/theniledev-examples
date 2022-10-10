@@ -295,9 +295,9 @@ jobs:
         working-directory: data-plane/k8s
         run: yarn install --no-lockfile --ignore-engines
 
-      - name: yarn setup
+      - name: yarn setup-nile
         working-directory: data-plane/k8s
-        run: yarn setup
+        run: yarn setup-nile
 
 
   webapp:

@@ -10,8 +10,7 @@ let envParams = [
   "NILE_URL",
   "NILE_WORKSPACE",
   "NILE_DEVELOPER_EMAIL",
-  "NILE_DEVELOPER_PASSWORD",
-  "NILE_ORGANIZATION_NAME"
+  "NILE_DEVELOPER_PASSWORD"
 ]
 envParams.forEach( (key: string) => {
   if (!process.env[key]) {
@@ -24,7 +23,7 @@ const NILE_URL = process.env.NILE_URL!;
 const NILE_WORKSPACE = process.env.NILE_WORKSPACE!;
 const NILE_DEVELOPER_EMAIL = process.env.NILE_DEVELOPER_EMAIL!;
 const NILE_DEVELOPER_PASSWORD = process.env.NILE_DEVELOPER_PASSWORD!;
-const NILE_ORGANIZATION_NAME = process.env.NILE_ORGANIZATION_NAME!;
+const NILE_ORGANIZATION_NAME = "customer-flink-org";
 
 const nile = Nile({
   basePath: NILE_URL,
