@@ -25,7 +25,7 @@ const Tangle = ({ fill }: { fill: 'success' | 'danger' }) => (
 const METRIC_NAME = 'uptime';
 const now = new Date();
 const TWENTY_FOUR_HOURS_AG0 = new Date(now.getTime() - 24 * 60 * 60000);
-const THRITY_SECONDS = 30 * 1000;
+const THIRTY_SECONDS = 30 * 1000;
 
 export default function UpTimeLoader() {
   const router = useRouter();
@@ -55,7 +55,7 @@ function UpTime(props: Props) {
 
   useMetricsGenerator({
     metricName: METRIC_NAME,
-    intervalTimeMs: THRITY_SECONDS,
+    intervalTimeMs: THIRTY_SECONDS,
     measurement: () => {
       const val = generateValueRange(0, 1);
       return { timestamp: new Date(), value: val >= 0.1 ? 1 : 0, instanceId };
@@ -71,7 +71,7 @@ function UpTime(props: Props) {
   const { metrics, isLoading } = useMetrics({
     fromTimestamp: TWENTY_FOUR_HOURS_AG0,
     filter: metricFilter,
-    updateInterval: THRITY_SECONDS,
+    updateInterval: THIRTY_SECONDS,
   });
 
   if (isLoading) {
