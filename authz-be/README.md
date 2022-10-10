@@ -51,17 +51,35 @@ warning No license field
   - run MongoDB in the background: `mongod --config /opt/homebrew/etc/mongod.conf &`
   - [Install mongosh](https://www.mongodb.com/docs/mongodb-shell/install/), a MongoDB CLI for logging in and cleanup
 
-## Setup
+## Initialize Nile
 
-For all examples, you need a local file with your Nile configuration.
+To run these examples, you need to access to Nile. Please [reach out](https://www.thenile.dev) for more information.
+
+1. Run through the [quickstart](../quickstart) to setup your Nile control plane. Afterwards, you will be able to use these parameters:
+
+   - `NILE_URL`
+   - `NILE_WORKSPACE`
+   - `NILE_DEVELOPER_EMAIL`
+   - `NILE_DEVELOPER_PASSWORD`
+   - `NILE_ENTITY_NAME`: refers to one of your selected [usecases](../usecases/).
+
+   [YOLO](../usecases/README.md#yolo): follow steps to define your own service offering (and thus a new `NILE_ENTITY_NAME`)
+
+2. For all examples, you need a local file with your Nile configuration.
 For that purpose, at the top-level of the examples, copy the `.env.defaults` file to `.env`:
 
-```bash
-# From the top level of the examples folder
-$ examples> cp .env.defaults .env
-```
+   ```bash
+   # From the top level of the examples folder
+   $ examples> cp .env.defaults .env
+   ```
 
-Set the values in this `.env` file to match the values you want in your control plane.
+   Set the values in this `.env` file to match the values you want in your control plane.
+
+3. Run the following command to preconfigure the Nile control plane with the mock usecase so that you're not starting from scratch.
+
+   ```bash
+   yarn setup-nile
+   ```
 
 ## Execute
 

@@ -162,6 +162,10 @@ jobs:
         working-directory: authz
         run: yarn install --no-lockfile
 
+      - name: yarn setup-nile
+        working-directory: authz
+        run: yarn setup-nile
+
       - name: yarn start
         working-directory: authz
         run: yarn start
@@ -206,9 +210,9 @@ jobs:
         working-directory: authz-be
         run: yarn install --no-lockfile
 
-      - name: yarn prestart
-        working-directory: authz-be
-        run: yarn prestart
+      - name: yarn setup-nile
+        working-directory: authz
+        run: yarn setup-nile
 
       - name: yarn gh-start
         working-directory: authz-be

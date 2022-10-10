@@ -26,7 +26,7 @@
     "typescript": "^4.7.3"
   },
   "scripts": {
-    "prestart": "yarn --cwd ../multi-tenancy/ install && yarn --cwd ../multi-tenancy/ start",
+    "setup-nile": "yarn --cwd ../multi-tenancy/ install && yarn --cwd ../multi-tenancy/ start",
     "start": "yarn gh-start && yarn run-server",
     "start-without-authz": "node server-without-authz.js",
     "gh-start": "ts-node src/index",
