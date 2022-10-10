@@ -26,7 +26,7 @@ This example uses Python and the NILE REST API to demonstrate authorization feat
   {
     "actions": [ "deny" ],
     "resource": { "type": "DB" },
-    "subject": { "email": "nora@demo.io" }
+    "subject": { "email": "polina@demo.io" }
   }
   ```
 

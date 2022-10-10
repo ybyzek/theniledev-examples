@@ -26,7 +26,7 @@ This example uses the NILE JS SDK to demonstrate authorization features in Nile 
   {
     "actions": [ "deny" ],
     "resource": { "type": "DB" },
-    "subject": { "email": "nora@demo.io" }
+    "subject": { "email": "polina@demo.io" }
   }
   ```
 
