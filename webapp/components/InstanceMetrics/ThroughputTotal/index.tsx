@@ -1,4 +1,4 @@
-import { Box, Card, Stack, Typography } from '@mui/joy';
+import { Card, Stack, Typography } from '@mui/joy';
 import { Measurement } from '@theniledev/js';
 import { useMetrics } from '@theniledev/react';
 import { useRouter } from 'next/router';
@@ -73,14 +73,15 @@ function ThroughputTotal(props: Props) {
   }, [metric]);
 
   return (
-    <Box sx={{ pl: 1 }}>
+    <Stack spacing={2}>
       <Card variant="outlined">
-        <Typography level="body1">Average write latency (last 60s)</Typography>
+        <Typography level="h4">Average write latency</Typography>
+        <Typography level="body3">Last 60 seconds</Typography>
         <Stack
           direction="row"
           sx={{
             alignItems: 'flex-end',
-            padding: 11.7,
+            padding: 4.1,
           }}
         >
           <Typography fontSize={150} sx={{ lineHeight: 0.8 }}>
@@ -91,6 +92,6 @@ function ThroughputTotal(props: Props) {
           </Typography>
         </Stack>
       </Card>
-    </Box>
+    </Stack>
   );
 }

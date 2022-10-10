@@ -40,7 +40,6 @@ const fields = [
     ],
   },
 ];
-export default fields;
 
 const columns = [
   'dbName',
@@ -50,7 +49,7 @@ const columns = [
   'connection',
   'status',
 ];
-export { columns };
 
 const instanceName = 'dbName';
-export { instanceName };
+
+export { instanceName, fields, columns };

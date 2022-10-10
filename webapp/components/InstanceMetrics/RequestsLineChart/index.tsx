@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 
 import { generateValueRange } from '../../../utils';
 import { useMetricsGenerator } from '../hooks';
+import { useTheme } from '../../../global-context/theme';
 
 const now = new Date();
 
@@ -35,6 +36,7 @@ type Props = {
   organizationId: string;
 };
 function RequestLineChart(props: Props) {
+  const color = useTheme();
   const { instanceId, entityType, organizationId } = props;
 
   const metricFilter = {
@@ -66,12 +68,7 @@ function RequestLineChart(props: Props) {
   );
 
   return (
-    <Card
-      variant="outlined"
-      sx={{
-        minWidth: '560px',
-      }}
-    >
+    <Card variant="outlined">
       <MetricsLineChart
         updateInterval={3000}
         filter={metricFilter}
@@ -80,7 +77,7 @@ function RequestLineChart(props: Props) {
         dataset={{
           tension: 0.3,
           pointRadius: 0,
-          borderColor: 'green',
+          borderColor: color.primary,
         }}
         chartOptions={{
           plugins: {
