@@ -1,0 +1,28 @@
+{
+  "name": "Workload",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string"
+      },
+      "datasetDB": {
+        "type": "string"
+      },
+      "cloud": {
+        "type": "string",
+        "enum": ["aws", "gcp", "azure"]
+      },
+      "status": {
+        "type": "string",
+        "enum": ["Submitted", "Provisioning", "Up", "Deleted"]
+      }
+    },
+    "required": [
+      "name"
+    ]
+  }
+}

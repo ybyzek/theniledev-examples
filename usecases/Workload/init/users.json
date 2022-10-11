@@ -1,0 +1,26 @@
+[
+  {
+    "email": "clara@demo.io",
+    "password": "password",
+    "org": "team-1",
+    "role": "RW"
+  },
+  {
+    "email": "trent@demo.io",
+    "password": "password",
+    "org": "team-1",
+    "role": "RO"
+  },
+  {
+    "email": "vera@demo.io",
+    "password": "password",
+    "org": "team-2",
+    "role": "deny"
+  },
+  {
+    "email": "rama@demo.io",
+    "password": "password",
+    "org": "team-2",
+    "role": "RO"
+  }
+]

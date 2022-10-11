@@ -17,6 +17,7 @@ These examples let you choose what kind of SaaS offering is provided, one of:
 - [Database as a Service](../usecases/DB/)
 - [SkyNet as a Service](../usecases/SkyNet/)
 - [Banking as a Service](../usecases/Banking/)
+- [Workload as a Service](../usecases/Workload/)
 - [YOLO](../usecases/README.md#yolo)
 
 Everything you need to run this example is in one of the folders above.

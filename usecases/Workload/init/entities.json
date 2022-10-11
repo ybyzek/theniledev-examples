@@ -1,0 +1,34 @@
+[
+  {
+    "//comment": "DO NOT MODIFY",
+    "name": "Test-algo",
+    "type": "Expression Analysis",
+    "cloud": "aws",
+    "org": "team-1"
+  },
+  {
+    "//comment": "DO NOT MODIFY",
+    "name": "NIH-2",
+    "type": "CRISPR",
+    "cloud": "gcp",
+    "org": "team-2"
+  },
+  {
+    "name": "Comp2",
+    "type": "virual-load",
+    "cloud": "azure",
+    "org": "team-1"
+  },
+  {
+    "name": "Transactions",
+    "type": "fraud-detection",
+    "cloud": "aws",
+    "org": "team-1"
+  },
+  {
+    "name": "Climate-analysis",
+    "type": "temperature-data",
+    "cloud": "azure",
+    "org": "team-2"
+  }
+]

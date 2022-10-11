@@ -12,6 +12,7 @@ This repo provides a few sample "service offerings" that you can use to run thes
 - [Database as a Service](DB/)
 - [SkyNet as a Service](SkyNet/)
 - [Banking as a Service](Banking/)
+- [Workload as a Service](Workload/)
 
 ## YOLO
 
@@ -24,7 +25,7 @@ The contents of the use case folder matches the following directory structure (n
 
 ```bash
 ├── app
-│   ├── FormFields.ts
+│   ├── FormFields.ts -> ./../../../webapp/form-fields/[entity]/index.ts
 │   └── logo.svg
 ├── entity_definition.json
 └── init
@@ -38,7 +39,7 @@ The contents of the use case folder matches the following directory structure (n
 The purpose of each file is as follows:
 
 - `app`: used by the [webapp](../webapp). This folder has files only used by the examples to create a very basic webapp (not required for real production)
-  - `FormFields.ts`: used for creating new and displaying existing instances
+  - `index.ts`: form fields used for creating new and displaying existing instances (need to also update webapp/form-fields/index.ts)
   - `logo.svg`: used to customize the UI
 - `entity_definition.json`: (required) represents the entity schema. (In order to use this entity type with the [data-plane/pulumi](../data-plane/pulumi) example, the schema must include a `status` field)
 - `init/`: this folder is only used by the examples to initialize the Nile control plane with prepopulated values (not required for real production)
