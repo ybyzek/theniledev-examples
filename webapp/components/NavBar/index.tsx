@@ -31,7 +31,7 @@ export default function NavBar(
   }
   const [name] = user?.email.split('@') ?? [];
 
-  const shortName = name?.length > 1 ? `${name[0]}${name[1]}` : name[0];
+  const shortName = name?.length > 1 ? `${name[0]}${name[1]}` : user?.email;
   return (
     <Stack
       direction="row"
@@ -56,7 +56,7 @@ export default function NavBar(
             {children}
           </Box>
         </Container>
-        {hasRightSidebar && (
+        {hasRightSidebar && shortName && (
           <Box sx={{ position: 'absolute', top: 0, right: 0 }}>
             <IconButton
               sx={{ m: 2 }}
