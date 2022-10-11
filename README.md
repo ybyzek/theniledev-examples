@@ -13,8 +13,7 @@ The mock scenario in these examples is a company that provides SaaS.
 
 These examples let you choose what kind of SaaS offering is provided, one of:
 
-- [Clusters as a Service](usecases/clusters/) (same as in the Nile Quickstart)
-- [Database as a Service](usecases/DB/)
+- [Database as a Service](usecases/DB/) (same as in the Nile Quickstart)
 - [SkyNet as a Service](usecases/SkyNet/)
 - [Banking as a Service](usecases/Banking/)
 - [Workload as a Service](usecases/Workload/)

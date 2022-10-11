@@ -10,8 +10,7 @@ As described in the [top-level README](../README.md), the mock scenario in these
 
 The mock scenario in these examples is a company that provides SaaS, one of the following offerings:
 
-- [Clusters as a Service](../usecases/clusters/) (same as in the Nile Quickstart)
-- [Database as a Service](../usecases/DB/)
+- [Database as a Service](../usecases/DB/) (same as in the Nile Quickstart)
 - [SkyNet as a Service](../usecases/SkyNet/)
 - [Banking as a Service](../usecases/Banking/)
 - [YOLO](../usecases/README.md#yolo)
@@ -58,7 +57,7 @@ $ examples> cp .env.defaults .env
 
 Set the values in this `.env` file to match the values you want in your control plane.
 
-To match the Nile quickstart from the docs, set `NILE_ENTITY_NAME=clusters` (see [Clusters as a Service](../usecases/clusters/) for details). 
+To match the Nile quickstart from the docs, set `NILE_ENTITY_NAME=DB` (see [DB as a Service](../usecases/DB/) for details). 
 
 ## Execute
 

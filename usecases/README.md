@@ -8,8 +8,7 @@ As described in the [top-level README](../README.md), the mock scenario in these
 
 This repo provides a few sample "service offerings" that you can use to run these examples.
 
-- [Clusters as a Service](clusters/) (same as in the Nile Quickstart)
-- [Database as a Service](DB/)
+- [Database as a Service](DB/) (same as in the Nile Quickstart)
 - [SkyNet as a Service](SkyNet/)
 - [Banking as a Service](Banking/)
 - [Workload as a Service](Workload/)
