@@ -24,8 +24,8 @@ The contents of the use case folder matches the following directory structure (n
 
 ```bash
 ├── app
-│   ├── FormFields.ts -> ./../../../webapp/form-fields/[entity]/index.ts
-│   └── logo.svg
+│   ├── index.ts -> ./../../../webapp/form-fields/Workload/index.ts
+│   └── logo.svg -> ./../../../webapp/form-fields/Workload/logo.svg
 ├── entity_definition.json
 └── init
     ├── Page.js
@@ -37,9 +37,9 @@ The contents of the use case folder matches the following directory structure (n
 
 The purpose of each file is as follows:
 
-- `app`: used by the [webapp](../webapp). This folder has files only used by the examples to create a very basic webapp (not required for real production)
+- `app`: used by the [webapp](../webapp). This folder has symlinks into the webapp, mentioned here just so you remember to modify this
   - `index.ts`: form fields used for creating new and displaying existing instances (need to also update webapp/form-fields/index.ts)
-  - `logo.svg`: used to customize the UI
+  - `logo.svg`: used to customize the webapp
 - `entity_definition.json`: (required) represents the entity schema. (In order to use this entity type with the [data-plane/pulumi](../data-plane/pulumi) example, the schema must include a `status` field)
 - `init/`: this folder is only used by the examples to initialize the Nile control plane with prepopulated values (not required for real production)
   - `init/admins.json`: (required) starting list of admins, i.e.,  org creators, and their respective organizations
