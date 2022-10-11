@@ -169,7 +169,7 @@ export default class Reconcile extends Command {
           console.log(emoji.get('bell'), `Received an event for instance ${e.after.id}!`);
           let orgID = await this.getOrgIDFromInstanceID(e.after.id, entityType);
           if (!orgID) {
-            console.log("${orgID} is undefined?");
+            console.log("orgID is undefined?");
             process.exit(1);
           }
           if (e.after.deleted) {
