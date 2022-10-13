@@ -15,6 +15,7 @@ export const useMetricsGenerator = (config: Config, cb?: () => void) => {
   const { metricName, intervalTimeMs, measurement } = config;
   const router = useRouter();
   const instanceId = String(router.query.instance);
+  const entity = String(router.query.entity);
 
   const _nile = useDeveloperNile();
 
@@ -24,7 +25,7 @@ export const useMetricsGenerator = (config: Config, cb?: () => void) => {
   const produceRequestMetrics = React.useCallback(async () => {
     const fakeMeasurement = measurement();
     const metricData = {
-      name: metricName,
+      name: `${metricName}-${entity ?? NILE_ENTITY_NAME}`,
       type: MetricTypeEnum.Gauge,
       entityType: NILE_ENTITY_NAME,
       measurements: [fakeMeasurement],
@@ -36,7 +37,15 @@ export const useMetricsGenerator = (config: Config, cb?: () => void) => {
       });
       cb && cb();
     }
-  }, [NILE_ENTITY_NAME, _nile, cb, instanceId, measurement, metricName]);
+  }, [
+    NILE_ENTITY_NAME,
+    _nile,
+    cb,
+    entity,
+    instanceId,
+    measurement,
+    metricName,
+  ]);
 
   const intervalFn = React.useCallback(() => {
     produceRequestMetrics();
