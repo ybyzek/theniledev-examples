@@ -34,7 +34,6 @@ export default function InstanceMetrics() {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { properties } = instance ?? ({} as Record<string, any>);
-  console.log(properties, instanceName);
 
   return (
     <NavBar>
