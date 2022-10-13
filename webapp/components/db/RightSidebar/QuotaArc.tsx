@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Stack, Typography } from '@mui/joy';
-import { Queries, useNile, useQuery } from '@theniledev/react';
+import { Queries, useNile } from '@theniledev/react';
+import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 
 import SvgArc from '~/components/SvgArc';

@@ -1,9 +1,11 @@
+import React from 'react';
 import { Box, Card, Stack, Typography } from '@mui/joy';
 import { useMetrics } from '@theniledev/react';
 import { Tooltip } from '@mui/material';
 import { useRouter } from 'next/router';
+import { MetricTypeEnum } from '@theniledev/js';
 
-import { useMetricsGenerator } from '../hooks';
+import { useMetricsGenerator, useProduceMetric } from '../hooks';
 import { generateValueRange } from '../../../utils';
 
 import Rect from './rect.svg';
@@ -32,7 +34,6 @@ export default function UpTimeLoader() {
   const instanceId = String(router.query.instance);
   const entityType = String(router.query.entity);
   const organizationId = String(router.query.org);
-
   if (Object.keys(router.query).length === 0) {
     return null;
   }
@@ -52,9 +53,12 @@ type Props = {
 };
 function UpTime(props: Props) {
   const { instanceId, entityType, organizationId } = props;
+  const produceMetric = useProduceMetric();
+
+  const metricName = `${entityType}-${METRIC_NAME}`;
 
   useMetricsGenerator({
-    metricName: METRIC_NAME,
+    metricName,
     intervalTimeMs: THIRTY_SECONDS,
     measurement: () => {
       const val = generateValueRange(0, 1);
@@ -62,14 +66,34 @@ function UpTime(props: Props) {
     },
   });
 
+  React.useEffect(() => {
+    async function producer() {
+      const val = generateValueRange(0, 1);
+      const fakeMeasurement = {
+        timestamp: new Date(),
+        value: val >= 0.1 ? 1 : 0,
+        instanceId,
+      };
+      const metricData = {
+        name: metricName,
+        type: MetricTypeEnum.Gauge,
+        entityType,
+        measurements: [fakeMeasurement],
+      };
+      await produceMetric(metricData);
+    }
+    producer();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const metricFilter = {
     entityType,
-    metricName: METRIC_NAME,
+    metricName,
     organizationId,
+    startTime: TWENTY_FOUR_HOURS_AG0,
   };
 
   const { metrics, isLoading } = useMetrics({
-    fromTimestamp: TWENTY_FOUR_HOURS_AG0,
     filter: metricFilter,
     updateInterval: THIRTY_SECONDS,
   });

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Organization, User } from '@theniledev/js';
-import { useQuery, useNile } from '@theniledev/react';
+import { useNile } from '@theniledev/react';
+import { useQuery } from '@tanstack/react-query';
 
 export const useFirstOrg = (): [
   boolean,

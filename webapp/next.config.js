@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 // keeping things consistent with the examples
 const fs = require('fs');
+const path = require('path');
 
 const envPath = './.env';
 let runtimeConfig = {};
@@ -8,7 +9,9 @@ let runtimeConfig = {};
 // Validate user has taken the step to setup certificates
 const certificateDir = './.certificates';
 if (!fs.existsSync(certificateDir)) {
-  console.log(`Error: directory ${certificateDir} does not exist. Did you forget to setup your local certificates? Refer to the README.md for instructions`);
+  console.log(
+    `Error: directory ${certificateDir} does not exist. Did you forget to setup your local certificates? Refer to the README.md for instructions`
+  );
   process.exit(1);
 }
 
@@ -57,12 +60,19 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   publicRuntimeConfig: runtimeConfig,
-  webpack(config) {
+  webpack(config, options) {
     config.module.rules.push({
       test: /\.svg$/i,
       issuer: /\.[jt]sx?$/,
       use: ['@svgr/webpack'],
     });
+    if (options.isServer) {
+      config.externals = ['@tanstack/react-query', ...config.externals];
+    }
+
+    const reactQuery = path.resolve(require.resolve('@tanstack/react-query'));
+
+    config.resolve.alias['@tanstack/react-query'] = reactQuery;
 
     return config;
   },

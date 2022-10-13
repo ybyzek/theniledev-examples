@@ -1,4 +1,4 @@
-import { Measurement, MetricTypeEnum } from '@theniledev/js';
+import { Measurement, Metric, MetricTypeEnum } from '@theniledev/js';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import useInterval from 'global-hooks/useInterval';
@@ -11,13 +11,23 @@ type Config = {
   measurement: () => Measurement;
 };
 
-export const useMetricsGenerator = (config: Config, cb?: () => void) => {
-  const { metricName, intervalTimeMs, measurement } = config;
+export function useProduceMetric() {
+  const _nile = useDeveloperNile();
   const router = useRouter();
   const instanceId = String(router.query.instance);
-  const entity = String(router.query.entity);
 
-  const _nile = useDeveloperNile();
+  return async (metricData: Metric) => {
+    if (_nile && instanceId) {
+      await _nile.metrics.produceBatchOfMetrics({
+        metric: [metricData],
+      });
+    }
+  };
+}
+
+export const useMetricsGenerator = (config: Config, cb?: () => void) => {
+  const { metricName, intervalTimeMs, measurement } = config;
+  const produceMetric = useProduceMetric();
 
   const { publicRuntimeConfig } = getConfig();
   const { NILE_ENTITY_NAME } = publicRuntimeConfig;
@@ -25,27 +35,15 @@ export const useMetricsGenerator = (config: Config, cb?: () => void) => {
   const produceRequestMetrics = React.useCallback(async () => {
     const fakeMeasurement = measurement();
     const metricData = {
-      name: `${metricName}-${entity ?? NILE_ENTITY_NAME}`,
+      name: metricName,
       type: MetricTypeEnum.Gauge,
       entityType: NILE_ENTITY_NAME,
       measurements: [fakeMeasurement],
     };
+    await produceMetric(metricData);
 
-    if (instanceId && _nile) {
-      await _nile.metrics.produceBatchOfMetrics({
-        metric: [metricData],
-      });
-      cb && cb();
-    }
-  }, [
-    NILE_ENTITY_NAME,
-    _nile,
-    cb,
-    entity,
-    instanceId,
-    measurement,
-    metricName,
-  ]);
+    cb && cb();
+  }, [NILE_ENTITY_NAME, cb, measurement, metricName, produceMetric]);
 
   const intervalFn = React.useCallback(() => {
     produceRequestMetrics();
