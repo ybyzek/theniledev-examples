@@ -37,19 +37,26 @@ type Props = {
 };
 function RequestLineChart(props: Props) {
   const color = useTheme();
+  const router = useRouter();
+  const entity = String(router.query.entity);
+  const metricName = `${entity}-${METRIC_NAME}`;
   const { instanceId, entityType, organizationId } = props;
-
-  const metricFilter = {
-    entityType,
-    metricName: METRIC_NAME,
-    organizationId,
-  };
 
   const [timestamp, setTimeStamp] = React.useState(TEN_MINUTES_AGO);
 
+  const metricFilter = React.useMemo(
+    () => ({
+      entityType,
+      metricName,
+      organizationId,
+      startTime: timestamp,
+    }),
+    [entityType, metricName, organizationId, timestamp]
+  );
+
   useMetricsGenerator(
     {
-      metricName: METRIC_NAME,
+      metricName,
       intervalTimeMs: 3 * 1000,
       measurement: function (): Measurement {
         return {
@@ -72,7 +79,6 @@ function RequestLineChart(props: Props) {
       <MetricsLineChart
         updateInterval={3000}
         filter={metricFilter}
-        fromTimestamp={timestamp}
         timeFormat="HH:mm:ss"
         dataset={{
           tension: 0.3,

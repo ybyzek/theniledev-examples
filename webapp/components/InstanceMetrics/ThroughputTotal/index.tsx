@@ -36,9 +36,12 @@ type Props = {
 
 function ThroughputTotal(props: Props) {
   const { instanceId, entityType, organizationId } = props;
+  const router = useRouter();
+  const entity = String(router.query.entity);
   const [metricValue, setMetricValue] = React.useState('');
+  const metricName = `${entity}-${METRIC_NAME}`;
   useMetricsGenerator({
-    metricName: METRIC_NAME,
+    metricName,
     intervalTimeMs: FOUR_SECONDS,
     measurement: function (): Measurement {
       return {
@@ -49,15 +52,19 @@ function ThroughputTotal(props: Props) {
     },
   });
 
-  const { metrics } = useMetrics({
-    updateInterval: 5000,
-    fromTimestamp: new Date(),
-    filter: {
-      metricName: METRIC_NAME,
-      entityType,
-      organizationId,
-    },
-  });
+  const metricPayload = React.useMemo(
+    () => ({
+      updateInterval: 5000,
+      filter: {
+        startTime: new Date(),
+        metricName,
+        entityType,
+        organizationId,
+      },
+    }),
+    [entityType, metricName, organizationId]
+  );
+  const { metrics } = useMetrics(metricPayload);
 
   const [metric] = metrics ?? [];
 

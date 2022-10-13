@@ -42,7 +42,7 @@ function WithGlobalLoader({
   return <></>;
 }
 
-function PostColorizor(props: React.PropsWithChildren) {
+function PostColorizor(props: { children: JSX.Element }) {
   const { publicRuntimeConfig } = getConfig();
   const { NILE_WORKSPACE, NILE_URL } = publicRuntimeConfig;
   const color = useTheme();
@@ -65,16 +65,16 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ColorProvider>
       <WithGlobalLoader>
+        <Head>
+          <title>{NILE_WORKSPACE} | powered on Nile</title>
+          <meta name="description" content={`Welcome to ${NILE_WORKSPACE}`} />
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
         <PostColorizor>
-          <Head>
-            <title>{NILE_WORKSPACE} | powered on Nile</title>
-            <meta name="description" content={`Welcome to ${NILE_WORKSPACE}`} />
-            <link rel="icon" href="/favicon.ico" />
-          </Head>
           <WorkspaceChecker>
             <Component {...pageProps} />
+            <Footer />
           </WorkspaceChecker>
-          <Footer />
         </PostColorizor>
       </WithGlobalLoader>
     </ColorProvider>

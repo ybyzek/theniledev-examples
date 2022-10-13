@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Stack, Typography } from '@mui/joy';
 import Card from '@mui/joy/Card';
-import { InstanceTable } from '@theniledev/react';
+import { InstanceList } from '@theniledev/react';
 import { useRouter } from 'next/router';
 
 import Unauthorized from '../Unauthorized';
@@ -60,7 +60,7 @@ export default function ClustersTable() {
             </Box>
           </Stack>
           {reRender ? null : (
-            <InstanceTable
+            <InstanceList
               org={org.id}
               entity={String(router.query.entity)}
               handleRowClick={({ id }) => {

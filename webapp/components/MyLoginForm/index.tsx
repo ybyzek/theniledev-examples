@@ -1,6 +1,7 @@
 import { Box, Chip, Link, Sheet, Stack, Typography } from '@mui/joy';
 import Card from '@mui/joy/Card';
-import { LoginForm, useQuery, useNile } from '@theniledev/react';
+import { LoginForm, useNile } from '@theniledev/react';
+import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import React from 'react';
 import ChipDelete from '@mui/joy/ChipDelete';
