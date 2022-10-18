@@ -51,7 +51,7 @@ It provides self-service workflows for user signup/login, org creation, and inst
      printf "[dn]\nCN=*.thenile.dev\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:*.thenile.dev\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth")
    ```
 
-2. Open the certificate just created (`open localhost.crt`), and double click on the certificate in your keychain.
+2. Open the certificate just created (`open localhost.crt`), and double click on the certificate in your keychain. Be sure it is added to the `login` keychain.
 
 3. From the pop up window, open the dropdown for `Trust` and select `Always Trust`.
 
