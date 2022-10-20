@@ -5,7 +5,7 @@
     "cloud": "gcp",
     "environment": "prod",
     "size": 100,
-    "org": "customer-org-1"
+    "org": "Danube Tech"
   },
   {
     "//comment": "DO NOT MODIFY",
@@ -13,13 +13,13 @@
     "cloud": "aws",
     "environment": "prod",
     "size": 200,
-    "org": "customer-org-2"
+    "org": "Indus Systems"
   },
   {
     "dbName": "myDB-billing",
     "cloud": "gcp",
     "environment": "dev",
     "size": 100,
-    "org": "customer-org-1"
+    "org": "Danube Tech"
   }
 ]

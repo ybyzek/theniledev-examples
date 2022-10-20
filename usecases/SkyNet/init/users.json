@@ -2,13 +2,13 @@
   {
     "email": "ale@demo.io",
     "password": "password",
-    "org": "SN-customer-org-1",
+    "org": "Cyberdyne Systems",
     "role": "RW"
   },
   {
     "email": "rick@demo.io",
     "password": "password",
-    "org": "SN-customer-org-2",
+    "org": "SAC-NORAD",
     "role": "RO"
   }
 ]

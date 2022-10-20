@@ -136,12 +136,12 @@ export default class Reconcile extends Command {
 
     // create any stacks that should exist
     for (const spec of plan.creationSpecs) {
+      console.log("\n" + emoji.get('arrow_right'), ` ${spec.id}: detected instance to reconcile`);
       let orgID = await this.getOrgIDFromInstanceID(spec.id, entityType);
       if (!orgID) {
         console.log("orgID is undefined?");
         process.exit(1);
       }
-      console.log(emoji.get('white_check_mark'), `Creating new stack for Nile instance ${spec.id}`);
       // Get Instance from the instance ID
       let myI = await this.getInstanceFromInstanceID(orgID, spec.id, entityType);
       if (!myI) {
@@ -166,7 +166,7 @@ export default class Reconcile extends Command {
         //this.log(JSON.stringify(e, null, 2));
         if (e.after) {
           console.log("\n");
-          console.log(emoji.get('bell'), `Received an event for instance ${e.after.id}!`);
+          console.log(emoji.get('bell'), `${e.after.id}: received an event for instance`);
           let orgID = await this.getOrgIDFromInstanceID(e.after.id, entityType);
           if (!orgID) {
             console.log("orgID is undefined?");
@@ -190,11 +190,13 @@ export default class Reconcile extends Command {
   }
 
   private async createAndUpdate(orgID: string, entityType: string, instance: Instance) {
-    console.log(emoji.get('white_check_mark'), `Creating new stack for Nile instance ${instance.id}`);
+    console.log(emoji.get('hourglass'), `${instance.id}: creating new stack for instance`);
 
     await this.updateInstance(orgID, entityType, instance.id, "Provisioning", "-");
 
     var createResult = await this.deployment.createStack(instance);
+    console.log(emoji.get('white_check_mark'), `${instance.id}: completed creation of new stack`);
+
     var endpoint;
     try {
       endpoint = createResult.outputs.endpoint.value;
@@ -253,12 +255,12 @@ export default class Reconcile extends Command {
           type: entityType,
       });
       if (instances.find( instance => instance.id==instanceID)) {
-        console.log(emoji.get('dart'), `InstanceID ${instanceID} is in org ${orgID}`);
+        console.log(emoji.get('dart'), `${instanceID}: instance is in org ${orgID}`);
         return orgID;
       }
     }
 
-    console.error(emoji.get('x'), `Could not determine org for InstanceID ${instanceID}`);
+    console.error(emoji.get('x'), `${instanceID}: could not determine org this instance`);
     process.exit(1);
 
     return "dummy";
@@ -282,10 +284,9 @@ export default class Reconcile extends Command {
     var myInstance = await this.nile.entities
       .getInstance(body);
     if (myInstance) {
-      console.log(emoji.get('dart'), `Found Instance for instanceID ${instanceID}: ${myInstance}`);
       return myInstance;
     } else {
-      console.error(emoji.get('x'), `Could not get Instance from InstanceID ${instanceID}`);
+      console.error(emoji.get('x'), `${instanceID}: could not get Instance from this instance ID`);
       process.exit(1);
       return null;
     }
@@ -328,9 +329,9 @@ export default class Reconcile extends Command {
           });
 
     if (change) {
-      console.log(emoji.get('white_check_mark'), `Event analyzed for instance ${instanceID}: change is actionable`);
+      console.log(emoji.get('white_check_mark'), `${instanceID}: event analyzed, change is actionable`);
     } else {
-      console.log(emoji.get('x'), `Event analyzed for instance ${instanceID}: change is not actionable`);
+      console.log(emoji.get('x'), `${instanceID}: event analyzed, change is not actionable`);
     }
 
     return change;
@@ -382,7 +383,7 @@ export default class Reconcile extends Command {
           });
 
     if (!properties) {
-      console.error (`Error getting properties from current instance ${instanceID}`);
+      console.error (emoji.get('x'), `${instanceID}: error getting properties from current instance`);
       process.exit(1);
     }
     // Update the instance with the new properties
@@ -397,7 +398,7 @@ export default class Reconcile extends Command {
     await this.nile.entities
       .updateInstance(body)
       .then((data) => {
-        console.log(emoji.get('white_check_mark'), `Updated Instance ${instanceID}: status=${status}, connection=${connection}`);
+        console.log(emoji.get('white_check_mark'), `${instanceID}: updated properties: status=${status}, connection=${connection}`);
       }).catch((error:any) => {
             console.error(error);
             process.exit(1);

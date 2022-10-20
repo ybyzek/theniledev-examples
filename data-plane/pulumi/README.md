@@ -89,7 +89,7 @@ For the values below, make sure they match what you set in the `.env` file.
 1. Login to the [Nile Admin Dashboard](https://nad.thenile.dev/).
 2. Create a workspace, which must be globally unique
 3. Create an entity type called `DB` from [this definition](../quickstart/src/models/SaaSDB_Entity_Definition.json), which is also available as a template from the Nile Admin Dashboard.
-4. Create an organization in the workspace named "customer-org-1".
+4. Create an organization in the workspace named "Danube Tech".
 5. Create an entity instance of type "DB" in the organization, with a value that matches the schema defined earlier:
 
 ```json

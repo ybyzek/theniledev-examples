@@ -2,15 +2,15 @@
   {
     "//comment": "DO NOT MODIFY",
     "greeting": "hello1",
-    "org": "SN-customer-org-1"
+    "org": "Cyberdyne Systems"
   },
   {
     "//comment": "DO NOT MODIFY",
     "greeting": "hello2",
-    "org": "SN-customer-org-2"
+    "org": "SAC-NORAD"
   },
   {
     "greeting": "hello3",
-    "org": "SN-customer-org-1"
+    "org": "Cyberdyne Systems"
   }
 ]

@@ -19,7 +19,7 @@ const PageSchema = new Mongoose.Schema({
   },
   org: {
     type: String,
-    default: "branch-1",
+    default: "River Bank",
     required: true,
   }
 });

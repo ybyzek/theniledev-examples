@@ -65,7 +65,7 @@ yarn start
 
 ![image](images/nad.png)
 
-2. Validate tenant isolation by running the command below. For example, if you used the `Database as a Service` use case, at first user polina@demo.io cannot see the organization `customer-org-2` nor any instances in it, but after adding polina@demo.io to `customer-org-2`, polina@demo.io can see all the instances in `customer-org-2` that frank@demo.io can see.
+2. Validate tenant isolation by running the command below. For example, if you used the `Database as a Service` use case, at first user polina@demo.io cannot see the organization `Indus Systems` nor any instances in it, but after adding polina@demo.io to `Indus Systems`, polina@demo.io can see all the instances in `Indus Systems` that frank@demo.io can see.
 
 ```
 yarn test

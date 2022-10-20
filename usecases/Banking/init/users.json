@@ -2,25 +2,25 @@
   {
     "email": "shaun@demo.io",
     "password": "password",
-    "org": "branch-1",
+    "org": "River Bank",
     "role": "RW"
   },
   {
     "email": "parker@demo.io",
     "password": "password",
-    "org": "branch-1",
+    "org": "River Bank",
     "role": "RO"
   },
   {
     "email": "lisa@demo.io",
     "password": "password",
-    "org": "branch-2",
+    "org": "Em Bank",
     "role": "deny"
   },
   {
     "email": "bill@demo.io",
     "password": "password",
-    "org": "branch-2",
+    "org": "Em Bank",
     "role": "RO"
   }
 ]

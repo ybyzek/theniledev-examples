@@ -7,7 +7,7 @@ const PageSchema = new Mongoose.Schema({
   },
   org: {
     type: String,
-    default: "customer-org-1",
+    default: "Danube Tech",
     required: true,
   }
 });

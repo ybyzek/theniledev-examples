@@ -3,14 +3,14 @@
     "//comment": "This user must be org creator for first org",
     "email": "polina@demo.io",
     "password": "password",
-    "org": "customer-org-1",
+    "org": "Danube Tech",
     "role": "admin"
   },
   {
     "//comment": "This user must be org creator for second org",
     "email": "frank@demo.io",
     "password": "password",
-    "org": "customer-org-2",
+    "org": "Indus Systems",
     "role": "admin"
   }
 ]

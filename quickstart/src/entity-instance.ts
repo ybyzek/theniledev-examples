@@ -66,7 +66,7 @@ async function createInstance() {
   let cloud = "gcp";
   let environment = "prod";
   let size = 100;
-  let org = "customer-org-1";
+  let org = "Danube Tech";
   let myInstances = await nile.entities.listInstances({
     org: orgID,
     type: NILE_ENTITY_NAME,

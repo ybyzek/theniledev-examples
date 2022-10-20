@@ -7,7 +7,7 @@ const PageSchema = new Mongoose.Schema({
   },
   org: {
     type: String,
-    default: "team-1",
+    default: "BI Systems",
     required: true,
   }
 });

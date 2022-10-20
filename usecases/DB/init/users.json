@@ -2,25 +2,25 @@
   {
     "email": "shaun@demo.io",
     "password": "password",
-    "org": "customer-org-1",
+    "org": "Danube Tech",
     "role": "RW"
   },
   {
     "email": "parker@demo.io",
     "password": "password",
-    "org": "customer-org-1",
+    "org": "Danube Tech",
     "role": "RO"
   },
   {
     "email": "lisa@demo.io",
     "password": "password",
-    "org": "customer-org-2",
+    "org": "Indus Systems",
     "role": "deny"
   },
   {
     "email": "bill@demo.io",
     "password": "password",
-    "org": "customer-org-2",
+    "org": "Indus Systems",
     "role": "RO"
   }
 ]
