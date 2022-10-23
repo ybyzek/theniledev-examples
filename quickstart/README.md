@@ -5,9 +5,10 @@
 ## Contents
 
 * [Overview](#overview)
-* [Install Dependencies](#install-dependencies)
+* [Prerequisites](#prerequisites)
 * [Setup](#setup)
 * [Run](#run)
+* [Next steps](#next-steps)
 
 ## Overview
 
@@ -24,26 +25,32 @@ By the end of this quick start, you will have:
 - an organization (a tenant) with one user (end customer) in that organization
 - an entity instance (logical instance of the MySQL database) in that organization
 
-## Install Dependencies
+## Prerequisites
 
-Run the following command:
+1. Your environment should have the following installed:
 
-```
-yarn install
-```
+   - `node`
+   - `ts-node`
+   - `yarn` (or `npm`)
 
-Your output should resemble:
+2. Run the following command from the `quickstart` directory:
 
-```bash
-yarn install v1.22.19
-warning package.json: No license field
-warning No license field
-[1/4] 🔍  Resolving packages...
-[2/4] 🚚  Fetching packages...
-[3/4] 🔗  Linking dependencies...
-[4/4] 🔨  Building fresh packages...
-✨  Done in 2.26s.
-```
+   ```
+   yarn install
+   ```
+
+   Your output should resemble:
+
+   ```bash
+   yarn install v1.22.19
+   warning package.json: No license field
+   warning No license field
+   [1/4] 🔍  Resolving packages...
+   [2/4] 🚚  Fetching packages...
+   [3/4] 🔗  Linking dependencies...
+   [4/4] 🔨  Building fresh packages...
+   ✨  Done in 2.26s.
+   ```
 
 ## Setup
 
@@ -64,26 +71,12 @@ There are three ways to execute the quickstart:
 3. Programmatically from the command line: all steps executed with a single command (see [one-command](#one-command) instructions), quickest of the three options
 
 If you are following option 2 or 3 (running from the command line), you need a local file with your Nile configuration.
-For that purpose, at the top-level of the examples, copy the `.env.defaults` file to `.env`:
+For that purpose, at the top-level of the examples, copy the `.env.defaults` file to `.env` and then edit the new `.env` file to match your existing workspace.
 
-   ```bash
-   # From the top level of the examples folder
-   $ examples> cp .env.defaults .env
-   ```
-  
-   Set the values in this `.env` file to match the values of what you configured in the dashboard.
-
-   ```
-   NILE_URL=https://prod.thenile.dev
-  
-   NILE_WORKSPACE=<workspace>
-  
-   NILE_DEVELOPER_EMAIL=<your email>
-   NILE_DEVELOPER_PASSWORD=<your password>
-  
-   # Specify a name from the usecases/ folder, e.g.
-   NILE_ENTITY_NAME=DB
-   ```
+```bash
+# From the top level of the examples folder
+$ cp .env.defaults .env
+```
 
 Now that you have a local configuration file for Nile, you are set to go!
 
@@ -137,3 +130,7 @@ Your dashboard should resemble below:
 ![image](images/nad.png)
 
 Nile automatically generates the OpenAPI spec for the new entity, see the `OPENAPI` tab in the dashboard.
+
+## Next Steps
+
+Run the [webapp](../webapp), a self-service frontend that integrates with Nile on the backend

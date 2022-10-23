@@ -11,6 +11,7 @@ type Config = {
   measurement: () => Measurement;
 };
 
+/* Generate mock metrics; not for production */
 export function useProduceMetric() {
   const _nile = useDeveloperNile();
   const router = useRouter();

@@ -1,7 +1,7 @@
 /**
- * This is a stop gap for some functionality that exists.
- * Ideally, this is not needed since other parts of the architecture would handle
- * the `developer` like things that need done.
+ * Developer auth is a stop gap for the webapp to generate mock metrics for the data plane.
+ * Ideally, for examples, this would not be in the webapp because a non-webapp component would generate metrics.
+ * In production, the data plane would emit its own real metrics
  */
 import Nile, { NileApi } from '@theniledev/js';
 import getConfig from 'next/config';

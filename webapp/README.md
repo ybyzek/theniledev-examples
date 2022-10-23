@@ -29,70 +29,79 @@ It provides self-service workflows for user signup/login, org creation, and inst
 ## Contents
 
 * [Overview](#overview)
-* [Setup Certificates](#setup-certificates)
-* [Install Dependencies](#install-dependencies)
+* [Prerequisites](#prerequisites)
 * [Initialize Nile](#initialize-nile)
 * [Run the web server locally](#run-the-web-server-locally)
 * [Playbook](#playbook)
 
-## Setup Certificates
+## Prerequisites
 
-1. At the current time, Nile will only serve cookies to `\*.thenile.dev` domains, which is required for login, so you must put this app in that domain. Create certificates for your local machine and accept them.
+1. Your environment should have the following installed:
 
-- Edit `/etc/hosts` and add `127.0.0.1 local.thenile.dev`.
-- Run `mkdir .certificates && cd .certificates`
-- Add an SSL key that lasts 1 year
+   - `node`
+   - `ts-node`
+   - `yarn` (or `npm`)
 
-   ```bash
-   openssl req -x509 -out localhost.crt -keyout localhost.key \
-     -days 365 \
-     -newkey rsa:2048 -nodes -sha256 \
-     -subj '/CN=*.thenile.dev' -extensions EXT -config <( \
-     printf "[dn]\nCN=*.thenile.dev\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:*.thenile.dev\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth")
+2. Run the following command from the `webapp` directory:
+
+   ```
+   yarn install
    ```
 
-2. Open the certificate just created (`open localhost.crt`), and double click on the certificate in your keychain. Be sure it is added to the `login` keychain.
+### Setup certificates
 
-3. From the pop up window, open the dropdown for `Trust` and select `Always Trust`.
+Currently, Nile will only serve cookies to `\*.thenile.dev` domains, which is required for login, so you must put this webapp in that domain. Create certificates for your local machine and add them to your keychain.
 
-## Install Dependencies
+1. Edit the file `/etc/hosts` and at the bottom, add the line `127.0.0.1 local.thenile.dev`
 
-```bash
-yarn install
-```
+2. From the `webapp` directory, create a new directory for certificates.
+
+   ```bash
+   mkdir .certificates
+   ```
+
+3. Run the following command to add an SSL key that lasts 1 year
+
+   ```bash
+   (cd .certificates && \
+      openssl req -x509 -out localhost.crt -keyout localhost.key \
+        -days 365 \
+        -newkey rsa:2048 -nodes -sha256 \
+        -subj '/CN=*.thenile.dev' -extensions EXT -config <( \
+        printf "[dn]\nCN=*.thenile.dev\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:*.thenile.dev\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth"))
+   ```
+
+3. Trust the new certificate you just created
+
+   - Run `open .certificates/localhost.crt` to open it in Keychain.
+   - Make sure the certificate is under `Login` (not `System`), moving it there if necessary.
+   - Double click on the certificate, and from the popup window, expand the `Trust` dropdown and select `Always Trust`.
+
+   ![image](images/certs.png)
 
 ## Initialize Nile
 
 To run these examples, you need to access to Nile. Please [reach out](https://www.thenile.dev) for more information.
 
-1. For all examples, you need a local file with your Nile configuration.
-For that purpose, at the top-level of the examples, copy the `.env.defaults` file to `.env`:
+1. For all examples, you need a local `.env` file configured for your Nile control plane.
+For that purpose, at the top-level of the examples, copy the `.env.defaults` file to `.env` and then edit the new `.env` file to match your existing workspace.
 
    ```bash
    # From the top level of the examples folder
-   $ examples> cp .env.defaults .env
+   $ cp .env.defaults .env
    ```
 
-   Set the values in this `.env` file to match the values you want in your control plane.
-   Be sure to set the following parameters
-
-   - `NILE_URL`
-   - `NILE_WORKSPACE`
-   - `NILE_DEVELOPER_EMAIL`
-   - `NILE_DEVELOPER_PASSWORD`
-   - `NILE_ENTITY_NAME`: refers to one of your selected [usecases](../usecases/), default value is `DB`.
-
-3. Run the following command to preconfigure the Nile control plane with the mock usecase so that you're not starting from scratch.
+3. Run the following command from the `webapp` directory to preconfigure the Nile control plane with the mock usecase so that you're not starting from scratch.
 
    ```bash
    yarn setup-nile
    ```
 
-4. (Optional) If you want to hook up your Nile control plane to a data plane and provision real resources, run the reconciler to synchronize events between the control plane and data plane (e.g. if you use the webapp to create new entity instances). Follow the instructions in the [Pulumi example](../data-plane/pulumi/) and start the reconciler in a separate terminal window.
+4. (Optional) If you want to hook up your Nile control plane to a data plane and provision real resources, run the reconciler to synchronize events between the control plane and data plane (e.g. if you use the webapp to create new entity instances). Follow the instructions in the [Pulumi example](../data-plane/pulumi/) and start the reconciler in a separate terminal window.  If you skip this step, the instances in your webapp will not go to `status=Up`.
 
 ## Run the web server locally
 
-Run the web server locally:
+Run the following command from the `webapp` directory to run the web server locally:
 
 ```bash
 yarn dev
