@@ -2,6 +2,16 @@
 
 ![image](images/Nile-text-logo.png)
 
+## Contents
+
+* [Overview](#overview)
+* [Setup](#setup)
+* [Quickstart](#quickstart)
+* [Multi-tenancy](#multi-tenancy)
+* [Data Plane](#data-plane)
+* [Authorization](#authorization)
+* [Webapp](#webapp)
+
 ## Overview
 
 This collection of examples demonstrates how to use Nile as a control plane for an Infrastructure SaaS product.
@@ -32,41 +42,30 @@ And view metrics for each of their instances:
 
 ![image](webapp/images/metrics.png)
 
-## Contents
-
-* [Overview](#overview)
-* [Setup](#setup)
-* [Quickstart](#quickstart)
-* [Multi-tenancy](#multi-tenancy)
-* [Data Plane](#data-plane)
-* [Authorization](#authorization)
-* [Webapp](#webapp)
-
 ## Setup
 
-To run these examples:
+1. Navigate your web browser of choice to the [Nile Admin Dashboard](https://nad.thenile.dev/) and click `Continue with Google` to login via SSO. (Don't want SSO? Go to the [Nile website](https://thenile.dev), enter your email address, and click `Talk to us`, then someone from Nile will contact you to setup up an email and password for you)
 
-1. You must have access to Nile, please [reach out](https://www.thenile.dev) for more information.
+2. If you don't already have a Nile workspace, create it now. From the dashboard, click `Create a workspace`, and in the textbox enter the name of a new workspace. This represents your control plane where your SaaS application lives.
 
-2. Validate your environment has the minimum required Node version v18.0.0 or higher. If you are running earlier versions, you may encounter errors such as `ReferenceError: fetch is not defined`. (If you use `nvm`, run `nvm use`).
-   
-3. Obtain the following parameter values that represent your control plane configuration in Nile.
-These can be an existing control plane or a new one will be created for you from these values.
-`NILE_ENTITY_NAME` refers to one of the [usecases](usecases/).
+3. From the dashboard, get your [developer auth token](https://www.thenile.dev/docs/current/quick-start-ui#more-examples).  This token enables you to programmatically run the examples in this repo.
 
-   - `NILE_URL`
-   - `NILE_WORKSPACE`
-   - `NILE_DEVELOPER_EMAIL`
-   - `NILE_DEVELOPER_PASSWORD`
-   - `NILE_ORGANIZATION_NAME`
-   - `NILE_ENTITY_NAME`: choose one of the [usecases](usecases/)
-
-   At the top-level of the examples repo, copy the [.env.defaults](.env.defaults) file to `.env` and set the values in this `.env` file to match the values you want in your control plane.  It will be used for all the examples.
+4. From a terminal window, clone the [theniledev/examples](https://github.com/theniledev/examples) repo and change into the new directory.
 
    ```bash
-   cp .env.defaults .env
+   git clone git@github.com:TheNileDev/examples.git
+   cd examples
    ```
 
+4. To run any example, you need a local `.env` file with your Nile configuration.
+At the top-level of the examples, copy the [.env.defaults](.env.defaults) file to a new file `.env`, and then edit the values in the `.env` file to match what you created in the dashboard. In particular, set the values of your Nile workspace and credentials to match what you have in the Nile Admin Dashboard.
+
+   ```bash
+   cp .env.defaults .env     # then edit file (NILE_WORKSPACE, your Nile credentials)
+   ```
+
+5. For the Javascript examples, validate your environment has the minimum required Node version v18.0.0 or higher. If you are running earlier versions, you may encounter errors such as `ReferenceError: fetch is not defined`. (If you use `nvm`, run `nvm use`).
+   
 > Note: the languages presented below are an indication just of which examples have been developed, not of what's available.
 > Please see the Nile API and SDK documentation for details.
 

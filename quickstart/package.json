@@ -20,7 +20,9 @@
     "setup-org": "ts-node src/org.ts",
     "setup-user": "ts-node src/user.ts",
     "setup-entity-instance": "ts-node src/entity-instance.ts",
-    "start": "yarn setup-dev && yarn setup-ws && yarn setup-entity && yarn setup-user && yarn setup-org && yarn setup-entity-instance"
+    "start": "yarn setup-entity && yarn setup-user && yarn setup-org && yarn setup-entity-instance",
+    "nile-init": "yarn setup-dev && yarn setup-ws",
+    "test-login": "ts-node src/test-login.ts"
   },
   "engines": {
     "node": ">=18.0.0"

@@ -37,10 +37,17 @@ jobs:
         working-directory: quickstart
         run: yarn install --no-lockfile
 
+      - name: yarn nile-init
+        working-directory: quickstart
+        run: yarn nile-init
+
+      - name: yarn test-login
+        working-directory: quickstart
+        run: yarn test-login
+
       - name: yarn start
         working-directory: quickstart
         run: yarn start
-
 
   multi-tenancy:
 

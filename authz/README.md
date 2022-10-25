@@ -55,35 +55,17 @@ warning No license field
 ✨  Done in 2.26s.
 ```
 
-## Initialize Nile
+## Setup
 
-To run these examples, you need to access to Nile. Please [reach out](https://www.thenile.dev) for more information.
+You must do all the steps in the [Setup section](../README.md#setup) of the top-level README.md.
 
-1. Run through the [quickstart](../quickstart) to setup your Nile control plane. Afterwards, you will be able to use these parameters:
+:stop_sign: **STOP** :stop_sign: Do not proceed until you have done the above setup :heavy_exclamation_mark:
 
-   - `NILE_URL`
-   - `NILE_WORKSPACE`
-   - `NILE_DEVELOPER_EMAIL`
-   - `NILE_DEVELOPER_PASSWORD`
-   - `NILE_ENTITY_NAME`: refers to one of your selected [usecases](../usecases/).
+Then, run the following command to preconfigure the Nile control plane with an entity, organizations, users, and entity instances for the mock usecase, so that you're not starting from scratch.
 
-   [YOLO](../usecases/README.md#yolo): follow steps to define your own service offering (and thus a new `NILE_ENTITY_NAME`)
-
-2. For all examples, you need a local file with your Nile configuration.
-For that purpose, at the top-level of the examples, copy the `.env.defaults` file to `.env`:
-
-   ```bash
-   # From the top level of the examples folder
-   $ examples> cp .env.defaults .env
-   ```
-
-   Set the values in this `.env` file to match the values you want in your control plane.
-
-3. Run the following command to preconfigure the Nile control plane with the mock usecase so that you're not starting from scratch.
-
-   ```bash
-   yarn setup-nile
-   ```
+```bash
+yarn setup-nile
+```
 
 ## Execute
 

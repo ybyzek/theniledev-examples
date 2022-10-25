@@ -40,16 +40,9 @@ warning No license field
 
 ## Setup
 
-For all examples, you need a local file with your Nile configuration.
-For that purpose, at the top-level of the examples, copy the `.env.defaults` file to `.env`:
+You must do all the steps in the [Setup section](../README.md#setup) of the top-level README.md.
 
-```bash
-# From the top level of the examples folder
-$ examples> cp .env.defaults .env
-```
-
-Set the values in this `.env` file to match the values you want in your control plane.
-
+:stop_sign: **STOP** :stop_sign: Do not proceed until you have done the above setup :heavy_exclamation_mark:
 
 ## Execute
 
@@ -61,7 +54,7 @@ yarn start
 
 ## Validate
 
-1. Log into the [Nile Admin Dashboard](https://nad.thenile.dev/) to see the control plane and entity instances.  For the email and password, use the `NILE_DEVELOPER_EMAIL` and `NILE_DEVELOPER_PASSWORD` values you specified in the `.env` file.  Your dashboard should resemble below:
+1. Login to the [Nile Admin Dashboard](https://nad.thenile.dev/) via SSO to see the control plane and entity instances (If your developer account is not SSO, enter the `NILE_DEVELOPER_EMAIL` and `NILE_DEVELOPER_PASSWORD` values you specified in the `.env` file).
 
 ![image](images/nad.png)
 

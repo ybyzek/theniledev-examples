@@ -6,44 +6,43 @@ import * as dotenv from 'dotenv';
 
 dotenv.config({ override: true })
 
-let envParams = [
-  "NILE_URL",
-  "NILE_WORKSPACE",
-  "NILE_DEVELOPER_EMAIL",
-  "NILE_DEVELOPER_PASSWORD",
-]
-envParams.forEach( (key: string) => {
-  if (!process.env[key]) {
-    console.error(emoji.get('x'), `Error: missing environment variable ${ key }. See .env.defaults for more info and copy it to .env with your values`);
-    process.exit(1);
-  }
-});
-
+// Get Nile URL and workspace
+if (!process.env.NILE_URL || !process.env.NILE_WORKSPACE) {
+  console.error(emoji.get('x'), `Error: missing variable NILE_URL or NILE_WORKSPACE in .env .  See .env.defaults for more info and copy it to .env with your values`);
+  process.exit(1);
+}
 const NILE_URL = process.env.NILE_URL!;
 const NILE_WORKSPACE = process.env.NILE_WORKSPACE!;
-const NILE_DEVELOPER_EMAIL = process.env.NILE_DEVELOPER_EMAIL!;
-const NILE_DEVELOPER_PASSWORD = process.env.NILE_DEVELOPER_PASSWORD!;
+const nile!;
 
-const nile = Nile({
-  basePath: NILE_URL,
-  workspace: NILE_WORKSPACE,
-});
+async function loginDeveloper() {
+
+  if (!process.env.NILE_DEVELOPER_TOKEN) {
+    if (!process.env.NILE_DEVELOPER_EMAIL || !process.env.NILE_DEVELOPER_PASSWORD) {
+      console.error(emoji.get('x'), `Error: please provide NILE_DEVELOPER_TOKEN or {NILE_DEVELOPER_EMAIL and NILE_DEVELOPER_PASSWORD} in .env .  See .env.defaults for more info and copy it to .env with your values`);
+      process.exit(1);
+    }
+  }
+
+  nile = await Nile({
+    basePath: NILE_URL,
+    workspace: NILE_WORKSPACE,
+  }).connect(process.env.NILE_DEVELOPER_TOKEN ?? { email: process.env.NILE_DEVELOPER_EMAIL, password: process.env.NILE_DEVELOPER_PASSWORD });
+
+  nile.authToken = nile.developers.authToken;
+  if (nile.authToken) {
+    console.log("\n" + emoji.get('arrow_right'), ` Logged into Nile as developer`);
+    console.log(`export NILE_ACCESS_TOKEN=${nile.authToken}`);
+  } else {
+    console.error(emoji.get('x'), ` Could not log into Nile.  Did you follow the instructions in https://github.com/TheNileDev/examples/blob/main/README.md#setup , create your Nile workspace, and set valid parameter values in a local .env file?`);
+    process.exit(1);
+  }
+
+}
 
 async function createWorkspace() {
 
-  // Login developer
-  await nile.developers.loginDeveloper({
-    loginInfo: {
-      email: NILE_DEVELOPER_EMAIL,
-      password: NILE_DEVELOPER_PASSWORD,
-    },
-    }).catch((error:any) => {
-      console.error(emoji.get('x'), `Error: Failed to login to Nile as developer ${NILE_DEVELOPER_EMAIL}: ` + error.message);
-      process.exit(1);
-    });
-  nile.authToken = nile.developers.authToken;
-  console.log("\n" + emoji.get('arrow_right'), ` Logged into Nile as developer ${NILE_DEVELOPER_EMAIL}`);
-  console.log(`export NILE_ACCESS_TOKEN=${nile.authToken}`);
+  await loginDeveloper();
 
   // Check if workspace exists, create if not
   var myWorkspaces = await nile.workspaces.listWorkspaces()

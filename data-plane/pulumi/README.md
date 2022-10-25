@@ -44,33 +44,16 @@ This example assumes you have:
 * [A Pulumi account](https://app.pulumi.com/signup) that's
   [connected to your AWS account](https://www.pulumi.com/docs/get-started/aws/begin/)
 * [The Pulumi CLI installed](https://www.pulumi.com/docs/reference/cli/)
-* A Nile developer account using an email address and password
+* A Nile developer account
+* Validate your environment has the minimum required Node version v18.0.0 or higher. If you are running earlier versions, you may encounter errors such as `ReferenceError: fetch is not defined`. (If you use `nvm`, run `nvm use`).
 
 Note that this example creates real AWS resources so be sure to manually destroy all resources to avoid unexpected charges from AWS.
 
 ## Setup
 
-To run this example:
+You must do all the steps in the [Setup section](../../README.md#setup) of the top-level README.md.
 
-1. You must have access to Nile, please [reach out](https://www.thenile.dev) for more information.
-
-2. Validate your environment has the minimum required Node version v18.0.0 or higher. If you are running earlier versions, you may encounter errors such as `ReferenceError: fetch is not defined`. (If you use `nvm`, run `nvm use`).
-
-3. Obtain the following parameter values that represent your control plane configuration in Nile.
-These can be an existing control plane or a new one will be created for you from these values.
-
-   - `NILE_URL`
-   - `NILE_WORKSPACE`
-   - `NILE_DEVELOPER_EMAIL`
-   - `NILE_DEVELOPER_PASSWORD`
-   - `NILE_ORGANIZATION_NAME`
-   - `NILE_ENTITY_NAME`
-
-   At the top-level of the examples repo, copy the [.env.defaults](.env.defaults) file to `.env` and set the values in this `.env` file to match the values you want in your control plane.  It will be used for all the examples.
-
-   ```bash
-   cp .env.defaults .env
-   ```
+:stop_sign: **STOP** :stop_sign: Do not proceed until you have done the above setup :heavy_exclamation_mark:
 
 ## Configure the Control Plane ##
 

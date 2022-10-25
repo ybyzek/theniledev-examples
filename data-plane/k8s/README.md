@@ -44,19 +44,14 @@ This example assumes you have:
 * Kubernetes cluster and ability to execute `kubectl` commands from your development environment. [Kind](https://kind.sigs.k8s.io/) is great for local testing
 * [Helm installed](https://helm.sh/docs/intro/install/)
 * [OpenAPI code generator installed](https://openapi-generator.tech/docs/installation/#homebrew)
-* A Nile developer account using an email address and password
+* A Nile developer account
+* Validate your environment has the minimum required Node version v18.0.0 or higher. If you are running earlier versions, you may encounter errors such as `ReferenceError: fetch is not defined`. (If you use `nvm`, run `nvm use`).
 
 ## Setup
 
-For all examples, you need a local file with your Nile configuration.
-For that purpose, at the top-level of the examples, copy the `.env.defaults` file to `.env`:
+You must do all the steps in the [Setup section](../../README.md#setup) of the top-level README.md.
 
-```bash
-# From the top level of the examples folder
-$ examples> cp .env.defaults .env
-```
-
-Set the values in this `.env` file to match the values you want in your control plane.
+:stop_sign: **STOP** :stop_sign: Do not proceed until you have done the above setup :heavy_exclamation_mark:
 
 ## Configure the Control Plane ##
 

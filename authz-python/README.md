@@ -44,22 +44,15 @@ python3 -m venv venv && venv/bin/python3 -m pip install -r requirements.txt
 
 ## Setup
 
-1. For all examples, you need a local file with your Nile configuration.
-For that purpose, at the top-level of the examples, copy the `.env.defaults` file to `.env`:
+You must do all the steps in the [Setup section](../README.md#setup) of the top-level README.md.
 
-```bash
-# From the top level of the examples folder
-$ examples> cp .env.defaults .env
-```
+:stop_sign: **STOP** :stop_sign: Do not proceed until you have done the above setup :heavy_exclamation_mark:
 
-2. Set the values in this `.env` file to match the values you want in your control plane.
-
-3. Configure your Nile control plane manually according to the values above, or by running the quickstart
+Then, run the following command to preconfigure the Nile control plane with an entity, organizations, users, and entity instances for the mock usecase, so that you're not starting from scratch.
 
 ```
 yarn --cwd ../quickstart/ install && yarn --cwd ../quickstart/ start
 ```
-
 
 ## Execute
 

@@ -23,14 +23,15 @@ const NILE_URL = process.env.NILE_URL!;
 const NILE_WORKSPACE = process.env.NILE_WORKSPACE!;
 const NILE_DEVELOPER_EMAIL = process.env.NILE_DEVELOPER_EMAIL!;
 const NILE_DEVELOPER_PASSWORD = process.env.NILE_DEVELOPER_PASSWORD!;
-
-const nile = Nile({
-  basePath: NILE_URL,
-  workspace: NILE_WORKSPACE,
-});
+const nile!;
 
 // Workflow for the Nile developer
 async function createDeveloper() {
+
+  nile = await Nile({
+    basePath: NILE_URL,
+    workspace: NILE_WORKSPACE,
+  });
 
   // Signup developer
   try {

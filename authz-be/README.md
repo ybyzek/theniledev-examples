@@ -50,35 +50,17 @@ warning No license field
   - run MongoDB in the background: `mongod --config /opt/homebrew/etc/mongod.conf &`
   - [Install mongosh](https://www.mongodb.com/docs/mongodb-shell/install/), a MongoDB CLI for logging in and cleanup
 
-## Initialize Nile
+## Setup
 
-To run these examples, you need to access to Nile. Please [reach out](https://www.thenile.dev) for more information.
+You must do all the steps in the [Setup section](../README.md#setup) of the top-level README.md.
 
-1. Run through the [quickstart](../quickstart) to setup your Nile control plane. Afterwards, you will be able to use these parameters:
+:stop_sign: **STOP** :stop_sign: Do not proceed until you have done the above setup :heavy_exclamation_mark:
 
-   - `NILE_URL`
-   - `NILE_WORKSPACE`
-   - `NILE_DEVELOPER_EMAIL`
-   - `NILE_DEVELOPER_PASSWORD`
-   - `NILE_ENTITY_NAME`: refers to one of your selected [usecases](../usecases/).
+Then, run the following command to preconfigure the Nile control plane with an entity, organizations, users, and entity instances for the mock usecase, so that you're not starting from scratch.
 
-   [YOLO](../usecases/README.md#yolo): follow steps to define your own service offering (and thus a new `NILE_ENTITY_NAME`)
-
-2. For all examples, you need a local file with your Nile configuration.
-For that purpose, at the top-level of the examples, copy the `.env.defaults` file to `.env`:
-
-   ```bash
-   # From the top level of the examples folder
-   $ examples> cp .env.defaults .env
-   ```
-
-   Set the values in this `.env` file to match the values you want in your control plane.
-
-3. Run the following command to preconfigure the Nile control plane with the mock usecase so that you're not starting from scratch.
-
-   ```bash
-   yarn setup-nile
-   ```
+```bash
+yarn setup-nile
+```
 
 ## Execute
 
@@ -116,8 +98,7 @@ diff server.js server-without-authz.js
 
 ## Validate
 
-1. Log into the [Nile Admin Dashboard](https://nad.thenile.dev/) to see the control plane and entity instances.
-For the email and password, use the `NILE_DEVELOPER_EMAIL` and `NILE_DEVELOPER_PASSWORD` values you specified in the `.env` file.
+1. Login to the [Nile Admin Dashboard](https://nad.thenile.dev/) via SSO to see the control plane and entity instances (If your developer account is not SSO, enter the `NILE_DEVELOPER_EMAIL` and `NILE_DEVELOPER_PASSWORD` values you specified in the `.env` file).
 
 2. Cross-check which users are authorized to see which pages.  For example, if you used the `Database as a Service` use case, `parker@demo.io` is in org `Danube Tech` which has entities for `myDB-products`(=page1) and `myDB-billing`(=page2).  Therefore when `parker@demo.io` tries to view either of those entities, he will be able to see those pages:
 

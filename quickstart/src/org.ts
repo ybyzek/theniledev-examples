@@ -6,31 +6,25 @@ import * as dotenv from 'dotenv';
 
 dotenv.config({ override: true })
 
-let envParams = [
-  "NILE_URL",
-  "NILE_WORKSPACE",
-  "NILE_DEVELOPER_EMAIL",
-  "NILE_DEVELOPER_PASSWORD",
-]
-envParams.forEach( (key: string) => {
-  if (!process.env[key]) {
-    console.error(emoji.get('x'), `Error: missing environment variable ${ key }. See .env.defaults for more info and copy it to .env with your values`);
-    process.exit(1);
-  }
-});
-
+// Get Nile URL and workspace
+if (!process.env.NILE_URL || !process.env.NILE_WORKSPACE) {
+  console.error(emoji.get('x'), `Error: missing variable NILE_URL or NILE_WORKSPACE in .env .  See .env.defaults for more info and copy it to .env with your values`);
+  process.exit(1);
+}
 const NILE_URL = process.env.NILE_URL!;
 const NILE_WORKSPACE = process.env.NILE_WORKSPACE!;
-const NILE_DEVELOPER_EMAIL = process.env.NILE_DEVELOPER_EMAIL!;
-const NILE_DEVELOPER_PASSWORD = process.env.NILE_DEVELOPER_PASSWORD!;
+const nile!;
+
+// Set entity
 const NILE_ENTITY_NAME = "DB";
 
-const nile = Nile({
-  basePath: NILE_URL,
-  workspace: NILE_WORKSPACE,
-});
-
 async function setupOrg() {
+
+  // Set Nile
+  nile = Nile({
+    basePath: NILE_URL,
+    workspace: NILE_WORKSPACE,
+  });
 
   // login as user
   let email = "shaun@colton.demo"

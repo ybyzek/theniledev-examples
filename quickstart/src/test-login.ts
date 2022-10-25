@@ -1,5 +1,4 @@
-import Nile, { CreateEntityRequest } from "@theniledev/js";
-import { CreateEntityOperationRequest } from "@theniledev/js/dist/generated/openapi/src";
+import Nile from "@theniledev/js";
 
 var emoji = require('node-emoji');
 
@@ -16,18 +15,6 @@ const NILE_URL = process.env.NILE_URL!;
 const NILE_WORKSPACE = process.env.NILE_WORKSPACE!;
 const nile!;
 
-// Get entity schema that defines the service in the data plane
-const NILE_ENTITY_NAME = "DB";
-const fs = require('fs');
-try {
-  const EntityDefinition = JSON.parse(fs.readFileSync(`../usecases/${NILE_ENTITY_NAME}/entity_definition.json`))
-} catch (err) {
-  console.error(err);
-  console.error(emoji.get('x'), `Did you check that ../usecases/${NILE_ENTITY_NAME}/entity_definition.json exists?`);
-  process.exit(1);
-}
-const entityDefinition: CreateEntityRequest = EntityDefinition;
-
 async function loginDeveloper() {
 
   if (!process.env.NILE_DEVELOPER_TOKEN) {
@@ -36,6 +23,10 @@ async function loginDeveloper() {
       process.exit(1);
     }
   }
+
+  console.log(emoji.get('information_source'), ` NILE_DEVELOPER_TOKEN: ${process.env.NILE_DEVELOPER_TOKEN}`);
+  console.log(emoji.get('information_source'), ` NILE_DEVELOPER_EMAIL: ${process.env.NILE_DEVELOPER_EMAIL}`);
+  console.log(emoji.get('information_source'), ` NILE_DEVELOPER_PASSWORD: ${process.env.NILE_DEVELOPER_PASSWORD}`);
 
   nile = await Nile({
     basePath: NILE_URL,
@@ -53,23 +44,10 @@ async function loginDeveloper() {
 
 }
 
-// Workflow for the Nile developer
-async function createEntity() {
+async function testLogin() {
 
   await loginDeveloper();
 
-  // Check if entity exists, create if not
-  var myEntities =  await nile.entities.listEntities()
-  if (myEntities.find( ws => ws.name==entityDefinition.name)) { 
-      console.log(emoji.get('dart'), "Entity " + entityDefinition.name + " exists");
-  } else {
-      await nile.entities.createEntity({
-        createEntityRequest: entityDefinition
-      }).then((data) => 
-      {
-        console.log(emoji.get('white_check_mark'), 'Created entity: ' + JSON.stringify(data, null, 2));
-      }).catch((error:any) => console.error(error.message)); 
-  }
 }
 
-createEntity();
+testLogin();

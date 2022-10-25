@@ -30,7 +30,7 @@ It provides self-service workflows for user signup/login, org creation, and inst
 
 * [Overview](#overview)
 * [Prerequisites](#prerequisites)
-* [Initialize Nile](#initialize-nile)
+* [Setup](#setup)
 * [Run the web server locally](#run-the-web-server-locally)
 * [Playbook](#playbook)
 
@@ -79,25 +79,19 @@ Currently, Nile will only serve cookies to `\*.thenile.dev` domains, which is re
 
    ![image](images/certs.png)
 
-## Initialize Nile
+## Setup
 
-To run these examples, you need to access to Nile. Please [reach out](https://www.thenile.dev) for more information.
+You must do all the steps in the [Setup section](../README.md#setup) of the top-level README.md.
 
-1. For all examples, you need a local `.env` file configured for your Nile control plane.
-For that purpose, at the top-level of the examples, copy the `.env.defaults` file to `.env` and then edit the new `.env` file to match your existing workspace.
+:stop_sign: **STOP** :stop_sign: Do not proceed until you have done the above setup :heavy_exclamation_mark:
 
-   ```bash
-   # From the top level of the examples folder
-   $ cp .env.defaults .env
-   ```
-
-3. Run the following command from the `webapp` directory to preconfigure the Nile control plane with the mock usecase so that you're not starting from scratch.
+Then, run the following command to preconfigure the Nile control plane with an entity, organizations, users, and entity instances for the mock usecase, so that you're not starting from scratch.
 
    ```bash
    yarn setup-nile
    ```
 
-4. (Optional) If you want to hook up your Nile control plane to a data plane and provision real resources, run the reconciler to synchronize events between the control plane and data plane (e.g. if you use the webapp to create new entity instances). Follow the instructions in the [Pulumi example](../data-plane/pulumi/) and start the reconciler in a separate terminal window.  If you skip this step, the instances in your webapp will not go to `status=Up`.
+(Optional) If you want to hook up your Nile control plane to a data plane and provision real resources, run the reconciler to synchronize events between the control plane and data plane (e.g. if you use the webapp to create new entity instances). Follow the instructions in the [Pulumi example](../data-plane/pulumi/) and start the reconciler in a separate terminal window.  If you skip this step, the instances in your webapp will not go to `status=Up`.
 
 ## Run the web server locally
 
@@ -125,12 +119,10 @@ yarn dev
 
 4. Logout. Then instead of logging in as an existing user, sign up as a new user.  Enter any email/password, then create an organization name.
 
-5. Create a new instance.  If you are running the reconciler in a separate terminal window (see [initialize Nile](#initialize-nile)), then observe the resources being provisioned and updating Nile with its status.
+5. Create a new instance.  If you are running the reconciler in a separate terminal window (see [Setup](#setup)), then observe the resources being provisioned and updating Nile with its status.
 
-6. As a Nile developer: log into the [Nile Admin Dashboard](https://nad.thenile.dev/) to see the control plane and entity instances.
-Notice the multi-tenancy features, with tenants belonging to different organizations.
-For the email and password, use the `NILE_DEVELOPER_EMAIL` and `NILE_DEVELOPER_PASSWORD` values you specified in the `.env` file.
+6. As a Nile developer: Login to the [Nile Admin Dashboard](https://nad.thenile.dev/) via SSO to see the control plane and entity instances (If your developer account is not SSO, enter the `NILE_DEVELOPER_EMAIL` and `NILE_DEVELOPER_PASSWORD` values you specified in the `.env` file).
 
-   Your dashboard should resemble below:
+7. From the dashboard, notice the multi-tenancy features, with tenants belonging to different organizations. Your dashboard should resemble below:
 
    ![image](images/nad.png)

@@ -30,6 +30,9 @@ By the end of this quick start, you will have:
 1. Your environment should have the following installed:
 
    - `node`
+
+     - Validate your environment has the minimum required Node version v18.0.0 or higher. If you are running earlier versions, you may encounter errors such as `ReferenceError: fetch is not defined`. (If you use `nvm`, run `nvm use`).
+
    - `ts-node`
    - `yarn` (or `npm`)
 
@@ -54,13 +57,9 @@ By the end of this quick start, you will have:
 
 ## Setup
 
-1. Navigate your web browser of choice to the [Nile Admin Dashboard](https://nad.thenile.dev/).
-You have two options for logging in:
+You must do all the steps in the [Setup section](../README.md#setup) of the top-level README.md.
 
-   - SSO: click `Continue with Google`.
-   - Username/password: if you haven't signed up to Nile yet, go to [our website](https://thenile.dev), enter your email address, and click `Talk to us`. Someone from Nile will contact you.
-
-2. Your SaaS application lives in a workspace, which represents your control plane. You probably already have a name for the SaaS application you'd like to build, so now you can create it. From the dashboard, click `Create a workspace`.  In the textbox, enter the name of a new workspace. 
+:stop_sign: **STOP** :stop_sign: Do not proceed until you have done the above setup :heavy_exclamation_mark:
 
 ## Run
 
@@ -70,22 +69,12 @@ There are three ways to execute the quickstart:
 2. Step-by-step from the command line: execute snippets of Typescript code using the JS SDK (see [step-by-step](#step-by-step-from-the-command-line) instructions), useful to learn from individual code blocks
 3. Programmatically from the command line: all steps executed with a single command (see [one-command](#one-command) instructions), quickest of the three options
 
-If you are following option 2 or 3 (running from the command line), you need a local file with your Nile configuration.
-For that purpose, at the top-level of the examples, copy the `.env.defaults` file to `.env` and then edit the new `.env` file to match your existing workspace.
-
-```bash
-# From the top level of the examples folder
-$ cp .env.defaults .env
-```
-
-Now that you have a local configuration file for Nile, you are set to go!
-
 ### Step-by-step from the command line
 
-1. Create a workspace (refer to code [src/ws.ts](src/ws.ts)).
+1. Verify the workspace and credentials set in your `.env` file by testing a login.
 
 ```
-yarn setup-ws
+yarn test-login
 ```
 
 2. Create an entity (refer to code [src/entity.ts](src/entity.ts)).
@@ -122,8 +111,7 @@ yarn start
 
 ## Validate
 
-Log into the [Nile Admin Dashboard](https://nad.thenile.dev/) to see the control plane and entity instances.
-For the email and password, use the `NILE_DEVELOPER_EMAIL` and `NILE_DEVELOPER_PASSWORD` values you specified in the `.env` file.
+Login to the [Nile Admin Dashboard](https://nad.thenile.dev/) via SSO to see the control plane and entity instances (If your developer account is not SSO, enter the `NILE_DEVELOPER_EMAIL` and `NILE_DEVELOPER_PASSWORD` values you specified in the `.env` file).
 
 Your dashboard should resemble below:
 
