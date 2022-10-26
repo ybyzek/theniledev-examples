@@ -75,6 +75,7 @@ Start with the quickstart to configure a base Nile control plane.
 This provides a simple setup to learn the concepts but also serves as the foundation for the other examples below.
 
 - [Quickstart](quickstart) | JS SDK | Setup a minimal Nile control plane with a single tenant
+- [Quickstart with Python](quickstart-python) | Python SDK | Setup a minimal Nile control plane with a single tenant
 
 ## Multi-tenancy
 
@@ -90,8 +91,8 @@ As instances are created or destroyed from the control plane, the example reconc
 Even if you're using another deployment tool like Kubernetes or Terraform, similar principles apply as they do for Pulumi.
 
 - [Data Plane with Pulumi](data-plane/pulumi/) | JS SDK | Synchronize your data plane and control plane
-- [Data Plane with Apache Flink and Kubernetes](data-plane/k8s/)  | JS SDK | Synchronize a control plane built with Nile with data plane that uses Apache Flink and Kubernetes
-- [Data Plane with Apache Flink and Kubernetes via Python](data-plane-python/k8s/)  | Python SDK | Synchronize a control plane built with Nile with data plane that uses Apache Flink and Kubernetes
+- [Data Plane with Apache Flink and Kubernetes](data-plane/k8s/) | JS SDK | Synchronize a control plane built with Nile with data plane that uses Apache Flink and Kubernetes
+- [Data Plane with Apache Flink and Kubernetes via Python](data-plane-python/k8s/) | Python SDK | Synchronize a control plane built with Nile with data plane that uses Apache Flink and Kubernetes
 
 ## Authorization
 
