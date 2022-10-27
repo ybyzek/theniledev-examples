@@ -270,6 +270,10 @@ jobs:
         working-directory: authz-python
         run: python authz.py
 
+      - name: python delete_all_policies.py
+        working-directory: authz-python
+        run: python delete_all_policies.py
+
   data-plane-k8s:
 
     needs: multi-tenancy

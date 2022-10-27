@@ -17,7 +17,6 @@ from nile_api.api.access import (
 from nile_api.api.developers import login_developer
 from nile_api.api.organizations import list_organizations
 from nile_api.api.entities import list_instances
-from nile_api.api.users import login_user
 from nile_api.models.login_info import LoginInfo
 from nile_api.models.create_policy_request import CreatePolicyRequest
 from nile_api.models.action import Action
@@ -65,7 +64,6 @@ else:
 NILE_TENANT1_EMAIL = user["email"]
 NILE_TENANT_PASSWORD = user["password"]
 
-# Login developer
 token = login_developer.sync(
     client=Client(base_url=params["NILE_URL"]),
     info=LoginInfo(
@@ -73,6 +71,7 @@ token = login_developer.sync(
         password=params["NILE_DEVELOPER_PASSWORD"],
     ),
 )
+
 client = AuthenticatedClient(base_url=params["NILE_URL"], token=token.token)
 
 organizations = list_organizations.sync(
@@ -93,105 +92,19 @@ else:
     )
     sys.exit(1)
 
-# Login user
-token = login_user.sync(
-    client=Client(base_url=params["NILE_URL"]),
-    workspace=params["NILE_WORKSPACE"],
-    json_body=LoginInfo(email=NILE_TENANT1_EMAIL, password=NILE_TENANT_PASSWORD),
-)
-client = AuthenticatedClient(base_url=params["NILE_URL"], token=token.token)
-
-# List instances
-instances = list_instances.sync(
-    client=client,
-    workspace=params["NILE_WORKSPACE"],
-    org=org.id,
-    type=params["NILE_ENTITY_NAME"],
-)
-print(f"\nInstances:")
-for instance in instances:
-    print(f"{json.dumps(instance.to_dict(), indent=2)}")
-
-# Login developer
-token = login_developer.sync(
-    client=Client(base_url=params["NILE_URL"]),
-    info=LoginInfo(
-        email=params["NILE_DEVELOPER_EMAIL"],
-        password=params["NILE_DEVELOPER_PASSWORD"],
-    ),
-)
-client = AuthenticatedClient(base_url=params["NILE_URL"], token=token.token)
-
-print("\nPolicies at start:")
 policies_start = list_policies.sync(
     client=client,
     workspace=params["NILE_WORKSPACE"],
     org=org.id,
 )
-print([each.id for each in policies_start])
-
-# Create a new policy
-myresource=Resource(type=params["NILE_ENTITY_NAME"])
-myresource.additional_properties={"properties": {'environment': 'dev'}}
-data = CreatePolicyRequest(
-    actions=[Action.READ],
-    resource=myresource,
-    subject=Subject(email=NILE_TENANT1_EMAIL),
-)
-print(f"\nCreating new policy {data}.")
-policy = create_policy.sync(
-    client=client,
-    workspace=params["NILE_WORKSPACE"],
-    org=org.id,
-    json_body=data,
-)
-print(f"{GOOD} policy id is {policy.id}")
-print(
-    "\nPolicies post-create:",
-    list_policies.sync(
+for each in policies_start:
+    response = delete_policy.sync_detailed(
         client=client,
         workspace=params["NILE_WORKSPACE"],
         org=org.id,
-    ),
-)
-
-# Login user
-token = login_user.sync(
-    client=Client(base_url=params["NILE_URL"]),
-    workspace=params["NILE_WORKSPACE"],
-    json_body=LoginInfo(email=NILE_TENANT1_EMAIL, password=NILE_TENANT_PASSWORD),
-)
-client = AuthenticatedClient(base_url=params["NILE_URL"], token=token.token)
-
-# List instances
-instances = list_instances.sync(
-    client=client,
-    workspace=params["NILE_WORKSPACE"],
-    org=org.id,
-    type=params["NILE_ENTITY_NAME"],
-)
-print(f"\nInstances:")
-for instance in instances:
-    print(f"{json.dumps(instance.to_dict(), indent=2)}")
-
-# Login developer
-token = login_developer.sync(
-    client=Client(base_url=params["NILE_URL"]),
-    info=LoginInfo(
-        email=params["NILE_DEVELOPER_EMAIL"],
-        password=params["NILE_DEVELOPER_PASSWORD"],
-    ),
-)
-client = AuthenticatedClient(base_url=params["NILE_URL"], token=token.token)
-
-# Delete the policy just created
-response = delete_policy.sync_detailed(
-    client=client,
-    workspace=params["NILE_WORKSPACE"],
-    org=org.id,
-    policy_id=policy.id,
-)
-print("policy id {} is deleted".format(policy.id))
+        policy_id=each.id,
+    )
+    print("policy id {} is deleted".format(each.id))
 
 print("\nPolicies post-delete:")
 policies_end = list_policies.sync(
@@ -200,11 +113,5 @@ policies_end = list_policies.sync(
     org=org.id,
 )
 print([each.name for each in policies_end])
-
-if policies_start != policies_end:
-    print(
-        f"{BAD} Something is wrong, policies at start should equal policies at end"  # noqa: E501
-    )
-    sys.exit(1)
 
 sys.exit(0)

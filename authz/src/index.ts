@@ -47,7 +47,7 @@ console.log(`export NILE_URL=${NILE_URL}`);
 console.log(`export NILE_WORKSPACE=${NILE_WORKSPACE}`);
 
 
-async function testTenant(orgID : string, expectEmpty : boolean = false) {
+async function testTenant(orgID : string, expectProd : boolean = true) {
 
   await exampleUtils.loginAsUser(nile, NILE_TENANT1_EMAIL, NILE_TENANT_PASSWORD);
 
@@ -56,9 +56,17 @@ async function testTenant(orgID : string, expectEmpty : boolean = false) {
     org: orgID,
     type: NILE_ENTITY_NAME,
   }).then((instances) => {
-    console.log(`\n--> TENANT: list of allowed instances (expectEmpty is ${expectEmpty}):`, instances);
-    if (expectEmpty && instances.length != 0) {
-      console.error(emoji.get('x'), `Error: Tenant should not see ${NILE_ENTITY_NAME} instances`);
+    console.log(`\n--> TENANT: list of allowed instances (expectProd is ${expectProd}):`, instances);
+    if (!expectProd) {
+      for (let i=0; i<instances.length; i++) {
+        if (instances[i].properties.environment == "prod") {
+          console.error(emoji.get('x'), `Error: Tenant should not see ${NILE_ENTITY_NAME} instances where environment is 'prod'`);
+          process.exit(1);
+        }
+      }
+    }
+    if (instances.length == 0) {
+      console.error(emoji.get('x'), `Error: Tenant should see more than 0 ${NILE_ENTITY_NAME} instances`);
       process.exit(1);
     }
   }).catch((error: any) => {
@@ -69,8 +77,6 @@ async function testTenant(orgID : string, expectEmpty : boolean = false) {
 }
 
 async function listPolicies(orgID : string) {
-
-  console.log(`\nLogging into Nile at ${NILE_URL}, workspace ${NILE_WORKSPACE}, as developer ${NILE_DEVELOPER_EMAIL} in order to listPolicies for ${orgID}`);
 
   await exampleUtils.loginAsDev(nile, NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD);
 
@@ -92,8 +98,6 @@ async function listPolicies(orgID : string) {
 
 
 async function run() {
-
-  console.log(`\nLogging into Nile at ${NILE_URL}, workspace ${NILE_WORKSPACE}, as developer ${NILE_DEVELOPER_EMAIL}`);
 
   await exampleUtils.loginAsDev(nile, NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD);
 
@@ -118,8 +122,9 @@ async function run() {
     })
     .catch((error: any) => console.error(error));
 
-  console.log('Test tenant before');
-  await testTenant(orgID, false);
+  var expectProd!;
+  expectProd=true;
+  await testTenant(orgID, expectProd);
 
   await exampleUtils.loginAsDev(nile, NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD);
 
@@ -128,10 +133,10 @@ async function run() {
   const body = {
     org: orgID,
     createPolicyRequest: {
-      actions: ["deny"],
+      actions: ["read"],
       resource: {
         type: NILE_ENTITY_NAME,
-        //id: <instance id>,
+        properties: {environment: "dev"},
       },
       subject: { email : NILE_TENANT1_EMAIL },
     },
@@ -141,16 +146,18 @@ async function run() {
     .createPolicy(body)
     .then((data) => {
       policyID = JSON.stringify(data.id, null, 2).replace(/['"]+/g, '');
-      console.log(emoji.get('white_check_mark'), `Created policy with id ${policyID} to deny ${NILE_TENANT1_EMAIL} from entity ${NILE_ENTITY_NAME}.`);
+      console.log(emoji.get('white_check_mark'), `Created policy with id ${policyID}`);
       //console.log(JSON.stringify(data, (key, value) => value instanceof Set ? Array.from(value) : value));
-    })
-    .catch((error: any) => console.error(error));
+    }).catch((error: any) => {
+      console.error(error);
+      process.exit(1);
+    });
 
   // List policies
   listPolicies(orgID);
 
-  console.log('Test tenant after');
-  await testTenant(orgID, true);
+  expectProd=false;
+  await testTenant(orgID, expectProd);
 
   await exampleUtils.loginAsDev(nile, NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD);
 
@@ -170,8 +177,8 @@ async function run() {
   // List policies
   listPolicies(orgID);
 
-  console.log('Test tenant after');
-  await testTenant(orgID, false);
+  expectProd=true;
+  await testTenant(orgID, expectProd);
 }
 
 run();

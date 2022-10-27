@@ -19,17 +19,20 @@ For this service, you can use Nile's built-in entities to enforce access policie
 This example uses the NILE JS SDK to demonstrate authorization features in Nile in the following workflow:
 
 - List the instances of `DB` entity type allowed to be read in a given organization by one of the predefined users from the [usecases](../usecases/)
-- Create a new policy that denies the user access to instances of the type `DB` (organization is provided in the request)
+- Create a new policy that allows the user `read` permissions to instances of the type `DB` which have a property `environment=dev`. There is an implicit deny for all other instances.
 
   ```json
   {
-    "actions": [ "deny" ],
-    "resource": { "type": "DB" },
-    "subject": { "email": "polina@demo.io" }
+      actions: ["read"],
+      resource: {
+        type: "DB",
+        properties: {environment: "dev"},
+      },
+      subject: { email : "shaun@demo.io" },
   }
   ```
 
-- List the `DB` instances allowed to be read by the user in a given organization: should be none
+- List the `DB` instances allowed to be read by the user in a given organization: should be just those where environment is dev, none in prod
 - Delete the policy
 - List the `DB` instances allowed to be read by the user in a given organization
 
