@@ -14,6 +14,7 @@ export const useDeveloperNile = (): void | NileApi => {
   const {
     NILE_URL,
     NILE_WORKSPACE,
+    NILE_WORKSPACE_ACCESS_TOKEN,
     NILE_DEVELOPER_EMAIL,
     NILE_DEVELOPER_PASSWORD,
   } = publicRuntimeConfig;
@@ -23,14 +24,11 @@ export const useDeveloperNile = (): void | NileApi => {
       const nile = await Nile({
         basePath: NILE_URL,
         workspace: NILE_WORKSPACE,
-      }).connect({
-        email: NILE_DEVELOPER_EMAIL,
-        password: NILE_DEVELOPER_PASSWORD,
-      });
+      }).connect(NILE_WORKSPACE_ACCESS_TOKEN ?? { email: NILE_DEVELOPER_EMAIL, password: NILE_DEVELOPER_PASSWORD});
       setNile(nile);
     }
     getNile();
-  }, [NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD, NILE_URL, NILE_WORKSPACE]);
+  }, [NILE_URL, NILE_WORKSPACE, NILE_WORKSPACE_ACCESS_TOKEN, NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD]);
 
   return _nile;
 };

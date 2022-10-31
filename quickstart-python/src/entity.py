@@ -25,8 +25,6 @@ params = {
     for param in [
         "NILE_URL",
         "NILE_WORKSPACE",
-        "NILE_DEVELOPER_EMAIL",
-        "NILE_DEVELOPER_PASSWORD",
     ]
 }
 NILE_ENTITY_NAME = "DB"
@@ -54,18 +52,26 @@ else:
 
 
 def run():
-    token = login_developer.sync(
-        client=Client(base_url=params["NILE_URL"]),
-        info=LoginInfo(
-            email=params["NILE_DEVELOPER_EMAIL"],
-            password=params["NILE_DEVELOPER_PASSWORD"],
-        ),
-    )
+    if not os.environ.get("NILE_WORKSPACE_ACCESS_TOKEN"):
+        if not os.environ.get("NILE_DEVELOPER_EMAIL") or not os.environ.get("NILE_DEVELOPER_PASSWORD"):
+            print(
+                f"{BAD} Error: please provide NILE_WORKSPACE_ACCESS_TOKEN or {NILE_DEVELOPER_EMAIL and NILE_DEVELOPER_PASSWORD} in .env . See .env.defaults for more info and copy it to .env with your values"
+            )
+            sys.exit(1)
+        else:
+            token = login_developer.sync(
+                client=Client(base_url=params["NILE_URL"]),
+                info=LoginInfo(
+                    email=os.environ.get("NILE_DEVELOPER_EMAIL"),
+                    password=os.environ.get("NILE_DEVELOPER_PASSWORD"),
+                ),
+            )
+            devToken = token.token
+    else:
+        devToken = os.environ.get("NILE_WORKSPACE_ACCESS_TOKEN")
+    client = AuthenticatedClient(base_url=params["NILE_URL"], token=devToken)
 
-    client = AuthenticatedClient(base_url=params["NILE_URL"], token=token.token)
-
-    print(f"\n{ARROW_RIGHT} Logged into Nile as developer {params['NILE_DEVELOPER_EMAIL']}")
-    print(f"export NILE_ACCESS_TOKEN={token.token}")
+    print(f"\n{ARROW_RIGHT} Logged into Nile as developer")
 
     # Check if entity exists, create if not
     entities = list_entities.sync(client=client, workspace=params["NILE_WORKSPACE"])

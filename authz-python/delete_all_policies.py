@@ -14,7 +14,7 @@ from nile_api.api.access import (
     delete_policy,
     list_policies,
 )
-from nile_api.api.developers import login_developer
+from nile_api.api.users import login_user
 from nile_api.api.organizations import list_organizations
 from nile_api.api.entities import list_instances
 from nile_api.models.login_info import LoginInfo
@@ -32,8 +32,6 @@ params = {
     for param in [
         "NILE_URL",
         "NILE_WORKSPACE",
-        "NILE_DEVELOPER_EMAIL",
-        "NILE_DEVELOPER_PASSWORD",
         "NILE_ORGANIZATION_NAME",
         "NILE_ENTITY_NAME",
     ]
@@ -64,14 +62,26 @@ else:
 NILE_TENANT1_EMAIL = user["email"]
 NILE_TENANT_PASSWORD = user["password"]
 
-token = login_developer.sync(
-    client=Client(base_url=params["NILE_URL"]),
-    info=LoginInfo(
-        email=params["NILE_DEVELOPER_EMAIL"],
-        password=params["NILE_DEVELOPER_PASSWORD"],
-    ),
+# Login user (org creator)
+admins_path = Path(__file__).absolute().parent.parent.joinpath(
+    "usecases",
+    params["NILE_ENTITY_NAME"],
+    "init",
+    "admins.json",
 )
-
+try:
+    contents = admins_path.read_text()
+except FileNotFoundError:
+    print(f"{BAD} could not find {admins_path}")
+    sys.exit(1)
+else:
+    # Load first admin only
+    admin, *_ = json.loads(contents)
+token = login_user.sync(
+    client=Client(base_url=params["NILE_URL"]),
+    workspace=params["NILE_WORKSPACE"],
+    json_body=LoginInfo(email=admin["email"], password=admin["password"]),
+)
 client = AuthenticatedClient(base_url=params["NILE_URL"], token=token.token)
 
 organizations = list_organizations.sync(

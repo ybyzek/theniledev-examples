@@ -17,26 +17,25 @@ const nile!;
 
 async function loginDeveloper() {
 
-  if (!process.env.NILE_DEVELOPER_TOKEN) {
+  if (!process.env.NILE_WORKSPACE_ACCESS_TOKEN) {
     if (!process.env.NILE_DEVELOPER_EMAIL || !process.env.NILE_DEVELOPER_PASSWORD) {
-      console.error(emoji.get('x'), `Error: please provide NILE_DEVELOPER_TOKEN or {NILE_DEVELOPER_EMAIL and NILE_DEVELOPER_PASSWORD} in .env .  See .env.defaults for more info and copy it to .env with your values`);
+      console.error(emoji.get('x'), `Error: please provide NILE_WORKSPACE_ACCESS_TOKEN or {NILE_DEVELOPER_EMAIL and NILE_DEVELOPER_PASSWORD} in .env .  See .env.defaults for more info and copy it to .env with your values`);
       process.exit(1);
     }
   }
 
-  console.log(emoji.get('information_source'), ` NILE_DEVELOPER_TOKEN: ${process.env.NILE_DEVELOPER_TOKEN}`);
+  console.log(emoji.get('information_source'), ` NILE_WORKSPACE_ACCESS_TOKEN: ${process.env.NILE_WORKSPACE_ACCESS_TOKEN}`);
   console.log(emoji.get('information_source'), ` NILE_DEVELOPER_EMAIL: ${process.env.NILE_DEVELOPER_EMAIL}`);
   console.log(emoji.get('information_source'), ` NILE_DEVELOPER_PASSWORD: ${process.env.NILE_DEVELOPER_PASSWORD}`);
 
   nile = await Nile({
     basePath: NILE_URL,
     workspace: NILE_WORKSPACE,
-  }).connect(process.env.NILE_DEVELOPER_TOKEN ?? { email: process.env.NILE_DEVELOPER_EMAIL, password: process.env.NILE_DEVELOPER_PASSWORD });
+  }).connect(process.env.NILE_WORKSPACE_ACCESS_TOKEN ?? { email: process.env.NILE_DEVELOPER_EMAIL, password: process.env.NILE_DEVELOPER_PASSWORD });
 
   nile.authToken = nile.developers.authToken;
   if (nile.authToken) {
     console.log("\n" + emoji.get('arrow_right'), ` Logged into Nile as developer`);
-    console.log(`export NILE_ACCESS_TOKEN=${nile.authToken}`);
   } else {
     console.error(emoji.get('x'), ` Could not log into Nile.  Did you follow the instructions in https://github.com/TheNileDev/examples/blob/main/README.md#setup , create your Nile workspace, and set valid parameter values in a local .env file?`);
     process.exit(1);

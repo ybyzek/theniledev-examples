@@ -11,8 +11,6 @@ dotenv.config({ override: true });
 let envParams = [
   "NILE_URL",
   "NILE_WORKSPACE",
-  "NILE_DEVELOPER_EMAIL",
-  "NILE_DEVELOPER_PASSWORD",
   "NILE_ENTITY_NAME",
 ]
 envParams.forEach( (key: string) => {
@@ -24,8 +22,6 @@ envParams.forEach( (key: string) => {
 
 const NILE_URL = process.env.NILE_URL!;
 const NILE_WORKSPACE = process.env.NILE_WORKSPACE!;
-const NILE_DEVELOPER_EMAIL = process.env.NILE_DEVELOPER_EMAIL!;
-const NILE_DEVELOPER_PASSWORD = process.env.NILE_DEVELOPER_PASSWORD!;
 const NILE_ENTITY_NAME = process.env.NILE_ENTITY_NAME!;
 
 const fs = require('fs');
@@ -38,7 +34,7 @@ const NILE_TENANT1_EMAIL = users[index].email;
 const NILE_TENANT_PASSWORD = users[index].password;
 const NILE_ORGANIZATION_NAME = users[index].org;
 
-const nile = Nile({
+var nile = Nile({
   basePath: NILE_URL,
   workspace: NILE_WORKSPACE,
 });
@@ -49,7 +45,7 @@ console.log(`export NILE_WORKSPACE=${NILE_WORKSPACE}`);
 
 async function testTenant(orgID : string, expectProd : boolean = true) {
 
-  await exampleUtils.loginAsUser(nile, NILE_TENANT1_EMAIL, NILE_TENANT_PASSWORD);
+  nile = await exampleUtils.loginAsUser(nile, NILE_TENANT1_EMAIL, NILE_TENANT_PASSWORD);
 
   // List instances of the service
   await nile.entities.listInstances({
@@ -78,7 +74,10 @@ async function testTenant(orgID : string, expectProd : boolean = true) {
 
 async function listPolicies(orgID : string) {
 
-  await exampleUtils.loginAsDev(nile, NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD);
+  // Login as user who is the admin for this org
+  const admins = require(`../../usecases/${NILE_ENTITY_NAME}/init/admins.json`);
+  let admin = exampleUtils.getAdminForOrg(admins, NILE_ORGANIZATION_NAME);
+  nile = await exampleUtils.loginAsUser(nile, admin.email, admin.password);
 
   // List policies
   const body = {
@@ -96,12 +95,12 @@ async function listPolicies(orgID : string) {
 }
 
 
-
 async function run() {
 
-  await exampleUtils.loginAsDev(nile, NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD);
-
-  console.log(`NILE_ORGANIZATION_NAME is ${NILE_ORGANIZATION_NAME}`);
+  // Login as user who is the admin for this org
+  const admins = require(`../../usecases/${NILE_ENTITY_NAME}/init/admins.json`);
+  let admin = exampleUtils.getAdminForOrg(admins, NILE_ORGANIZATION_NAME);
+  nile = await exampleUtils.loginAsUser(nile, admin.email, admin.password);
 
   let createIfNot = false;
   let orgID = await exampleUtils.maybeCreateOrg (nile, NILE_ORGANIZATION_NAME, false);
@@ -113,20 +112,14 @@ async function run() {
   // List policies
   listPolicies(orgID);
 
-  // List instances of the service
-  await nile.entities.listInstances({
-    org: orgID,
-    type: NILE_ENTITY_NAME,
-    }).then((instances) => {
-      console.log('DEVELOPER: list of allowed instances:', instances);
-    })
-    .catch((error: any) => console.error(error));
-
   var expectProd!;
   expectProd=true;
   await testTenant(orgID, expectProd);
 
-  await exampleUtils.loginAsDev(nile, NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD);
+  // Login as user who is the admin for this org
+  const admins = require(`../../usecases/${NILE_ENTITY_NAME}/init/admins.json`);
+  let admin = exampleUtils.getAdminForOrg(admins, NILE_ORGANIZATION_NAME);
+  nile = await exampleUtils.loginAsUser(nile, admin.email, admin.password);
 
   // Create policy
   var policyID;
@@ -159,7 +152,10 @@ async function run() {
   expectProd=false;
   await testTenant(orgID, expectProd);
 
-  await exampleUtils.loginAsDev(nile, NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD);
+  // Login as user who is the admin for this org
+  const admins = require(`../../usecases/${NILE_ENTITY_NAME}/init/admins.json`);
+  let admin = exampleUtils.getAdminForOrg(admins, NILE_ORGANIZATION_NAME);
+  nile = await exampleUtils.loginAsUser(nile, admin.email, admin.password);
 
   // Delete policy
   const body = {

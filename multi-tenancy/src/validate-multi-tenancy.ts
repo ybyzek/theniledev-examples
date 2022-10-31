@@ -11,8 +11,6 @@ dotenv.config({ override: true });
 let envParams = [
   "NILE_URL",
   "NILE_WORKSPACE",
-  "NILE_DEVELOPER_EMAIL",
-  "NILE_DEVELOPER_PASSWORD",
   "NILE_ENTITY_NAME",
 ]
 envParams.forEach( (key: string) => {
@@ -24,17 +22,14 @@ envParams.forEach( (key: string) => {
 
 const NILE_URL = process.env.NILE_URL!;
 const NILE_WORKSPACE = process.env.NILE_WORKSPACE!;
-const NILE_DEVELOPER_EMAIL = process.env.NILE_DEVELOPER_EMAIL!;
-const NILE_DEVELOPER_PASSWORD = process.env.NILE_DEVELOPER_PASSWORD!;
 const NILE_ENTITY_NAME = process.env.NILE_ENTITY_NAME!;
-
-const fs = require('fs');
-const EntityDefinition = JSON.parse(fs.readFileSync(`../usecases/${NILE_ENTITY_NAME}/entity_definition.json`));
-
 const nile = Nile({
   basePath: NILE_URL,
   workspace: NILE_WORKSPACE,
 });
+
+const fs = require('fs');
+const EntityDefinition = JSON.parse(fs.readFileSync(`../usecases/${NILE_ENTITY_NAME}/entity_definition.json`));
 
 async function getInstances(
   tenantEmail: string,
@@ -44,7 +39,7 @@ async function getInstances(
   console.log(`\nLogging into Nile at ${NILE_URL}, workspace ${NILE_WORKSPACE}, as tenant ${tenantEmail}`)
 
   // Login tenant
-  await exampleUtils.loginAsUser(nile, tenantEmail, "password");
+  nile = await exampleUtils.loginAsUser(nile, tenantEmail, "password");
 
   let createIfNot = false;
   let orgID = await exampleUtils.maybeCreateOrg (nile, orgName, false);
@@ -76,9 +71,9 @@ async function addTenant(
   orgName: string
 ) {
 
-  console.log(`Logging into Nile at ${NILE_URL}, workspace ${NILE_WORKSPACE}, as developer ${NILE_DEVELOPER_EMAIL}, to add ${tenantEmail} to ${orgName}`);
+  console.log(`Logging into Nile at ${NILE_URL}, workspace ${NILE_WORKSPACE}, as developer, to add ${tenantEmail} to ${orgName}`);
 
-  await exampleUtils.loginAsDev(nile, NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD);
+  nile = await exampleUtils.loginAsDev(nile, NILE_URL, NILE_WORKSPACE, process.env.NILE_DEVELOPER_EMAIL, process.env.NILE_DEVELOPER_PASSWORD, process.env.NILE_WORKSPACE_ACCESS_TOKEN);
 
   // Get orgID
   let createIfNot = false;

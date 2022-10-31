@@ -1,23 +1,25 @@
+import Nile from "@theniledev/js";
+
 var emoji = require('node-emoji');
 
 exports.loginAsDev = async function (
-  nile: nileAPI, email: string, password: string): Promise< null > {
+  nile: nileAPI, url: string, workspace: string, email: string, password: string, token: string): Promise< null > {
 
-  // Login developer
-  await nile.developers.loginDeveloper({
-    loginInfo: {
-      email: email,
-      password: password,
-    },
-    }).catch((error:any) => {
-      console.error(emoji.get('x'), `Error: Failed to login to Nile as developer ${email}: ` + error.message);
+  if (!token) {
+    if (!email || !password) {
+      console.error(emoji.get('x'), `Error: please provide NILE_WORKSPACE_ACCESS_TOKEN or {NILE_DEVELOPER_EMAIL and NILE_DEVELOPER_PASSWORD} in .env .  See .env.defaults for more info and copy it to .env with your values`);
       process.exit(1);
-    });
+    }
+  }
 
-  // Get the JWT token
-  nile.authToken = nile.developers.authToken;
-  console.log("\n" + emoji.get('arrow_right'), ` Logged into Nile as developer ${email}`);
-  //console.log(`export NILE_ACCESS_TOKEN=${nile.authToken}`);
+  nile = await Nile({
+    basePath: url,
+    workspace: workspace,
+  }).connect(token ?? { email: email, password: password});
+
+  console.log("\n" + emoji.get('arrow_right'), ` Connected into Nile as developer`);
+
+  return nile;
 }
 
 exports.loginAsUser = async function (
@@ -38,6 +40,8 @@ exports.loginAsUser = async function (
   nile.authToken = nile.users.authToken;
   console.log("\n" + emoji.get('arrow_right'), ` Logged into Nile as user ${email}`);
   //console.log(`export NILE_ACCESS_TOKEN=${nile.authToken}`);
+
+  return nile;
 }
 
 exports.maybeCreateUser = async function (
@@ -79,6 +83,7 @@ exports.maybeCreateOrg = async function (
     //console.log(`export NILE_ORGANIZATION_ID=${maybeOrg.id}`);
     return maybeOrg.id;
   } else if (createIfNot == true) {
+    var orgID;
     await nile.organizations.createOrganization({"createOrganizationRequest" :
     {
       name: orgName,

@@ -45,13 +45,9 @@ Successfully installed anyio-3.6.2 attrs-22.1.0 certifi-2022.9.24 emoji-2.1.0 h1
 
 ## Setup
 
-1. Navigate your web browser of choice to the [Nile Admin Dashboard](https://nad.thenile.dev/).
-You have two options for logging in:
+You must do all the steps in the [Setup section](../README.md#setup) of the top-level README.md.
 
-   - SSO: click `Continue with Google`.
-   - Username/password: if you haven't signed up to Nile yet, go to [our website](https://thenile.dev), enter your email address, and click `Talk to us`. Someone from Nile will contact you.
-
-2. Your SaaS application lives in a workspace, which represents your control plane. You probably already have a name for the SaaS application you'd like to build, so now you can create it. From the dashboard, click `Create a workspace`.  In the textbox, enter the name of a new workspace. 
+:stop_sign: **STOP** :stop_sign: Do not proceed until you have done the above setup :heavy_exclamation_mark:
 
 ## Run
 
@@ -61,57 +57,27 @@ There are three ways to execute the quickstart:
 2. Step-by-step from the command line: execute snippets of Python code using the Python SDK (see [step-by-step](#step-by-step-from-the-command-line) instructions), useful to learn from individual code blocks
 3. Programmatically from the command line: all steps executed with a single command (see [one-command](#one-command) instructions), quickest of the three options
 
-If you are following option 2 or 3 (running from the command line), you need a local file with your Nile configuration.
-For that purpose, at the top-level of the examples, copy the `.env.defaults` file to `.env`:
-
-   ```bash
-   # From the top level of the examples folder
-   $ examples> cp .env.defaults .env
-   ```
-  
-   Set the values in this `.env` file to match the values of what you configured in the dashboard.
-
-   ```
-   NILE_URL=https://prod.thenile.dev
-  
-   NILE_WORKSPACE=<workspace>
-  
-   NILE_DEVELOPER_EMAIL=<your email>
-   NILE_DEVELOPER_PASSWORD=<your password>
-  
-   # Specify a name from the usecases/ folder, e.g.
-   NILE_ENTITY_NAME=DB
-   ```
-
-Now that you have a local configuration file for Nile, you are set to go!
-
 ### Step-by-step from the command line
 
-1. Create a workspace (refer to code [src/ws.py](src/ws.py)).
-
-```
-venv/bin/python src/ws.py
-```
-
-2. Create an entity (refer to code [src/entity.py](src/entity.py)).
+1. Create an entity (refer to code [src/entity.py](src/entity.py)).
 
 ```
 venv/bin/python src/entity.py
 ```
 
-3. Create a user (refer to code [src/user.py](src/user.py)).
+2. Create a user (refer to code [src/user.py](src/user.py)).
 
 ```
 venv/bin/python src/user.py
 ```
 
-4. Create an organization (refer to code [src/org.py](src/org.py)).
+3. Create an organization (refer to code [src/org.py](src/org.py)).
 
 ```
 venv/bin/python src/org.py
 ```
 
-5. Create an entity instance (refer to code [src/entity_instance.py](src/entity_instance.py)).
+4. Create an entity instance (refer to code [src/entity_instance.py](src/entity_instance.py)).
 
 ```
 venv/bin/python src/entity_instance.py
@@ -127,8 +93,7 @@ venv/bin/python src/all.py
 
 ## Validate
 
-Log into the [Nile Admin Dashboard](https://nad.thenile.dev/) to see the control plane and entity instances.
-For the email and password, use the `NILE_DEVELOPER_EMAIL` and `NILE_DEVELOPER_PASSWORD` values you specified in the `.env` file.
+Login to the [Nile Admin Dashboard](https://nad.thenile.dev/) via SSO to see the control plane and entity instances (If your developer account is not SSO, enter the `NILE_DEVELOPER_EMAIL` and `NILE_DEVELOPER_PASSWORD` values you specified in the `.env` file).
 
 Your dashboard should resemble below:
 

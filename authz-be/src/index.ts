@@ -11,8 +11,6 @@ dotenv.config({ override: true });
 let envParams = [
   "NILE_URL",
   "NILE_WORKSPACE",
-  "NILE_DEVELOPER_EMAIL",
-  "NILE_DEVELOPER_PASSWORD",
   "NILE_ENTITY_NAME",
 ]
 envParams.forEach( (key: string) => {
@@ -24,8 +22,6 @@ envParams.forEach( (key: string) => {
 
 const NILE_URL = process.env.NILE_URL!;
 const NILE_WORKSPACE = process.env.NILE_WORKSPACE!;
-const NILE_DEVELOPER_EMAIL = process.env.NILE_DEVELOPER_EMAIL!;
-const NILE_DEVELOPER_PASSWORD = process.env.NILE_DEVELOPER_PASSWORD!;
 const NILE_ENTITY_NAME = process.env.NILE_ENTITY_NAME!;
 
 const fs = require('fs');
@@ -37,7 +33,7 @@ const index=0
 const email = users[index].email;
 const NILE_TENANT_PASSWORD = users[index].password;
 
-const nile = Nile({
+var nile = Nile({
   basePath: NILE_URL,
   workspace: NILE_WORKSPACE,
 });
@@ -56,7 +52,45 @@ async function listPolicies(orgID : string) {
     .catch((error: any) => console.error(error));
 }
 
+async function createAccessPolicyEntityType(email: string, orgID: string) {
+
+  // Create policy
+  var policyID;
+  const body = {
+    org: orgID,
+    createPolicyRequest: {
+      actions: ["read", "write"],
+      resource: {
+        type: NILE_ENTITY_NAME,
+      },
+      subject: { email : email },
+    },
+  };
+  console.log("Creating createAccessPolicyEntityType with body: " + JSON.stringify(body, null, 2));
+  await nile.access
+    .createPolicy(body)
+    .then((data) => {
+      policyID = JSON.stringify(data.id, null, 2).replace(/['"]+/g, '');
+      console.log(emoji.get('white_check_mark'), `Created policy with id ${policyID} for subject ${email} for entity ${NILE_ENTITY_NAME}`);
+    })
+    .catch((error: any) => console.error(error));
+}
+
+
 async function createAccessPolicyEntityInstance(email: string, orgID: string, instanceName: string, propertyValue: string, actions: string[]) {
+
+  // List instances
+  await nile.entities.listInstances({
+    org: orgID,
+    type: NILE_ENTITY_NAME,
+   }).then((entity_instances) => {
+    if (entity_instances.length === 0) {
+      console.error(emoji.get('x'), `Something is wrong, currently logged in user should be able to see some entity instances in ${orgID} but sees none`);
+      process.exit(1);
+    } else {
+      console.log(`Currently logged in user can see the following entity instances exist in orgID ${orgID}\n`, entity_instances);
+    }
+  });
 
   // Find instance
   var instance_id;
@@ -86,7 +120,7 @@ async function createAccessPolicyEntityInstance(email: string, orgID: string, in
       subject: { email : email },
     },
   };
-  console.log("Creating policy with body: " + JSON.stringify(body, null, 2));
+  console.log("Creating createAccessPolicyEntityInstance with body: " + JSON.stringify(body, null, 2));
   await nile.access
     .createPolicy(body)
     .then((data) => {
@@ -98,6 +132,19 @@ async function createAccessPolicyEntityInstance(email: string, orgID: string, in
 }
 
 async function createAccessPolicyForPolicies(email: string, orgID: string) {
+
+  // List instances
+  await nile.entities.listInstances({
+    org: orgID,
+    type: NILE_ENTITY_NAME,
+   }).then((entity_instances) => {
+    if (entity_instances.length === 0) {
+      console.error(emoji.get('x'), `Something is wrong, currently logged in user should be able to see some entity instances in ${orgID} but sees none`);
+      process.exit(1);
+    } else {
+      console.log(`Currently logged in user can see the following entity instances exist in orgID ${orgID}\n`, entity_instances);
+    }
+  });
 
   // Create policy
   var policyID;
@@ -111,7 +158,7 @@ async function createAccessPolicyForPolicies(email: string, orgID: string) {
       subject: { email : email },
     },
   };
-  console.log("Creating policy with body: " + JSON.stringify(body, null, 2));
+  console.log("Creating createAccessPolicyForPolicies with body: " + JSON.stringify(body, null, 2));
   await nile.access
     .createPolicy(body)
     .then((data) => {
@@ -124,28 +171,49 @@ async function createAccessPolicyForPolicies(email: string, orgID: string) {
 
 async function run() {
 
-  // For ease of demo: the Nile developer creates all the access policies
-  // However, in practice, the organization's admin user can create the necessary policies
-  await exampleUtils.loginAsDev(nile, NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD);
-
   var actions;
   const entities = require(`../../usecases/${NILE_ENTITY_NAME}/init/entities.json`);
+  const admins = require(`../../usecases/${NILE_ENTITY_NAME}/init/admins.json`);
   const users = require(`../../usecases/${NILE_ENTITY_NAME}/init/users.json`);
-  for (let index = 0 ; index < entities.length ; index++) {
 
-    let pageOrg = entities[index].org;
+  // Configure access policies for admins
+  for (let index3 = 0 ; index3 < admins.length ; index3++) {
+    nile = await exampleUtils.loginAsUser(nile, admins[index3].email, admins[index3].password);
     let createIfNot = false;
-    let orgID = await exampleUtils.maybeCreateOrg (nile, pageOrg, createIfNot);
+    let orgID = await exampleUtils.maybeCreateOrg (nile, admins[index3].org, createIfNot);
     if (!orgID) {
-      console.error ("Error: cannot determine the ID of the organization from the provided name :" + orgName)
+      console.error ("Error: cannot determine the ID of the organization from the provided name :" + admins[index3].org)
+      process.exit(1);
+    }
+    await createAccessPolicyForPolicies(admins[index3].email, orgID);
+    await createAccessPolicyEntityType(admins[index3].email, orgID);
+  }
+
+  // Configure access policies for users
+  for (let index = 0 ; index < entities.length ; index++) {
+    let pageOrg = entities[index].org;
+
+    // Login as user who is the admin for this org
+    let admin = exampleUtils.getAdminForOrg(admins, pageOrg);
+    nile = await exampleUtils.loginAsUser(nile, admin.email, admin.password);
+    let createIfNot = false;
+    let orgID = await exampleUtils.maybeCreateOrg (nile, admin.org, createIfNot);
+    if (!orgID) {
+      console.error ("Error: cannot determine the ID of the organization from the provided name :" + pageOrg);
       process.exit(1);
     }
 
     for (let index2 = 0 ; index2 < users.length ; index2++) {
       if (users[index2].org == pageOrg) {
+        // Login as user who is the admin for this org
+        let admin = exampleUtils.getAdminForOrg(admins, pageOrg);
+        nile = await exampleUtils.loginAsUser(nile, admin.email, admin.password);
+        console.log(`users[index2].email is ${users[index2].email}`);
+
         if (users[index2].role == "admin") {
           // In this scenario, admins have RW for policies and entity instances
           await createAccessPolicyForPolicies(users[index2].email, orgID);
+          await createAccessPolicyEntityType(users[index2].email, orgID);
           actions = ["read", "write"];
         } else if (users[index2].role == "RW") {
           actions = ["read", "write"];

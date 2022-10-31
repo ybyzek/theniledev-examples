@@ -16,6 +16,7 @@
   "scripts": {
     "setup-nile": "yarn --cwd ../multi-tenancy/ install && yarn --cwd ../multi-tenancy/ start",
     "start": "ts-node src/index.ts",
+    "preclean": "yarn --cwd ../utils-module-js/ install",
     "clean": "ts-node src/delete-all-policies.ts"
   },
   "engines": {

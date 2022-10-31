@@ -40,7 +40,6 @@ async function createInstance() {
     });
   nile.authToken = nile.users.authToken;
   console.log("\n" + emoji.get('arrow_right'), ` Logged into Nile as user ${email}`);
-  console.log(`export NILE_ACCESS_TOKEN=${nile.authToken}`);
 
   // Get orgID
   let orgName = "Colton Labs"

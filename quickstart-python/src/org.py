@@ -45,7 +45,7 @@ def run():
     client = AuthenticatedClient(base_url=params["NILE_URL"], token=token.token)
 
     print(f"\n{ARROW_RIGHT} Logged into Nile as user {email}")
-    print(f"export NILE_ACCESS_TOKEN={token.token}")
+    #print(f"export NILE_USER_AUTH_TOKEN={token.token}")
 
     # Check if org exists, create if not
     org_name = "Colton Labs"

@@ -186,14 +186,13 @@ yarn install && yarn build
 source .env
 ```
 
-3. Run the following reconciler executable:
+3. Run the reconciler executable.  Pass in either `--authToken` with your workspace access token (SSO), or `--email` and `--password` with your developer email and password (non-SSO).
 
 ```bash
 ./bin/dev reconcile --basePath $NILE_URL \
   --workspace $NILE_WORKSPACE \
   --entity $NILE_ENTITY_NAME \
-  --email $NILE_DEVELOPER_EMAIL \
-  --password $NILE_DEVELOPER_PASSWORD
+  --authToken $NILE_WORKSPACE_ACCESS_TOKEN
 ```
 
 ### Docker

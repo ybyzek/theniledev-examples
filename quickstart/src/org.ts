@@ -40,7 +40,6 @@ async function setupOrg() {
     });
   nile.authToken = nile.users.authToken;
   console.log("\n" + emoji.get('arrow_right'), ` Logged into Nile as user ${email}`);
-  console.log(`export NILE_ACCESS_TOKEN=${nile.authToken}`);
 
   // Check if org exists, create if not
   let orgName = "Colton Labs"

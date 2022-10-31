@@ -1,4 +1,4 @@
-import Nile, { CreateEntityRequest } from "@theniledev/js";
+import { CreateEntityRequest } from "@theniledev/js";
 import { CreateEntityOperationRequest } from "@theniledev/js/dist/generated/openapi/src";
 
 var exampleUtils = require('../../utils-module-js/').exampleUtils;
@@ -12,8 +12,6 @@ dotenv.config({ override: true })
 let envParams = [
   "NILE_URL",
   "NILE_WORKSPACE",
-  "NILE_DEVELOPER_EMAIL",
-  "NILE_DEVELOPER_PASSWORD",
   "NILE_ENTITY_NAME",
 ]
 envParams.forEach( (key: string) => {
@@ -25,9 +23,8 @@ envParams.forEach( (key: string) => {
 
 const NILE_URL = process.env.NILE_URL!;
 const NILE_WORKSPACE = process.env.NILE_WORKSPACE!;
-const NILE_DEVELOPER_EMAIL = process.env.NILE_DEVELOPER_EMAIL!;
-const NILE_DEVELOPER_PASSWORD = process.env.NILE_DEVELOPER_PASSWORD!;
 const NILE_ENTITY_NAME = process.env.NILE_ENTITY_NAME!;
+var nile!;
 
 const fs = require('fs');
 try {
@@ -40,54 +37,14 @@ try {
 
 const NILE_TENANT_MAX = process.env.NILE_TENANT_MAX || false;
 
-const nile = Nile({
-  basePath: NILE_URL,
-  workspace: NILE_WORKSPACE,
-});
-
 // Schema for the entity that defines the service in the data plane
 const entityDefinition: CreateEntityRequest = EntityDefinition;
 
 // Workflow for the Nile developer
-async function setupDeveloper() {
+async function setupEntity() {
 
-  // Signup developer
-  try {
-    await nile.developers.createDeveloper({
-      createUserRequest : {
-        email : NILE_DEVELOPER_EMAIL,
-        password : NILE_DEVELOPER_PASSWORD,
-      }
-    })
-    console.log(emoji.get('white_check_mark'), `Signed up for Nile at ${NILE_URL}, workspace ${NILE_WORKSPACE}, as developer ${NILE_DEVELOPER_EMAIL}`);
-  } catch (error:any) {
-    if (error.message == "user already exists") {
-      console.log(emoji.get('dart'), `Developer ${NILE_DEVELOPER_EMAIL} already exists`);
-    } else {
-      console.error(error);
-      process.exit(1);
-    }
-  };
-
-  await exampleUtils.loginAsDev(nile, NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD);
-
-  // Check if workspace exists, create if not
-  var myWorkspaces = await nile.workspaces.listWorkspaces()
-  if ( myWorkspaces.find( ws => ws.name==NILE_WORKSPACE) != null) {
-         console.log(emoji.get('dart'), "Workspace " + NILE_WORKSPACE + " exists");
-  } else {
-      await nile.workspaces.createWorkspace({
-        createWorkspaceRequest: { name: NILE_WORKSPACE },
-      }).then( (ws) => { if (ws != null)  console.log(emoji.get('white_check_mark'), "Created workspace: " + ws.name)})
-        .catch((error:any) => {
-          if (error.message == "workspace already exists") {
-            console.error(emoji.get('x'), `Error: workspace ${NILE_WORKSPACE} already exists (workspace names are globally unique)`);
-          } else {
-            console.error(error);
-            process.exit(1);
-          }
-        });
-  }
+  // Login
+  nile = await exampleUtils.loginAsDev(nile, NILE_URL, NILE_WORKSPACE, process.env.NILE_DEVELOPER_EMAIL, process.env.NILE_DEVELOPER_PASSWORD, process.env.NILE_WORKSPACE_ACCESS_TOKEN);
 
   // Check if entity exists, create if not
   var myEntities =  await nile.entities.listEntities()
@@ -111,7 +68,7 @@ async function addAdmin(admin: string, nile: nileApi) {
 
   // user is org creator
   await exampleUtils.maybeCreateUser(nile, email, password, role);
-  await exampleUtils.loginAsUser(nile, email, password);
+  nile = await exampleUtils.loginAsUser(nile, email, password);
   let createIfNot = true;
   await exampleUtils.maybeCreateOrg (nile, org, createIfNot);
 }
@@ -124,7 +81,7 @@ async function addUser(user: string, nile: nileApi, admins: string) {
   let admin = exampleUtils.getAdminForOrg(admins, org);
 
   // user is not org creator; let admin user create and add them into the org
-  await exampleUtils.loginAsUser(nile, admin.email, admin.password);
+  nile = await exampleUtils.loginAsUser(nile, admin.email, admin.password);
   await exampleUtils.maybeCreateUser(nile, email, password, role);
   let createIfNot = false;
   let orgID = await exampleUtils.maybeCreateOrg (nile, org, createIfNot);
@@ -136,7 +93,7 @@ async function addEntity(entity: string, nile: nileApi, admins: string) {
   let admin = exampleUtils.getAdminForOrg(admins, org);
 
   // Get orgID
-  await exampleUtils.loginAsUser(nile, admin.email, admin.password);
+  nile = await exampleUtils.loginAsUser(nile, admin.email, admin.password);
   let createIfNot = false;
   let orgID = await exampleUtils.maybeCreateOrg (nile, org, false);
 
@@ -151,8 +108,8 @@ async function addEntity(entity: string, nile: nileApi, admins: string) {
 // Value is for running the examples and does not represent exactly how this would work in production
 async function setupControlPlane() {
 
-  // Sign up and log in as the Nile developer
-  await setupDeveloper();
+  // Login and setup entity
+  await setupEntity();
 
   // Add admins and create their orgs
   const admins = require(`../../usecases/${NILE_ENTITY_NAME}/init/admins.json`);
@@ -179,7 +136,7 @@ async function setupControlPlane() {
   for (let index = 0; index < admins.length ; index++) {
     let email = admins[index].email;
     let password = admins[index].password;
-    await exampleUtils.loginAsUser(nile, email, password);
+    nile = await exampleUtils.loginAsUser(nile, email, password);
 
     let org = admins[index].org;
     let createIfNot = false;

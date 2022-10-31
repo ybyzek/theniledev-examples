@@ -9,7 +9,7 @@ exports.addInstanceToOrg = async function (nile, orgID, entityName, instanceJson
   if (maybeInstance) {
     console.log("Entity instance " + entityName + ` exists where ` + exports.instanceName + ` is ${instanceJson[exports.instanceName]} (id: ${maybeInstance.id})`);
   } else {
-    console.log(myInstances);
+    console.log(`Did not find existing instance of ${instanceJson[exports.instanceName]} in ${orgID}, creating new instance...`);
     await nile.entities.createInstance({
       org: orgID,
       type: entityName,

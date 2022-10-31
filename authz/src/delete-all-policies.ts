@@ -11,8 +11,6 @@ dotenv.config({ override: true });
 let envParams = [
   "NILE_URL",
   "NILE_WORKSPACE",
-  "NILE_DEVELOPER_EMAIL",
-  "NILE_DEVELOPER_PASSWORD",
   "NILE_ENTITY_NAME",
 ]
 envParams.forEach( (key: string) => {
@@ -24,14 +22,12 @@ envParams.forEach( (key: string) => {
 
 const NILE_URL = process.env.NILE_URL!;
 const NILE_WORKSPACE = process.env.NILE_WORKSPACE!;
-const NILE_DEVELOPER_EMAIL = process.env.NILE_DEVELOPER_EMAIL!;
-const NILE_DEVELOPER_PASSWORD = process.env.NILE_DEVELOPER_PASSWORD!;
 const NILE_ENTITY_NAME = process.env.NILE_ENTITY_NAME!;
 
 const fs = require('fs');
 const EntityDefinition = JSON.parse(fs.readFileSync(`../usecases/${NILE_ENTITY_NAME}/entity_definition.json`));
 
-const nile = Nile({
+var nile = Nile({
   basePath: NILE_URL,
   workspace: NILE_WORKSPACE,
 });
@@ -73,13 +69,18 @@ async function deletePoliciesFromOrg (orgName: string) {
 }
 
 async function run() {
-  await exampleUtils.loginAsDev(nile, NILE_DEVELOPER_EMAIL, NILE_DEVELOPER_PASSWORD);
 
   var actions;
   const entities = require(`../../usecases/${NILE_ENTITY_NAME}/init/entities.json`);
   const users = require(`../../usecases/${NILE_ENTITY_NAME}/init/users.json`);
   for (let index = 0 ; index < entities.length ; index++) {
     let pageOrg = entities[index].org;
+
+    // Login as user who is the admin for this org
+    const admins = require(`../../usecases/${NILE_ENTITY_NAME}/init/admins.json`);
+    let admin = exampleUtils.getAdminForOrg(admins, pageOrg);
+    nile = await exampleUtils.loginAsUser(nile, admin.email, admin.password);
+
     await deletePoliciesFromOrg(pageOrg);
   }
 }

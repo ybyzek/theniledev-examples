@@ -65,3 +65,9 @@ To execute the workflow, run the following command:
 ```
 venv/bin/python authz.py
 ```
+
+To delete access policies, run the following command:
+
+```
+venv/bin/python delete_all_policies.py
+```

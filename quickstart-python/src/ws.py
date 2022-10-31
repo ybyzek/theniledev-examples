@@ -52,7 +52,7 @@ def run():
     client = AuthenticatedClient(base_url=params["NILE_URL"], token=token)
 
     print(f"\n{ARROW_RIGHT} Logged into Nile as developer {params['NILE_DEVELOPER_EMAIL']}")
-    print(f"export NILE_ACCESS_TOKEN={token}")
+    print(f"export NILE_DEVELOPER_AUTH_TOKEN={token}")
 
     workspaces = list_workspaces.sync(client=client)
     workspace = next(
