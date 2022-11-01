@@ -6,13 +6,16 @@
 
 * [Overview](#overview)
 * [Setup](#setup)
-* [Examples](#examples)
+* [Examples by Feature](#examples-by-feature)
   * [Quickstart](#quickstart)
   * [Multi-tenancy](#multi-tenancy)
   * [Data Plane](#data-plane)
   * [Authorization](#authorization)
   * [Webapp](#webapp)
   * [Other](#other)
+* [Examples by Language](#examples-by-language)
+  * [Javascript](#javascript)
+  * [Python](#python)
 * [Advanced Configuration](#advanced-configuration)
 
 ## Overview
@@ -57,10 +60,10 @@ At the top-level of the examples, copy the [.env.defaults](.env.defaults) file t
 
 5. For the Javascript examples, validate your environment has the minimum required Node version v18.0.0 or higher. If you are running earlier versions, you may encounter errors such as `ReferenceError: fetch is not defined`. (If you use `nvm`, run `nvm use`).
    
+## Examples by Feature
+
 > Note: the languages presented below are an indication just of which examples have been developed, not of what's available.
 > Please see the Nile API and SDK documentation for details.
-
-## Examples
 
 ### Quickstart
 
@@ -108,6 +111,28 @@ These metrics can be exposed externally to the end user as well as internally fo
 
 Here are additional examples that you can refer to.
 
+- [Python + Flask Todo List Webapp](python-flask-todo-list/) | Python REST | Take a basic Todo List webapp written in Python and Flask and turn it to a PLG SaaS product with Nile APIs
+
+## Examples by Language
+
+> Note: the languages presented below are an indication just of which examples have been developed, not of what's available.
+> Please see the Nile API and SDK documentation for details.
+
+### Javascript
+
+- [Quickstart with JS](quickstart) | JS SDK | Setup a minimal Nile control plane with a single tenant
+- [Multi-tenancy](multi-tenancy/) | JS SDK | Setup the Nile control plane with multiple tenants and users
+- [Data Plane with Pulumi via JS](data-plane/pulumi/) | JS SDK | Synchronize your data plane and control plane
+- [Data Plane with Apache Flink and Kubernetes via JS](data-plane/k8s/) | JS SDK | Synchronize a control plane built with Nile with data plane that uses Apache Flink and Kubernetes
+- [Authorization with JS](authz/) | JS SDK | Use ABAC to grant and revoke permissions to resources
+- [Authorization App Backend with JS](authz-be/) | JS SDK | Authorize users against Nile control plane for your backend applications
+- [Webapp](webapp/) | JS SDK | Builds a self-service frontend that integrates with Nile on the backend
+
+### Python
+
+- [Quickstart with Python](quickstart-python) | Python SDK | Setup a minimal Nile control plane with a single tenant
+- [Data Plane with Apache Flink and Kubernetes via Python](data-plane-python/k8s/) | Python SDK | Synchronize a control plane built with Nile with data plane that uses Apache Flink and Kubernetes
+- [Authorization with Python](authz-python/) | Python SDK | Use ABAC to grant and revoke permissions to resources
 - [Python + Flask Todo List Webapp](python-flask-todo-list/) | Python REST | Take a basic Todo List webapp written in Python and Flask and turn it to a PLG SaaS product with Nile APIs
 
 ## Advanced Configuration
