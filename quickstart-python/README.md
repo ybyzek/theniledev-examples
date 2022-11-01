@@ -97,6 +97,6 @@ Login to the [Nile Admin Dashboard](https://nad.thenile.dev/) via SSO to see the
 
 Your dashboard should resemble below:
 
-![image](images/nad.png)
+![image](../quickstart/images/nad.png)
 
 Nile automatically generates the OpenAPI spec for the new entity, see the `OPENAPI` tab in the dashboard.
