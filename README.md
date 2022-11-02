@@ -1,71 +1,77 @@
-# Nile Examples
-
 ![image](images/Nile-text-logo.png)
 
-## Contents
+### Table of Contents
 
 * [Overview](#overview)
 * [Setup](#setup)
+* [Quickstart](#quickstart)
 * [Examples by Feature](#examples-by-feature)
-  * [Quickstart](#quickstart)
   * [Multi-tenancy](#multi-tenancy)
   * [Data Plane](#data-plane)
   * [Authorization](#authorization)
   * [Webapp](#webapp)
   * [Other](#other)
 * [Examples by Language](#examples-by-language)
-  * [Javascript](#javascript)
-  * [Python](#python)
+  * [Javascript](#javascript-javascript)
+  * [Python](#python-python)
+* [Tests](#tests)
 * [Advanced Configuration](#advanced-configuration)
+* [Talk to us](#talk-to-us)
 
 ## Overview
 
-This collection of examples demonstrates how to use Nile as a control plane for an Infrastructure SaaS product.
-Nile provides an entity system, event system, and tenant-aware metrics.
+Nile provides a tenant-aware, serverless database that is used to build control planes, which enables companies to iterate quickly and deliver their product to the market as quickly as possible.
+This collection of examples demonstrates how to use Nile in a variety of ways.
 
-### Where to start
+### Getting started
 
-Run the Quickstart to setup your control plane in Nile.
-Follow on with any of the other modules for different use cases.
+To get started, [setup](#setup) your Nile workspace and environment, and then run the [Quickstart](#quickstart) to configure a minimal control plane in Nile.
+
+You can then follow on with any of the other modules for different use cases.
 The modules can also be run sequentially to build on top of one another, in which case, we recommend running them in the order presented here to build up your SaaS as you go.
-Don't forget to run the webapp which builds on the control plane; it includes a front-end for self-service provisioning, where a user can log in to view and create new entity instances, for example:
-
-![image](webapp/images/instances.png)
-
-And view metrics for each of their instances:
-
-![image](webapp/images/metrics.png)
+Don't forget to run the webapp example which builds on the control plane which showcases a front-end for self-service provisioning, where a user can log in to view and create new entity instances, and view metrics for each of their instances:
 
 ## Setup
 
-1. Navigate your web browser of choice to the [Nile Admin Dashboard](https://nad.thenile.dev/) and click `Continue with Google` to login via SSO. (Don't want SSO? Go to the [Nile website](https://thenile.dev), enter your email address, and click `Talk to us`, then someone from Nile will contact you to setup up an email and password for you)
+### Nile workspace and developer credentials
 
-2. If you don't already have a Nile workspace, create it now. From the dashboard, click `Create a workspace`, and in the textbox enter the name of a new workspace. This represents your control plane where your SaaS application lives.
+- ✅ Log into Nile Admin Dashboard
 
-3. From the dashboard, get your [workspace access token](https://www.thenile.dev/docs/current/quick-start-ui#more-examples).  This token enables you to programmatically run the examples in this repo.
+   Navigate your web browser of choice to the [Nile Admin Dashboard](https://nad.thenile.dev/) and click `Continue with Google` to login via SSO. (Don't want SSO? Go to the [Nile website](https://thenile.dev), enter your email address, and click `Talk to us`, then someone from Nile will contact you to setup up an email and password for you)
 
-4. From a terminal window, clone the [theniledev/examples](https://github.com/theniledev/examples) repo and change into the new directory.
+- ✅ Create a Nile workspace
 
-   ```bash
-   git clone git@github.com:TheNileDev/examples.git
-   cd examples
-   ```
+  If you don't already have a Nile workspace, create it now. From the dashboard, click `Create a workspace`, and in the textbox enter the name of a new workspace. This represents your control plane where your SaaS application lives.
 
-4. To run any example, you need a local `.env` file with your Nile configuration.
-At the top-level of the examples, copy the [.env.defaults](.env.defaults) file to a new file `.env`, and then edit the values in the `.env` file to match what you created in the dashboard. In particular, set the values of your Nile workspace and credentials to match what you have in the Nile Admin Dashboard.
+- ✅ Get your workspace access token
 
-   ```bash
-   cp .env.defaults .env     # edit file (set NILE_WORKSPACE, and {NILE_WORKSPACE_ACCESS_TOKEN} or {NILE_DEVELOPER_EMAIL and NILE_DEVELOPER_PASSWORD})
-   ```
+  From the dashboard, get your [workspace access token](https://www.thenile.dev/docs/current/quick-start-ui#more-examples).  This token enables you to programmatically run the examples in this repo.
 
-5. For the Javascript examples, validate your environment has the minimum required Node version v18.0.0 or higher. If you are running earlier versions, you may encounter errors such as `ReferenceError: fetch is not defined`. (If you use `nvm`, run `nvm use`).
+### Your local environment
+
+- ✅ Clone the GitHub repository
+
+  From a terminal window, clone the [theniledev/examples](https://github.com/theniledev/examples) repo and change into the new directory.
+
+  ```bash
+  git clone git@github.com:TheNileDev/examples.git
+  cd examples
+  ```
+
+- ✅ Create a local `.env` file
+
+  To run any example, you need a local `.env` file with your Nile configuration.
+  At the top-level of the examples, copy the [.env.defaults](.env.defaults) file to a new file `.env`, and then edit the values in the `.env` file to match what you created in the dashboard. In particular, set the values of your Nile workspace and credentials to match what you have in the Nile Admin Dashboard.
+
+  ```bash
+  cp .env.defaults .env     # edit file (set NILE_WORKSPACE, and {NILE_WORKSPACE_ACCESS_TOKEN} or {NILE_DEVELOPER_EMAIL and NILE_DEVELOPER_PASSWORD})
+  ```
+
+- ✅ Verify Node version (Javascript examples only)
+
+  For the Javascript examples, validate your environment has the minimum required Node version v18.0.0 or higher. If you are running earlier versions, you may encounter errors such as `ReferenceError: fetch is not defined`. (If you use `nvm`, run `nvm use`).
    
-## Examples by Feature
-
-> Note: the languages presented below are an indication just of which examples have been developed, not of what's available.
-> Please see the Nile API and SDK documentation for details.
-
-### Quickstart
+## Quickstart
 
 Start with the quickstart to configure a base Nile control plane.
 This provides a simple setup to learn the concepts but also serves as the foundation for the other examples below.
@@ -73,12 +79,18 @@ This provides a simple setup to learn the concepts but also serves as the founda
 - [Quickstart with JS](quickstart) | JS SDK | Setup a minimal Nile control plane with a single tenant
 - [Quickstart with Python](quickstart-python) | Python SDK | Setup a minimal Nile control plane with a single tenant
 
+![quickstart](quickstart/images/nad.png)
+
+## Examples by Feature
+
 ### Multi-tenancy
 
 Tenants have access to specific organizations that have isolated sets of resources.
 Users are allowed to access only the entity instances in the organizations to which they have been added.
 
 - [Multi-tenancy](multi-tenancy/) | JS SDK | Setup the Nile control plane with multiple tenants and users
+
+![multi-tenancy](images/infra_saas_architecture.png)
 
 ### Data Plane
 
@@ -90,6 +102,8 @@ Even if you're using another deployment tool like Kubernetes or Terraform, simil
 - [Data Plane with Apache Flink and Kubernetes via JS](data-plane/k8s/) | JS SDK | Synchronize a control plane built with Nile with data plane that uses Apache Flink and Kubernetes
 - [Data Plane with Apache Flink and Kubernetes via Python](data-plane-python/k8s/) | Python SDK | Synchronize a control plane built with Nile with data plane that uses Apache Flink and Kubernetes
 
+![data-plane](images/synchronize_data_plane.png)
+
 ### Authorization
 
 Attribute-based access control (ABAC) is an authorization model that gives you fine-grained authorization capabilities.
@@ -99,6 +113,8 @@ You can configure these in the control plane so that they are aligned to your bu
 - [Authorization with Python](authz-python/) | Python SDK | Use ABAC to grant and revoke permissions to resources
 - [Authorization App Backend with JS](authz-be/) | JS SDK | Authorize users against Nile control plane for your backend applications
 
+![validate permissions](images/validate_permissions.png)
+
 ### Webapp
 
 Configure a front-end web application that is customizable on a per-tenant basis.
@@ -106,6 +122,8 @@ The webapp includes Nile React components for metrics, because it is critical fo
 These metrics can be exposed externally to the end user as well as internally for business operations.
 
 - [Webapp](webapp/) | JS SDK | Builds a self-service frontend that integrates with Nile on the backend
+
+![image](webapp/images/metrics.png)
 
 ### Other
 
@@ -115,10 +133,12 @@ Here are additional examples that you can refer to.
 
 ## Examples by Language
 
-> Note: the languages presented below are an indication just of which examples have been developed, not of what's available.
+> Note: the languages and examples shown are an indication just of which examples have been developed, not of what's available.
 > Please see the Nile API and SDK documentation for details.
 
-### Javascript
+### ![javascript](images/javascript.png) Javascript
+
+These examples use the [nile-js](https://github.com/TheNileDev/nile-js) SDK.
 
 - [Quickstart with JS](quickstart) | JS SDK | Setup a minimal Nile control plane with a single tenant
 - [Multi-tenancy](multi-tenancy/) | JS SDK | Setup the Nile control plane with multiple tenants and users
@@ -128,12 +148,21 @@ Here are additional examples that you can refer to.
 - [Authorization App Backend with JS](authz-be/) | JS SDK | Authorize users against Nile control plane for your backend applications
 - [Webapp](webapp/) | JS SDK | Builds a self-service frontend that integrates with Nile on the backend
 
-### Python
+### ![python](images/python.png) Python
+
+These examples use the [nile-py](https://github.com/TheNileDev/nile-py) SDK.
 
 - [Quickstart with Python](quickstart-python) | Python SDK | Setup a minimal Nile control plane with a single tenant
 - [Data Plane with Apache Flink and Kubernetes via Python](data-plane-python/k8s/) | Python SDK | Synchronize a control plane built with Nile with data plane that uses Apache Flink and Kubernetes
 - [Authorization with Python](authz-python/) | Python SDK | Use ABAC to grant and revoke permissions to resources
 - [Python + Flask Todo List Webapp](python-flask-todo-list/) | Python REST | Take a basic Todo List webapp written in Python and Flask and turn it to a PLG SaaS product with Nile APIs
+
+## Tests
+
+The examples are validated via GitHub Actions, a flexible CI/CD tool that executes the examples against Nile.
+For more details, view this repo's [workflow](.github/workflows/validate-examples.yml).
+
+![GitHub Actions workflow](images/gh-actions-workflow.png)
 
 ## Advanced Configuration
 
@@ -145,3 +174,8 @@ But you can modify the `NILE_ENTITY_NAME` parameter in your `.env` file (see [Se
 - [Banking as a Service](usecases/Banking/): `NILE_ENTITY_NAME=Banking`
 - [Workload as a Service](usecases/Workload/): `NILE_ENTITY_NAME=Workload`
 - [YOLO](usecases/README.md#yolo)
+
+## Talk to us
+
+If you have any questions, reach out to us from the [Nile website](https://thenile.dev).
+Enter your email address, and click `Talk to us`, then someone from Nile will contact you.
