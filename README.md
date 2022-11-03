@@ -9,6 +9,7 @@
   * [Multi-tenancy](#multi-tenancy)
   * [Data Plane](#data-plane)
   * [Authorization](#authorization)
+  * [Metrics](#metrics)
   * [Webapp](#webapp)
   * [Other](#other)
 * [Examples by Language](#examples-by-language)
@@ -115,11 +116,20 @@ You can configure these in the control plane so that they are aligned to your bu
 
 ![validate permissions](images/validate_permissions.png)
 
+### Metrics
+
+Nile provides a metrics API and matching UI components.
+This allows you to add real-time data features to your application, for example, each end user of your SaaS can see their real-time resource consumption and the cost incurred to date.
+Read more on the importance of metrics and consumption-based billing in the blog post [Launching an Infrastructure SaaS Product, An Example Walkthrough](https://www.thenile.dev/blog/launch-infra-saas#metrics-and-consumption-based-billing).
+
+- [Metrics with JS](metrics/) | JS SDK | Produce and get mock metrics
+
+![metrics](images/metrics_billing_apis.png)
+
 ### Webapp
 
-Configure a front-end web application that is customizable on a per-tenant basis.
-The webapp includes Nile React components for metrics, because it is critical for any SaaS to be able to measure and monitor consumption and do accurate tenant billing.
-These metrics can be exposed externally to the end user as well as internally for business operations.
+Launch a front-end web application that is customizable on a per-tenant basis.
+The webapp includes Nile React components for metrics.
 
 - [Webapp](webapp/) | JS SDK | Builds a self-service frontend that integrates with Nile on the backend
 
