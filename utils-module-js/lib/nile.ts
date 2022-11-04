@@ -155,6 +155,10 @@ exports.getAnyValidInstance = async function (
   const orgName = users[index].org;
   let createIfNot = false;
   let orgID = await this.maybeCreateOrg (nile, orgName, false);
+  if (!orgID) {
+    console.error(emoji.get('x'), `Error: could not get orgID for organization name ${orgName}.  Did you first run 'yarn setup-nile'?`);
+    process.exit(1);
+  }
 
   // Get one instance ID for above org ID
   var oneInstance;

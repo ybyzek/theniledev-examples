@@ -8,7 +8,7 @@ Nile provides a metrics API and matching UI components.
 This allows you to add real-time data features to your application, for example, each end user of your SaaS can see their real-time resource consumption and the cost incurred to date.
 Read more on the importance of metrics and consumption-based billing in the blog post [Launching an Infrastructure SaaS Product, An Example Walkthrough](https://www.thenile.dev/blog/launch-infra-saas#metrics-and-consumption-based-billing).
 
-This example uses the Nile JS SDK to produce and get metrics about your entity instances.
+This example uses the Nile JS SDK to produce and filter metrics for your entity instances.
 
 As described in the [top-level README](../README.md), the mock scenario in these examples is a company that provides SaaS.
 
@@ -56,6 +56,8 @@ yarn setup-nile
 
 ## Execute
 
+Note: the outputs below assume that `NILE_ENTITY_NAME=DB`.  If you are running the example with another entity type, your output may differ.
+
 1. List the metric definitions that are available by default (refer to code [src/listMetricDefinitions.ts](src/listMetricDefinitions.ts)).
 
    ```
@@ -91,10 +93,10 @@ yarn setup-nile
    }
    ```
 
-2. Produce a fake measurement for a new metric type called `custom.DB.instance.myMetric` (refer to code [src/putMetrics.ts](src/putMetrics.ts)).
+2. Produce a fake measurement for a new metric type called `custom.DB.instance.myMetric` (refer to code [src/produceMetrics.ts](src/produceMetrics.ts)).
 
    ```
-   yarn put-metric
+   yarn produce-metrics
    ```
 
    This will generate one measurement that resembles:
@@ -116,10 +118,10 @@ yarn setup-nile
    ]
    ```
 
-3. Get measurements from Nile (refer to code [src/getMetrics.ts](src/getMetrics.ts) which shows two different queries). You should get one measurement for when the instance was created (`nile.system.DB.instance.created`), and one that is what you sent in the previous step (`custom.DB.instance.myMetric`).
+3. Filter measurements from Nile (refer to code [src/filterMetrics.ts](src/filterMetrics.ts) which shows two different queries). In this example, you should get one measurement for when the instance was created (`nile.system.DB.instance.created`), and one or more measurements that were produced in the last 4 hours (the time range is configurable) including what you produced in the previous step (`custom.DB.instance.myMetric`).
 
    ```
-   yarn get-metric
+   yarn filter-metrics
    ```
 
    The output for the metric `nile.system.DB.instance.created` should resemble:

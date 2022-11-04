@@ -24,7 +24,7 @@ const NILE_WORKSPACE = process.env.NILE_WORKSPACE!;
 const NILE_ENTITY_NAME = process.env.NILE_ENTITY_NAME!;
 let nile!: NileApi;
 
-async function getMetrics() {
+async function filterMetrics() {
   // Login
   nile = await exampleUtils.loginAsDev(
     nile,
@@ -41,8 +41,8 @@ async function getMetrics() {
     NILE_ENTITY_NAME
   );
 
-  // Get measurement for "nile.system.DB.instance.created"
-  let metricName = 'nile.system.DB.instance.created';
+  // Filter measurements for nile.system.${NILE_ENTITY_NAME}.instance.created
+  let metricName = `nile.system.${NILE_ENTITY_NAME}.instance.created`;
   let metricFilter = {
     metricName: metricName,
     entityType: NILE_ENTITY_NAME,
@@ -66,8 +66,8 @@ async function getMetrics() {
     })
     .catch((error: any) => console.error(error));
 
-  // Get measurements for new metric "custom.DB.instance.myMetric"
-  metricName = 'custom.DB.instance.myMetric';
+  // Filter measurements for new metric custom.${NILE_ENTITY_NAME}.instance.myMetric, with `startTime` to specify time interval
+  metricName = `custom.${NILE_ENTITY_NAME}.instance.myMetric`;
   const now = new Date();
   const FOUR_HOURS_AGO = new Date(now.getTime() - 4 * 60 * 60000);
   metricFilter = {
@@ -95,4 +95,4 @@ async function getMetrics() {
     .catch((error: any) => console.error(error));
 }
 
-getMetrics();
+filterMetrics();

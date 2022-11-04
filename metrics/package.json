@@ -16,10 +16,10 @@
   "scripts": {
     "setup-nile": "yarn --cwd ../multi-tenancy/ install && yarn --cwd ../multi-tenancy/ start",
     "list-metrics": "ts-node src/listMetricDefinitions.ts",
-    "put-metric": "ts-node src/putMetrics.ts",
-    "get-metric": "ts-node src/getMetrics.ts",
+    "produce-metrics": "ts-node src/produceMetrics.ts",
+    "filter-metrics": "ts-node src/filterMetrics.ts",
     "prestart": "yarn --cwd ../utils-module-js/ install",
-    "start": "yarn list-metrics; yarn put-metric; yarn get-metric; yarn list-metrics"
+    "start": "yarn list-metrics; yarn produce-metrics; yarn filter-metrics; yarn list-metrics"
   },
   "engines": {
     "node": ">=18.0.0"
