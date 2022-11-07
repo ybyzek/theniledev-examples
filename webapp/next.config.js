@@ -12,7 +12,7 @@ if (!fs.existsSync(certificateDir)) {
   console.log(
     `Error: directory ${certificateDir} does not exist. Did you forget to setup your local certificates? Refer to the README.md for instructions`
   );
-  process.exit(1);
+  //process.exit(1);
 }
 
 // reads from .env to expose values to the client
