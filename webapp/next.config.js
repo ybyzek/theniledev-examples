@@ -25,7 +25,7 @@ function readVarsFile () {
     }
     const [name, value] = line.split('=');
 
-    if (name === 'NILE_ENTITY_NAME') {
+    if (name.includes('NILE_ENTITY_NAME')) {
       // Copy logo.svg
       fs.copyFile(
         `./form-fields/${value}/logo.svg`,
