@@ -19,7 +19,10 @@
     "produce-metrics": "ts-node src/produceMetrics.ts",
     "filter-metrics": "ts-node src/filterMetrics.ts",
     "prestart": "yarn --cwd ../utils-module-js/ install",
-    "start": "yarn list-metrics; yarn produce-metrics; yarn filter-metrics; yarn list-metrics"
+    "start": "yarn list-metrics; yarn produce-metrics; yarn filter-metrics; yarn list-metrics",
+    "generate-gaugeGraph": "ts-node src/generate_metrics_gaugeGraph.ts",
+    "generate-lineChart": "ts-node src/generate_metrics_lineChart.ts",
+    "generate-averageNum": "ts-node src/generate_metrics_averageNum.ts"
   },
   "engines": {
     "node": ">=18.0.0"

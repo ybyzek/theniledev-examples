@@ -15,8 +15,8 @@ if (!fs.existsSync(certificateDir)) {
   process.exit(1);
 }
 
+// reads from .env to expose values to the client
 try {
-  // reads from .env to expose values to the client
   const file = fs.readFileSync(envPath, 'utf8');
   const lines = file.split('\n');
   runtimeConfig = lines.reduce((accum, line) => {
@@ -25,8 +25,8 @@ try {
     }
     const [name, value] = line.split('=');
 
-    // Copy logo.svg
     if (name === 'NILE_ENTITY_NAME') {
+      // Copy logo.svg
       fs.copyFile(
         `./form-fields/${value}/logo.svg`,
         './public/images/logo.svg',
@@ -42,6 +42,24 @@ try {
             );
           }
         }
+      );
+
+      // Print valid admins
+      const admins = fs.readFileSync(
+        `../usecases/${value}/init/admins.json`,
+        'utf8'
+      );
+      console.log(
+        `Login as any of these predefined admins, or signup a new one: \n${admins}`
+      );
+
+      // Print valid users
+      const users = fs.readFileSync(
+        `../usecases/${value}/init/users.json`,
+        'utf8'
+      );
+      console.log(
+        `Login as any of these predefined users, or signup a new one: \n${users}`
       );
     }
 

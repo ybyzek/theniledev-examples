@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "setup-nile": "yarn --cwd ../multi-tenancy/ install && yarn --cwd ../multi-tenancy/ start",
-    "dev": "node server.mjs",
+    "start-server": "node server.mjs",
+    "start-metrics": "concurrently \"yarn --cwd ../metrics/ generate-gaugeGraph\" \"yarn --cwd ../metrics/ generate-lineChart\" \"yarn --cwd ../metrics/ generate-averageNum\"",
+    "dev": "concurrently \"yarn start-server\" \"yarn start-metrics\"",
     "build": "next build",
     "start": "next start",
     "lint": "yarn eslint . --fix --max-warnings=0"
@@ -12,11 +14,12 @@
   "dependencies": {
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
-    "@mui/joy": "^5.0.0-alpha.49",
+    "@mui/joy": "^5.0.0-alpha.52",
     "@svgr/webpack": "^6.4.0",
     "@tanstack/react-query": "^4.10.3",
-    "@theniledev/js": "^0.26.0",
-    "@theniledev/react": "^0.26.0",
+    "@theniledev/js": "^0.28.2",
+    "@theniledev/react": "^0.28.2",
+    "concurrently": "^7.5.0",
     "next": "12.3.1",
     "node-emoji": "^1.11.0",
     "react": "18.2.0",

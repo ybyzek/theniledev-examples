@@ -1,17 +1,15 @@
 import React from 'react';
-import { Card } from '@mui/joy';
+import { Card, Typography } from '@mui/joy';
 import { MetricsLineChart } from '@theniledev/react';
-import { Measurement } from '@theniledev/js';
 import { useRouter } from 'next/router';
 
-import { generateValueRange } from '../../../utils';
-import { useMetricsGenerator } from '../hooks';
 import { useTheme } from '../../../global-context/theme';
+
+import { getMetrics } from '~/metrics';
 
 const now = new Date();
 
 const TEN_MINUTES_AGO = new Date(now.getTime() - 0.5 * 60000);
-const METRIC_NAME = 'Queries per second (QPS)';
 
 export default function RequestLineChartLoader() {
   const router = useRouter();
@@ -39,10 +37,15 @@ function RequestLineChart(props: Props) {
   const color = useTheme();
   const router = useRouter();
   const entity = String(router.query.entity);
-  const metricName = `${entity}-${METRIC_NAME}`;
+
+  const { lineChart } = getMetrics(entity) ?? {};
+  const METRIC_NAME = lineChart['metricName'];
+  const METRIC_TITLE = lineChart['metricTitle'];
+
+  const metricName = METRIC_NAME;
   const { instanceId, entityType, organizationId } = props;
 
-  const [timestamp, setTimeStamp] = React.useState(TEN_MINUTES_AGO);
+  const [timestamp] = React.useState(TEN_MINUTES_AGO);
 
   const metricFilter = React.useMemo(
     () => ({
@@ -50,32 +53,14 @@ function RequestLineChart(props: Props) {
       metricName,
       organizationId,
       startTime: timestamp,
+      instanceId: instanceId,
     }),
-    [entityType, metricName, organizationId, timestamp]
-  );
-
-  useMetricsGenerator(
-    {
-      metricName,
-      intervalTimeMs: 3 * 1000,
-      measurement: function (): Measurement {
-        return {
-          timestamp: new Date(),
-          value: generateValueRange(35, 432),
-          instanceId,
-        };
-      },
-    },
-    () => {
-      const updated = new Date();
-      if (timestamp < new Date(updated.getTime() - 0.5 * 60000)) {
-        setTimeStamp(new Date(updated.getTime() - 60000));
-      }
-    }
+    [entityType, metricName, organizationId, timestamp, instanceId]
   );
 
   return (
     <Card variant="outlined">
+      <Typography level="h4">{METRIC_TITLE}</Typography>
       <MetricsLineChart
         updateInterval={3000}
         filter={metricFilter}

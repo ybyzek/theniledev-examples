@@ -1,14 +1,12 @@
 import React from 'react';
 import { Box, Card, Stack, Typography } from '@mui/joy';
-import { useMetrics } from '@theniledev/react';
+import { useFilter } from '@theniledev/react';
 import { Tooltip } from '@mui/material';
 import { useRouter } from 'next/router';
-import { MetricTypeEnum } from '@theniledev/js';
-
-import { useMetricsGenerator, useProduceMetric } from '../hooks';
-import { generateValueRange } from '../../../utils';
 
 import Rect from './rect.svg';
+
+import { getMetrics } from '~/metrics';
 
 const Tangle = ({ fill }: { fill: 'success' | 'danger' }) => (
   <Box
@@ -24,9 +22,8 @@ const Tangle = ({ fill }: { fill: 'success' | 'danger' }) => (
   </Box>
 );
 
-const METRIC_NAME = 'uptime';
 const now = new Date();
-const TWENTY_FOUR_HOURS_AG0 = new Date(now.getTime() - 24 * 60 * 60000);
+const TWENTY_FOUR_HOURS_AGO = new Date(now.getTime() - 24 * 60 * 60000);
 const THIRTY_SECONDS = 30 * 1000;
 
 export default function UpTimeLoader() {
@@ -37,6 +34,7 @@ export default function UpTimeLoader() {
   if (Object.keys(router.query).length === 0) {
     return null;
   }
+
   return (
     <UpTime
       instanceId={instanceId}
@@ -53,47 +51,20 @@ type Props = {
 };
 function UpTime(props: Props) {
   const { instanceId, entityType, organizationId } = props;
-  const produceMetric = useProduceMetric();
 
-  const metricName = `${entityType}-${METRIC_NAME}`;
-
-  useMetricsGenerator({
-    metricName,
-    intervalTimeMs: THIRTY_SECONDS,
-    measurement: () => {
-      const val = generateValueRange(0, 1);
-      return { timestamp: new Date(), value: val >= 0.1 ? 1 : 0, instanceId };
-    },
-  });
-
-  React.useEffect(() => {
-    async function producer() {
-      const val = generateValueRange(0, 1);
-      const fakeMeasurement = {
-        timestamp: new Date(),
-        value: val >= 0.1 ? 1 : 0,
-        instanceId,
-      };
-      const metricData = {
-        name: metricName,
-        type: MetricTypeEnum.Gauge,
-        entityType,
-        measurements: [fakeMeasurement],
-      };
-      await produceMetric(metricData);
-    }
-    producer();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const { gaugeGraph } = getMetrics(entityType) ?? {};
+  const METRIC_NAME = gaugeGraph['metricName'];
+  const METRIC_TITLE = gaugeGraph['metricTitle'];
 
   const metricFilter = {
     entityType,
-    metricName,
+    METRIC_NAME,
     organizationId,
-    startTime: TWENTY_FOUR_HOURS_AG0,
+    startTime: TWENTY_FOUR_HOURS_AGO,
+    instanceId: instanceId,
   };
 
-  const { metrics, isLoading } = useMetrics({
+  const { metrics, isLoading } = useFilter({
     filter: metricFilter,
     updateInterval: THIRTY_SECONDS,
   });
@@ -105,7 +76,7 @@ function UpTime(props: Props) {
   return (
     <Card variant="outlined" sx={{ overflow: 'scroll' }}>
       <Stack direction="row" sx={{ justifyContent: 'space-between', mb: 1 }}>
-        <Typography level="h4">Up time</Typography>
+        <Typography level="h4">{METRIC_TITLE}</Typography>
         <Typography level="body3">past 24 hours</Typography>
       </Stack>
       <Stack direction="row">

@@ -20,7 +20,7 @@ These examples let you choose what kind of SaaS offering is provided, one of:
 - [YOLO](../usecases/README.md#yolo)
 
 Everything you need to run this example is in one of the folders above.
-Once a developer initializes their control plane in Nile with their service's entity schema, they can capture events as end users create new instances to reconcile Nile with their data plane, get built-in multi-tenancy and authorization policies, and show metrics to users for consumption and billing.
+Once a developer initializes their control plane in Nile with their service's entity schema, they can capture events as end users create new instances to reconcile Nile with their data plane, get built-in multi-tenancy and authorization policies, and show metrics to users for consumption and billing using Nile's metrics API and matching UI components.
 This webapp demonstrates a sample frontend for their SaaS application that integrates with the control plane using Nile React components for [Next.js](https://nextjs.org/).
 It provides self-service workflows for user signup/login, org creation, and instance management.
 
@@ -93,9 +93,9 @@ Then, run the following command to preconfigure the Nile control plane with an e
 
 (Optional) If you want to hook up your Nile control plane to a data plane and provision real resources, run the reconciler to synchronize events between the control plane and data plane (e.g. if you use the webapp to create new entity instances). Follow the instructions in the [Pulumi example](../data-plane/pulumi/) and start the reconciler in a separate terminal window.  If you skip this step, the instances in your webapp will not go to `status=Up`.
 
-## Run the web server locally
+## Run the webapp
 
-Run the following command from the `webapp` directory to run the web server locally:
+Run the following command from the `webapp` directory.  It starts the web server locally and produces metrics to Nile that are rendered in charts in the webapp.
 
 ```bash
 yarn dev
