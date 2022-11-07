@@ -71,6 +71,17 @@ function readVarsFile () {
 try {
   readVarsFile();
 } catch (err) {
+  let envParams = [
+    "NEXT_PUBLIC_NILE_URL",
+    "NEXT_PUBLIC_NILE_WORKSPACE",
+    "NEXT_PUBLIC_NILE_ENTITY_NAME",
+  ]
+  envParams.forEach( (key) => {
+    if (!process.env[key]) {
+      console.error(`Error: missing .env file for local testing, or missing environment variable ${ key } for Vercel`);
+      process.exit(1);
+    }
+  });
   let data = `
 NEXT_PUBLIC_NILE_URL=${process.env.NEXT_PUBLIC_NILE_URL}
 NEXT_PUBLIC_NILE_WORKSPACE=${process.env.NEXT_PUBLIC_NILE_WORKSPACE}
