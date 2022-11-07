@@ -16,7 +16,7 @@ if (!fs.existsSync(certificateDir)) {
 }
 
 // reads from .env to expose values to the client
-try {
+function readVarsFile () {
   const file = fs.readFileSync(envPath, 'utf8');
   const lines = file.split('\n');
   runtimeConfig = lines.reduce((accum, line) => {
@@ -66,12 +66,18 @@ try {
     accum[name] = value;
     return accum;
   }, {});
+}
+
+try {
+  readVarsFile();
 } catch (err) {
-  console.log('err: ', err);
-  console.warn(
-    '[ERROR] local .env file missing. This must be configured before the demo can be run. '
-  );
-  process.exit(0);
+  let data = `
+NILE_URL=${process.env.NEXT_PUBLIC_NILE_URL}
+NILE_WORKSPACE=${process.env.NEXT_PUBLIC_NILE_WORKSPACE}
+NILE_ENTITY_NAME=${process.env.NEXT_PUBLIC_NILE_ENTITY_NAME}
+`;
+  fs.writeFileSync(envPath, data);
+  readVarsFile();
 }
 
 const nextConfig = {
