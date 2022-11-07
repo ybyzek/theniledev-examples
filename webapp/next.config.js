@@ -78,6 +78,12 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   publicRuntimeConfig: runtimeConfig,
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   webpack(config, options) {
     config.module.rules.push({
       test: /\.svg$/i,
